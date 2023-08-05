@@ -1,4 +1,4 @@
-# Beta 3
+### Beta 3
 Added: EBE GameID and fixed so everything else works.
 
 ###  Beta 4
@@ -43,5 +43,9 @@ that have more than 200 in wrap.
 - Label should not load 3 times in a row.
 - Label crash because of memory leak, which is fixed now.
 
-### EBEditor - Beta 0.0.8
-Removed: Unused code in accounts.
+### EBEditor - Beta 0.0.8  
+Removed: Unused code in accounts.  
+Fixed: Y position is showing up correct in the Editor.  
+Changed: EEditor to EBEditor.  
+Added: Admin access have all blocks.  
+
