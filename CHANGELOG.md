@@ -45,7 +45,8 @@ that have more than 200 in wrap.
 
 ### EBEditor - Beta 0.0.8  
 Removed: Unused code in accounts.  
-Fixed: Y position is showing up correct in the Editor.  
-Changed: EEditor to EBEditor.  
 Added: Admin access have all blocks.  
+Fixed: Block is not filling the whole screen.  
+Fixed: Y position is showing up correct in the Editor.  
+Fixed: EEditor to EBEditor.  
 
