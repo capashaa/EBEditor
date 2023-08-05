@@ -2,12 +2,10 @@
 Added: EBE GameID and fixed so everything else works.
 
 ###  Beta 4
-0) (Right click on Download button)
 Fixed: bgcolor is set when reading from the database.
 Fixed: title of the world is added from the database.
 Fixed: owner name of the world is added from the database.
-Fixed: Rotation, Number, Text is added from database.
-1) 
+Fixed: Rotation, Number, Text is added from database. 
 Added: Label reading from database and init.
 Fixed: that init read everything like it should in EBE Beta.
 
@@ -44,3 +42,6 @@ that have more than 200 in wrap.
 - Label crash when removing all text in the text box.
 - Label should not load 3 times in a row.
 - Label crash because of memory leak, which is fixed now.
+
+### EBEditor - Beta 0.0.8
+Removed: Unused code in accounts.
