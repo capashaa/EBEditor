@@ -38,8 +38,6 @@ namespace EEditor
             {
                 accountListBox.Items.Add(acco.Key);
                 accountListBox.SelectedIndex = 0; //Select topmost account (guest) in account list and load it's data to details
-                accEverybodyEdits.Checked = true; //Selects EE because guest is an EE account
-                instructionsField.Rtf = everybodyEditsRTF;
             }
 
             this.BackColor = MainForm.themecolors.background;
@@ -113,11 +111,6 @@ namespace EEditor
             tp.SetToolTip(removeAccount, "Remove selected account");
             tp.SetToolTip(saveAccount, "Save account values");
             tp.SetToolTip(reloadPacks, "Reload the list of item packs purchased with the account");
-            tp.SetToolTip(accEverybodyEdits, "Use Everybody Edits Account");
-            tp.SetToolTip(accEverybodyEditsTransfer, "Use transfered Accounts");
-            tp.SetToolTip(accKongregate, "Use Kongregate Account");
-            tp.SetToolTip(accArmorGames, "Use ArmorGames Account");
-            tp.SetToolTip(accFacebook, "Use Facebook Account");
             #endregion
         }
 
@@ -134,96 +127,8 @@ namespace EEditor
             MainForm.editArea.MainForm.cb.SelectedIndex = 0;
         }
 
-        #region RTF tutorial
-        //Everybody Edits rtf line
-        private string everybodyEditsRTF = @"{\rtf1\pc Use the e-mail and password you signed up with.";
-        private string everybodyEditsRTF2 = @"{\rtf1\pc Use the e-mail and password you got when transfered your account from facebook or armorgames.";
-        //Kongregate rtf line
-        private string kongregateRTF = @"{\rtf1\pc 1. Go to http://pastebin.com/raw/SMFAdPH9 and drag the text to bookmarks bar\par
-2. Go to Everybody Edits in Kongregate and click the bookmark\par
-3. Copy shown values to EEditor";
-
-        //Armor Games rtf line
-        /*private string armorgamesRTF = @"{\rtf1\pc 1. Go to http://pastebin.com/raw/Ars6y8GN and drag the text to bookmarks bar\par
-2. Go to Everybody Edits in ArmorGames and click the bookmark\par
-3. Copy shown values to EEditor";*/
-
-        private void instructionsField_LinkClicked(object sender, LinkClickedEventArgs e)
-        {
-            // Makes RTF links work
-            System.Diagnostics.Process.Start(e.LinkText);
-        }
-        #endregion
 
         #region Login method and fields
-        private void radiobuttons_CheckedChanged(object sender, EventArgs e)
-        {
-            var value = (RadioButton)sender;
-            if (value.Name == "accEverybodyEdits")
-            {
-                loginLabel1.Text = "Email:";
-                loginField1.Width = 146;
-                loginField1.Location = new Point(48, 190);
-                loginField1.Visible = true;
-
-                loginLabel2.Text = "Password:";
-                loginField2.Width = 125;
-                loginField2.Location = new Point(69, 219);
-
-                instructionsField.Rtf = everybodyEditsRTF;
-            }
-            if (value.Name == "accEverybodyEditsTransfer")
-            {
-                loginLabel1.Text = "Email:";
-                loginField1.Width = 146;
-                loginField1.Location = new Point(48, 190);
-                loginField1.Visible = true;
-
-                loginLabel2.Text = "Password:";
-                loginField2.Width = 125;
-                loginField2.Location = new Point(69, 219);
-
-                instructionsField.Rtf = everybodyEditsRTF2;
-            }
-            /* Facebook disabled
-             * else if (value.Text == "Facebook")
-            {
-                loginLabel1.Text = "Note: Token will expire in 1-2 hours";
-                loginField1.Visible = false;
-
-                loginLabel2.Text = "AccessToken:";
-                loginField2.Width = 112;
-                loginField2.Location = new Point(82, 219);
-
-                instructionsField.Rtf = facebookRTF;
-            }*/
-            else if (value.Name == "accKongregate")
-            {
-                loginLabel1.Text = "UserID:";
-                loginField1.Width = 138;
-                loginField1.Location = new Point(56, 190);
-                loginField1.Visible = true;
-
-                loginLabel2.Text = "GameAuthToken:";
-                loginField2.Width = 98;
-                loginField2.Location = new Point(96, 219);
-
-                instructionsField.Rtf = kongregateRTF;
-            }
-            /*else if (value.Name == "accArmorGames")
-            {
-                loginLabel1.Text = "UserID:";
-                loginField1.Width = 138;
-                loginField1.Location = new Point(56, 190);
-                loginField1.Visible = true;
-
-                loginLabel2.Text = "AuthToken:";
-                loginField2.Width = 125;
-                loginField2.Location = new Point(69, 219);
-
-                instructionsField.Rtf = armorgamesRTF;
-            }*/
-        }
 
         public static void CheckAccounts(MainForm mf)
         {
@@ -253,25 +158,6 @@ namespace EEditor
                                     {
                                         case 0:
                                             PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, property.Value["login"].ToString(), property.Value["password"].ToString(), null, (Client client) => successLogin2(client, property.Value["login"].ToString().ToString(), property.Value["password"].ToString(), Convert.ToInt32(property.Value["loginMethod"])), failLogin1);
-                                            break;
-                                        case 2:
-                                            PlayerIO.QuickConnect.KongregateConnect(bdata.gameID, property.Value["login"].ToString(), property.Value["password"].ToString(), null, (Client client) => successLogin2(client, property.Value["login"].ToString().ToString(), property.Value["password"].ToString(), Convert.ToInt32(property.Value["loginMethod"])), failLogin1);
-                                            break;
-                                        case 3:
-                                            PlayerIO.Authenticate(bdata.gameID, "secure", new Dictionary<string, string> { { "userId", property.Value["login"].ToString() }, { "authToken", property.Value["password"].ToString() } }, null, (Client client) => successLogin2(client, property.Value["login"].ToString(), property.Value["password"].ToString(), Convert.ToInt32(property.Value["loginMethod"])), failLogin1);
-                                            break;
-                                        case 4:
-                                            PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, property.Value["login"].ToString(), property.Value["password"].ToString(), null, (Client cli) =>
-                                            {
-                                                cli.Multiplayer.CreateJoinRoom("$service-room", "AuthRoom", true, null, new Dictionary<string, string>() { { "type", "Link" } }, (Connection con) =>
-                                                {
-                                                    con.OnMessage += (object sender1, PlayerIOClient.Message m) =>
-                                                    {
-                                                        if (m.Type == "auth") PlayerIO.Authenticate(bdata.gameID, "connected", new Dictionary<string, string>() { { "userId", m.GetString(0) }, { "auth", m.GetString(1) } }, null, (Client client) => successLogin2(client, property.Value["login"].ToString(), property.Value["password"].ToString(), Convert.ToInt32(property.Value["loginMethod"])), failLogin1);
-                                                    };
-                                                },
-                                                (PlayerIOError error) => MessageBox.Show(error.Message, "Error"));
-                                            }, failLogin1);
                                             break;
                                     }
                                     mf.cb.Items.Add(property.Key);
@@ -309,46 +195,9 @@ namespace EEditor
             {
                 if (!string.IsNullOrWhiteSpace(loginField2.Text))
                 {
-                    if (accEverybodyEdits.Checked)
-                    {
-                        PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, loginField1.Text, loginField2.Text, null, (Client client) => successLogin(client, loginField1.Text, loginField2.Text, 0), failLogin);
-                        accountOption = 0;
-                    }
 
-                    if (accEverybodyEditsTransfer.Checked)
-                    {
-                        PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, loginField1.Text, loginField2.Text, null, (Client cli) =>
-                        {
-                            cli.Multiplayer.CreateJoinRoom("$service-room", "AuthRoom", true, null, new Dictionary<string, string>() { { "type", "Link" } }, (Connection con) =>
-                            {
-                                con.OnMessage += (object sender1, PlayerIOClient.Message m) =>
-                                {
-                                    if (m.Type == "auth") PlayerIO.Authenticate("everybody-edits-su9rn58o40itdbnw69plyw", "connected", new Dictionary<string, string>() { { "userId", m.GetString(0) }, { "auth", m.GetString(1) } }, null, (Client client) => successLogin(client, loginField1.Text, loginField2.Text, 4), failLogin);
-                                };
-                            },
-                            (PlayerIOError error) => MessageBox.Show(error.Message, "Error"));
-                        },
-                        failLogin);
-                        accountOption = 4;
-                    }
-                    /* Facebook disabled
-                     * else if (accFacebook.Checked)
-                    {
-                        PlayerIO.Authenticate("everybody-edits-su9rn58o40itdbnw69plyw", "secure", new Dictionary<string, string>() { { "accessToken", loginField1.Text } }, null, successLogin, failLogin);
-                        //PlayerIO.QuickConnect.FacebookOAuthConnect("everybody-edits-su9rn58o40itdbnw69plyw", loginField1.Text, null, null, successLogin, failLogin);
-                        accountOption = 1;
-                    }
-                    */
-                    else if (accKongregate.Checked)
-                    {
-                        PlayerIO.QuickConnect.KongregateConnect(bdata.gameID, loginField1.Text, loginField2.Text, null, (Client client) => successLogin(client, loginField1.Text, loginField2.Text, 2), failLogin);
-                        accountOption = 2;
-                    }
-                    /*else if (accArmorGames.Checked)
-                    {
-                        PlayerIO.Authenticate(bdata.gameID, "secure", new Dictionary<string, string> { { "userId", loginField1.Text }, { "authToken", loginField2.Text } }, null, successLogin, failLogin);
-                        accountOption = 3;
-                    }*/
+                   PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, loginField1.Text, loginField2.Text, null, (Client client) => successLogin(client, loginField1.Text, loginField2.Text, 0), failLogin);
+                
                 }
                 else { MessageBox.Show("Your login details aren't added", "Login error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             }
@@ -361,42 +210,8 @@ namespace EEditor
             {
                 if (!string.IsNullOrWhiteSpace(loginField2.Text))
                 {
-                    if (accEverybodyEdits.Checked)
-                    {
-                        PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, loginField1.Text, loginField2.Text, null, (Client client) => successLogin1(client, loginField1.Text, loginField2.Text, 0), failLogin);
-                        accountOption = 0;
-                    }
-                    if (accEverybodyEditsTransfer.Checked)
-                    {
-                        PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, loginField1.Text, loginField2.Text, null, (Client cli) =>
-                        {
-                            cli.Multiplayer.CreateJoinRoom("$service-room", "AuthRoom", true, null, new Dictionary<string, string>() { { "type", "Link" } }, (Connection con) =>
-                            {
-                                con.OnMessage += (object sender1, PlayerIOClient.Message m) =>
-                                {
-                                    if (m.Type == "auth") PlayerIO.Authenticate("everybody-edits-su9rn58o40itdbnw69plyw", "connected", new Dictionary<string, string>() { { "userId", m.GetString(0) }, { "auth", m.GetString(1) } }, null, (Client client) => successLogin1(client, loginField1.Text, loginField2.Text, 4), failLogin);
-                                };
-                            },
-                            (PlayerIOError error) => MessageBox.Show(error.Message, "Error"));
-                        },
-                        failLogin);
-                        accountOption = 4;
-                    }
-                    /* Facebook disabled
-                    else if (accFacebook.Checked)
-                    {
-                        PlayerIO.QuickConnect.FacebookOAuthConnect("everybody-edits-su9rn58o40itdbnw69plyw", loginField1.Text, null, null, successLogin1, failLogin);
-                    }
-                    */
-                    else if (accKongregate.Checked)
-                    {
-                        PlayerIO.QuickConnect.KongregateConnect(bdata.gameID, loginField1.Text, loginField2.Text, null, (Client client) => successLogin1(client, loginField1.Text, loginField2.Text, 0), failLogin);
-                        accountOption = 2;
-                    }
-                    /*else if (accArmorGames.Checked)
-                    {
-                        PlayerIO.Authenticate(bdata.gameID, "secure", new Dictionary<string, string> { { "userId", loginField1.Text }, { "authToken", loginField2.Text } }, null, successLogin1, failLogin);
-                    }*/
+                    PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, loginField1.Text, loginField2.Text, null, (Client client) => successLogin1(client, loginField1.Text, loginField2.Text, 0), failLogin);
+                    accountOption = 0;
                 }
                 else { MessageBox.Show("Your login details aren't added", "Login error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             }
@@ -653,27 +468,6 @@ namespace EEditor
                 lastSelected = accountListBox.Items[accountListBox.SelectedIndex].ToString();
                 if (MainForm.accs.ContainsKey(lastSelected))
                 {
-                    var lm = MainForm.accs[lastSelected].loginMethod;
-                    switch (lm)
-                    {
-                        case 0:
-                            accEverybodyEdits.Checked = true;
-                            break;
-                        /* Facebook disabled
-                         *  case 1:
-                            accFacebook.Checked = true;
-                            break;
-                        */
-                        case 2:
-                            accKongregate.Checked = true;
-                            break;
-                        /*case 3: Armorgames removed
-                            accArmorGames.Checked = true;
-                            break;*/
-                        case 4:
-                            accEverybodyEditsTransfer.Checked = true;
-                            break;
-                    }
                     loginField1.Text = MainForm.accs[lastSelected].login;
                     loginField2.Text = MainForm.accs[lastSelected].login == "guest" ? "guest" : MainForm.accs[lastSelected].password;
                 }
