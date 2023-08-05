@@ -743,7 +743,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             if (started)
             {
                 Point p = Tool.GetLocation(e);
-                if (e.X / MainForm.Zoom <= CurFrame.Width) MainForm.pos.Text = "X: " + p.X + " Y: " + p.Y;
+                if (e.X / MainForm.Zoom <= CurFrame.Width && e.Y / MainForm.Zoom <= CurFrame.Height) MainForm.pos.Text = "X: " + p.X + " Y: " + p.Y;
                 MainForm.fg.Text = CurFrame.Foreground[p.Y, p.X].ToString();
                 MainForm.bg.Text = CurFrame.Background[p.Y, p.X].ToString();
                 if (CurFrame.Foreground[p.Y, p.X] == 374)
@@ -904,13 +904,13 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     if (MainForm.debug)
                     {
                         MainForm.debug = false;
-                        MainForm.Text = "EEditor " + MainForm.ProductVersion;
+                        MainForm.Text = "EBEditor " + MainForm.ProductVersion;
                         MainForm.rebuildGUI(false);
 
                     }
                     else
                     {
-                        MainForm.Text = "EEditor " + MainForm.ProductVersion + " - Using Debug";
+                        MainForm.Text = "EBEditor " + MainForm.ProductVersion + " - Using Debug";
                         MainForm.debug = true;
                         MainForm.rebuildGUI(false);
 
