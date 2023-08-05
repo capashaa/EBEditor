@@ -48,5 +48,5 @@ Removed: Unused code in accounts.
 Added: Admin access have all blocks.  
 Fixed: Block is not filling the whole screen.  
 Fixed: Y position is showing up correct in the Editor.  
-Fixed: EEditor to EBEditor.  
+Changed: EEditor to EBEditor.  
 
