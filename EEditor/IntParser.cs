@@ -26,7 +26,7 @@ namespace EEditor
             var chunks = new List<DataChunk>();
             byte[] yys = null;
             byte[] xxs = null;
-            int ttype = 0;
+            uint ttype = 0;
             int llayer = 0;
             while (data.Count > 0)
             {
@@ -37,7 +37,7 @@ namespace EEditor
                 if (data.Count > 0) yys = (byte[])data.Pop();
                 if (data.Count > 0) xxs = (byte[])data.Pop();
                 if (data.Count > 0) llayer = (int)data.Pop();
-                if (data.Count > 0) ttype = (int)data.Pop();
+                if (data.Count > 0) ttype = (uint)data.Pop();
                 else
                 {
                     data.CopyTo(dataGone,0);
@@ -55,11 +55,11 @@ namespace EEditor
     public class DataChunk
     {
         public int Layer { get; set; }
-        public int Type { get; set; }
+        public uint Type { get; set; }
         public Point[] Locations { get; set; }
         public object[] Args { get; set; }
 
-        public DataChunk(int layer, int type, byte[] xs, byte[] ys, object[] args)
+        public DataChunk(int layer, uint type, byte[] xs, byte[] ys, object[] args)
         {
             this.Layer = layer;
             this.Type = type;
