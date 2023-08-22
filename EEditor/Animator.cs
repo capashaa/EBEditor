@@ -203,6 +203,13 @@ namespace EEditor
                                         correctWay = true;
                                     }
                                 }
+                                else if (blockId == 1000)
+                                {
+                                    if (cur.Length == 7)
+                                    {
+                                        correctWay = true;
+                                    }
+                                }
                                 else
                                 {
                                     correctWay = true;
@@ -290,6 +297,16 @@ namespace EEditor
                                         }
                                     }
                                 }
+                                else if (blockId == 1000)
+                                {
+                                    if (cur.Length == 7)
+                                    {
+                                        if (remoteFrame.BlockData[y, x] != Convert.ToInt32(cur[4]) || remoteFrame.BlockData3[y, x] != cur[6] || remoteFrame.BlockData4[y, x] != cur[7])
+                                        {
+                                            correctWay = true;
+                                        }
+                                    }
+                                }
                             }
                         }
                         if (layer == 1)
@@ -352,6 +369,13 @@ namespace EEditor
                                 if (cur.Length == 7)
                                 {
                                     param = new object[] { layer, x, y, blockId, Convert.ToInt32(cur[4]), Convert.ToInt32(cur[5]), Convert.ToInt32(cur[6]) };
+                                }
+                            }
+                            else if (blockId == 1000)
+                            {
+                                if (cur.Length == 7)
+                                {
+                                    param = new object[] { layer, x, y, blockId, cur[5], cur[6], Convert.ToInt32(cur[4]) };
                                 }
                             }
                             else
@@ -569,6 +593,22 @@ namespace EEditor
                     //placeBlocks.Remove(new blocks() { layer = 0, x = e.GetInt(0), y = e.GetInt(1), bid = e.GetInt(2), data = new object[] { e.GetInt(3) } });
                 }
             }
+            else if (e.Type == "lb")
+            {
+                if (botid == (int)e.GetInt(6))
+                {
+                    int x = e.GetInt(0), y = e.GetInt(1);
+                    remoteFrame.Foreground[y, x] = e.GetInt(2);
+                    remoteFrame.BlockData[y, x] = e.GetInt(3);
+                    remoteFrame.BlockData3[y, x] = e.GetString(4);
+                    remoteFrame.BlockData4[y, x] = e.GetString(5);
+                    ++Gcurrent;
+                    ++Gcurrent1;
+                    OnStatusChanged("Uploading label to level. (Total: " + Gcurrent1 + "/" + firstFrame.Count + ")", DateTime.MinValue, false, Gtotal, Gcurrent);
+                    if (Convert.ToDouble(Gcurrent1) <= pb.Maximum && Convert.ToDouble(Gcurrent1) >= pb.Minimum) { if (pb.InvokeRequired) pb.Invoke((MethodInvoker)delegate { pb.Value = Gcurrent1; }); TaskbarProgress.SetValue(afHandle, Gcurrent1, firstFrame.Count); }
+                    //placeBlocks.Remove(new blocks() { layer = 0, x = e.GetInt(0), y = e.GetInt(1), bid = e.GetInt(2), data = new object[] { e.GetInt(3) } });
+                }
+            }
             else if (e.Type == "access")
             {
                 passTimer.Dispose();
@@ -596,13 +636,13 @@ namespace EEditor
                     OnStatusChanged("Wrong level size. Please create a level with the size of " + remoteFrame.Width + "x" + remoteFrame.Height + ".", DateTime.MinValue, true, 0, 0);
                     return;
                 }
-                if (e.GetBoolean(34))
+                if (e.GetBoolean(41))
                 {
                     AnimateForm.crewWorld = true;
-                    if (e.GetBoolean(14))
+                    if (e.GetBoolean(21))
                     {
                         AnimateForm.crewEdit = true;
-                        if (e.GetBoolean(31))
+                        if (e.GetBoolean(38))
                         {
                             AnimateForm.saveRights = true;
                             if (MainForm.userdata.useColor)
@@ -610,16 +650,16 @@ namespace EEditor
                                 if (MainForm.userdata.thisColor != Color.Transparent)
                                 {
                                     var hex = ColorTranslator.ToHtml(MainForm.userdata.thisColor);
-                                    conn.Send("say", "/bgcolor " + hex);
+                                    conn.Send("say", "/bgcolour " + hex);
                                 }
                                 else
                                 {
-                                    conn.Send("say", "/bgcolor none");
+                                    conn.Send("say", "/bgcolour none");
                                 }
                             }
                             else
                             {
-                                conn.Send("say", "/bgcolor none");
+                                conn.Send("say", "/bgcolour none");
                             }
                         }
                         locker.Release();
@@ -630,7 +670,7 @@ namespace EEditor
                         return;
                     }
                 }
-                else if (e.GetString(0) != e.GetString(13))
+                else if (e.GetString(0) != e.GetString(20))
                 {
                     if (MainForm.userdata.level.StartsWith("OW") && levelPassword.Length == 0)
                     {
@@ -695,7 +735,7 @@ namespace EEditor
                         }
                     }
                 }
-                else if (e.GetString(0) == e.GetString(13))
+                else if (e.GetString(0) == e.GetString(20))
                 {
                     if (MainForm.userdata.useColor)
                     {
