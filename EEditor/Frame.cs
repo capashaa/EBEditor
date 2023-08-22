@@ -28,6 +28,8 @@ namespace EEditor
         public string nickname { get; set; }
         public string owner { get; set; }
         public string levelname { get; set; }
+
+        public uint backgroundColor { get; set; }
         public static byte[] xx;
         public static byte[] yy;
         public static byte[] xx1;
@@ -155,9 +157,10 @@ namespace EEditor
 
         public static Frame FromMessage(PlayerIOClient.Message e)
         {
-            if (bdata.ParamNumbers(e, 18, "System.Int32") && bdata.ParamNumbers(e, 19, "System.Int32"))
+            Console.WriteLine(e[25] + " " + e[26]);
+            if (bdata.ParamNumbers(e, 25, "System.Int32") && bdata.ParamNumbers(e, 26, "System.Int32"))
             {
-                return FromMessage(e, e.GetInt(18), e.GetInt(19));
+                return FromMessage(e, e.GetInt(25), e.GetInt(26));
             }
             else
             {
@@ -649,6 +652,13 @@ namespace EEditor
                                 res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData3[y, x], BlockData4[y, x], BlockData5[y, x], BlockData6[y, x] });
                             }
                         }
+                        else if (Foreground[y, x] == 1000)
+                        {
+                            if (BlockData[y, x] != f.BlockData[y, x] || BlockData3[y, x] != f.BlockData3[y, x] || BlockData4[y, x] != f.BlockData4[y, x])
+                            {
+                                res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData[y, x].ToString(), BlockData3[y, x], BlockData4[y, x] });
+                            }
+                        }
                     }
                     if (Background[y, x] != f.Background[y, x])
                     {
@@ -1109,6 +1119,16 @@ namespace EEditor
                 Frame f = new Frame(lvl.Width, lvl.Height);
                 f.levelname = lvl.WorldName;
                 f.nickname = lvl.OwnerName;
+                if (lvl.BackgroundColor != 0)
+                {
+                    MainForm.userdata.useColor = true;
+                    MainForm.userdata.thisColor = UIntToColor(lvl.BackgroundColor);
+                }
+                else
+                {
+                    MainForm.userdata.useColor = false;
+                    MainForm.userdata.thisColor = Color.Transparent;
+                }
                 for (int x = 0; x < lvl.Width; ++x)
                 {
                     for (int y = 0; y < lvl.Height; ++y)
@@ -1176,7 +1196,13 @@ namespace EEditor
                         {
                             f.Background[y, x] = lvl[1, x, y].BlockID;
                         }
-
+                        if (Blocks.IsType(lvl[0,x,y].BlockID, Blocks.BlockType.Label))
+                        {
+                            f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                            f.BlockData[y, x] = ((Blocks.LabelBlock)lvl[0, x, y]).Wrap;
+                            f.BlockData3[y, x] = ((Blocks.LabelBlock)lvl[0, x, y]).Text;
+                            f.BlockData4[y, x] = ((Blocks.LabelBlock)lvl[0, x, y]).Color;
+                        }
                     }
                 }
                 return f;
