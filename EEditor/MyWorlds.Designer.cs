@@ -38,6 +38,8 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.LoadWorldButton = new System.Windows.Forms.Button();
             this.panelBg = new System.Windows.Forms.Panel();
+            this.cbShowMinimap = new System.Windows.Forms.CheckBox();
+            this.cbDB = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelBg.SuspendLayout();
             this.SuspendLayout();
@@ -117,11 +119,33 @@
             this.panelBg.Size = new System.Drawing.Size(313, 144);
             this.panelBg.TabIndex = 5;
             // 
+            // cbShowMinimap
+            // 
+            this.cbShowMinimap.AutoSize = true;
+            this.cbShowMinimap.Location = new System.Drawing.Point(174, 356);
+            this.cbShowMinimap.Name = "cbShowMinimap";
+            this.cbShowMinimap.Size = new System.Drawing.Size(95, 17);
+            this.cbShowMinimap.TabIndex = 6;
+            this.cbShowMinimap.Text = "Show Minimap";
+            this.cbShowMinimap.UseVisualStyleBackColor = true;
+            // 
+            // cbDB
+            // 
+            this.cbDB.AutoSize = true;
+            this.cbDB.Location = new System.Drawing.Point(275, 356);
+            this.cbDB.Name = "cbDB";
+            this.cbDB.Size = new System.Drawing.Size(122, 17);
+            this.cbDB.TabIndex = 7;
+            this.cbDB.Text = "Read from database";
+            this.cbDB.UseVisualStyleBackColor = true;
+            // 
             // MyWorlds
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(702, 419);
+            this.Controls.Add(this.cbDB);
+            this.Controls.Add(this.cbShowMinimap);
             this.Controls.Add(this.panelBg);
             this.Controls.Add(this.LoadWorldButton);
             this.Controls.Add(this.ResetButton);
@@ -150,5 +174,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button LoadWorldButton;
         private System.Windows.Forms.Panel panelBg;
+        private System.Windows.Forms.CheckBox cbShowMinimap;
+        private System.Windows.Forms.CheckBox cbDB;
     }
 }
