@@ -12,7 +12,7 @@ namespace EEditor
         Thread thread;
         Client client;
         Connection conn;
-        public Button buttonName {  get { return button1; } set { button1 = value; } }
+        public Button buttonName { get { return button1; } set { button1 = value; } }
         private Dictionary<string, string> data = new Dictionary<string, string>();
         public static bool crewEdit = false;
         public static bool crewWorld = false;
@@ -103,44 +103,19 @@ namespace EEditor
                     {
                         if (MainForm.accs.ContainsKey(MainForm.selectedAcc))
                         {
-                            if (MainForm.accs[MainForm.selectedAcc].loginMethod == 0)
-                            {
-                                client = PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, MainForm.accs[MainForm.selectedAcc].password, null);
-                            }
-                            else if (MainForm.accs[MainForm.selectedAcc].loginMethod == 1)
-                            {
-                                client = PlayerIO.QuickConnect.FacebookOAuthConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, null, null);
-                            }
-                            else if (MainForm.accs[MainForm.selectedAcc].loginMethod == 2)
-                            {
-                                client = PlayerIO.QuickConnect.KongregateConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, MainForm.accs[MainForm.selectedAcc].password, null);
-                            }
-                            else if (MainForm.accs[MainForm.selectedAcc].loginMethod == 3)
-                            {
-                                client = PlayerIO.Authenticate(bdata.gameID, "secure", new Dictionary<string, string> { { "userId", MainForm.accs[MainForm.selectedAcc].login }, { "authToken", MainForm.accs[MainForm.selectedAcc].password } }, null);
-                            }
-                            else if (MainForm.accs[MainForm.selectedAcc].loginMethod == 4)
-                            {
-                                PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, MainForm.accs[MainForm.selectedAcc].password, null, (Client cli) => {
-                                    cli.Multiplayer.CreateJoinRoom("$service-room", "AuthRoom", true, null, new Dictionary<string, string>() { { "type", "Link" } }, (Connection con) => {
-                                        con.OnMessage += (object sender1, PlayerIOClient.Message m) => {
-                                            if (m.Type == "auth") {
-                                                client = PlayerIO.Authenticate("everybody-edits-su9rn58o40itdbnw69plyw", "connected", new Dictionary<string, string>() { { "userId", m.GetString(0) }, { "auth", m.GetString(1) } }, null);
-                                                s1.Release();
-                                            }
-                                        };
-                                    },
-                                    (PlayerIOError error) => MessageBox.Show(error.Message, "Error"));
-                                }, (PlayerIOError error) => MessageBox.Show(error.Message, "Error"));
-                                s1.WaitOne();
-                            }
+                            client = PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, MainForm.accs[MainForm.selectedAcc].password, null);
                             if (MainForm.userdata.level.StartsWith("OW"))
                             {
-                                client.Multiplayer.ListRooms($"Everybuildexists{bdata.version}", null, 0, 0,
-                                (RoomInfo[] rinfo) => {
-                                    foreach (var val in rinfo) {
-                                        if (val.Id.StartsWith("OW")) {
-                                            if (val.Id.Length == MainForm.userdata.level.Length) {
+                                int version = bdata.forceversion ? bdata.version : Convert.ToInt32(client.BigDB.Load("config", "config")["version"]);
+                                client.Multiplayer.ListRooms($"Everybuildexists{version}", null, 0, 0,
+                                (RoomInfo[] rinfo) =>
+                                {
+                                    foreach (var val in rinfo)
+                                    {
+                                        if (val.Id.StartsWith("OW"))
+                                        {
+                                            if (val.Id.Length == MainForm.userdata.level.Length)
+                                            {
                                                 MainForm.userdata.level = val.Id;
                                                 levelTextBox.Text = val.Id;
                                                 conn = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, MainForm.userdata.level.StartsWith("BW") ? "Beta" : "Everybuildexists" + bdata.version, true, null, null);
@@ -160,7 +135,8 @@ namespace EEditor
                             }
                             else
                             {
-                                conn = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level,$"Everybuildexists{bdata.version}", true, null, null);
+                                int version = bdata.forceversion ? bdata.version : Convert.ToInt32(client.BigDB.Load("config", "config")["version"]);
+                                conn = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, $"Everybuildexists{version}", true, null, null);
                                 Animator anim = new Animator(frames, conn, levelPassTextBox.Text, shuffleCheckBox.Checked, checkBoxReverse.Checked, checkBoxRandom.Checked);
                                 conn.OnDisconnect += Conn_OnDisconnect;
                                 Animator.pb = uploadProgressBar; //Make Animator.cs work with this form's progressbar
@@ -238,6 +214,7 @@ namespace EEditor
             {
                 if (value.GetType() == typeof(GroupBox))
                 {
+
                     if (value.Controls.Count > 0)
                     {
                         foreach (Control cntrl in value.Controls)
@@ -254,7 +231,7 @@ namespace EEditor
                                 }
                                 if (cntrl.GetType() == typeof(GroupBox))
                                 {
-                                    cntrl.ForeColor = MainForm.themecolors.foreground;
+                                    cntrl.ForeColor = MainForm.themecolors.groupbox;
                                 }
                                 if (cntrl.GetType() == typeof(NumericUpDown))
                                 {
@@ -396,7 +373,7 @@ namespace EEditor
         public int totalLines { get; }
         public int CountedLines { get; }
 
-        public StatusChangedArgs(string text,DateTime epochstart, bool complete,int totallines,int countedlines)
+        public StatusChangedArgs(string text, DateTime epochstart, bool complete, int totallines, int countedlines)
         {
             Text = text;
             EpochStart = epochstart;
