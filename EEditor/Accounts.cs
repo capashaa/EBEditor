@@ -50,7 +50,7 @@ namespace EEditor
                 }
                 if (value0.GetType() == typeof(GroupBox))
                 {
-                    value0.ForeColor = MainForm.themecolors.foreground;
+                    value0.ForeColor = MainForm.themecolors.groupbox;
                 }
                 foreach (Control value1 in value0.Controls)
                 {
@@ -154,12 +154,7 @@ namespace EEditor
                                 }
                                 catch (Exception)
                                 {
-                                    switch (Convert.ToInt32(property.Value["loginMethod"]))
-                                    {
-                                        case 0:
-                                            PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, property.Value["login"].ToString(), property.Value["password"].ToString(), null, (Client client) => successLogin2(client, property.Value["login"].ToString().ToString(), property.Value["password"].ToString(), Convert.ToInt32(property.Value["loginMethod"])), failLogin1);
-                                            break;
-                                    }
+                                    PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, property.Value["login"].ToString(), property.Value["password"].ToString(), null, (Client client) => successLogin2(client, property.Value["login"].ToString().ToString(), property.Value["password"].ToString(), Convert.ToInt32(property.Value["loginMethod"])), failLogin1);
                                     mf.cb.Items.Add(property.Key);
                                 }
                             }
@@ -237,7 +232,8 @@ namespace EEditor
         {
             if (client != null)
             {
-                client.Multiplayer.CreateJoinRoom(id, $"Lobby{bdata.version}", true, null, null,
+                int version = bdata.forceversion ? bdata.version : Convert.ToInt32(client.BigDB.Load("config", "config")["version"]);
+                client.Multiplayer.CreateJoinRoom(id, $"Lobby{version}", true, null, null,
                     (Connection con) =>
                     {
                         lobbyConnected(con, client, login, password, loginmethod);
@@ -254,7 +250,6 @@ namespace EEditor
 
             con.OnMessage += (s, m) =>
             {
-
                 switch (m.Type)
                 {
                     case "LobbyTo":
@@ -273,6 +268,8 @@ namespace EEditor
                         Dictionary<string, int> pv = new Dictionary<string, int>();
                         int total = bdata.extractPlayerObjectsMessage(m) + 1;
                         string nickname = m[(uint)total].ToString();
+                        total += 8;
+                        
                         int goldmember = total + 9;
                         int isadmin = total + 7;
                         int ismod = total + 8;
@@ -379,33 +376,6 @@ namespace EEditor
                         });
 
                         break;
-                    /*
-                   case "theReceivedData":
-                           Here do you get the received data that you requested for. (Sent message)
-                        break;
-                    */
-                    case "linked":
-                        client_.Multiplayer.CreateJoinRoom("$service-room", "AuthRoom", true, null, new Dictionary<string, string>() { { "type", "Link" } }, (Connection conn) =>
-                        {
-                            conn.OnMessage += (object sender1, PlayerIOClient.Message mm) =>
-                            {
-                                if (mm.Type == "auth")
-                                {
-                                    PlayerIO.Authenticate("everybody-edits-su9rn58o40itdbnw69plyw", "connected", new Dictionary<string, string>() { { "userId", mm.GetString(0) }, { "auth", mm.GetString(1) } }, null, (Client client1) =>
-                                    {
-                                        Client clie = client1;
-                                        con.Disconnect();
-                                        tryLobbyConnect(string.Format("{0}_{1}", clie.ConnectUserId, RandomString(5)), client, login, pass, loginmethod);
-                                    }, (PlayerIOError error) =>
-                                    {
-                                    });
-                                }
-                            };
-                        },
-                        (PlayerIOError error) =>
-                        {
-                        });
-                        break;
                 }
             };
         }
@@ -417,6 +387,7 @@ namespace EEditor
         }
         private void successLogin(Client client, string login, string password, int loginmethod) //login for save
         {
+            Console.WriteLine(client.ConnectUserId);
             client_ = client;
             tryLobbyConnect($"{client.ConnectUserId}_{RandomString(5)}", client, login, password, loginmethod);
         }
