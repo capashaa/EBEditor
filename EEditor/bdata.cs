@@ -13,7 +13,15 @@ namespace EEditor
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont,
 IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         public static string gameID = "every-build-exists-d6aoqro023pzodrp9jhw";
-        public static int version = 224;
+        public static string programVersion { get; set; }
+
+        //Force version here, else read from database
+        public static int version = 225;
+        public static bool forceversion = false;
+
+        public static string lobby = "Lobby";
+        public static string normal_room = "Everybuildexists";
+
         public static int[] goal = { 77, 83, 43, 165, 213, 214, 417, 418, 419, 420, 421, 422, 423, 1027, 1028, 113, 185, 184, 1011, 1012, 453, 461, 467, 1079, 1080, 1520,1582,1619,1620 };
         //public static int[] effects = { 417, 418, 419, 420, 421, 422, 453 };
         //spikes
