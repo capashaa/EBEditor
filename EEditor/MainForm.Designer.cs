@@ -119,7 +119,8 @@
             this.foregroundLabel = new System.Windows.Forms.ToolStripLabel();
             this.backgroundLabel = new System.Windows.Forms.ToolStripLabel();
             this.rotationLabel = new System.Windows.Forms.ToolStripLabel();
-            this.idtargetLabel = new System.Windows.Forms.ToolStripLabel();
+            this.idLabel = new System.Windows.Forms.ToolStripLabel();
+            this.targetLabel = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.textLabel = new System.Windows.Forms.ToolStripLabel();
             this.findToolStrip = new System.Windows.Forms.ToolStrip();
@@ -853,7 +854,7 @@
             this.refreshButton.Size = new System.Drawing.Size(24, 24);
             this.refreshButton.Text = "Refresh";
             this.refreshButton.ToolTipText = "Left click: load current level (F5)\r\nRight click: load saved level ";
-            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            //this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             this.refreshButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.refreshButton_MouseUp);
             // 
             // codeTextbox
@@ -1041,13 +1042,14 @@
             this.foregroundLabel,
             this.backgroundLabel,
             this.rotationLabel,
-            this.idtargetLabel,
+            this.idLabel,
+            this.targetLabel,
             this.toolStripSeparator7,
             this.textLabel});
             this.statusToolStrip.Location = new System.Drawing.Point(0, 0);
             this.statusToolStrip.Name = "statusToolStrip";
             this.statusToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.statusToolStrip.Size = new System.Drawing.Size(218, 25);
+            this.statusToolStrip.Size = new System.Drawing.Size(286, 25);
             this.statusToolStrip.TabIndex = 2;
             this.statusToolStrip.Text = "toolStrip1";
             // 
@@ -1086,14 +1088,20 @@
             this.rotationLabel.Size = new System.Drawing.Size(33, 22);
             this.rotationLabel.Text = "0";
             this.rotationLabel.ToolTipText = "Block rotation";
+            // idLabel
             // 
-            // idtargetLabel
+            this.idLabel.Image = global::EEditor.Properties.Resources.id;
+            this.idLabel.Name = "idLabel";
+            this.idLabel.Size = new System.Drawing.Size(33, 22);
+            this.idLabel.Text = "0";
+            this.idLabel.ToolTipText = "Portal ID > target";
             // 
-            this.idtargetLabel.Image = global::EEditor.Properties.Resources.id;
-            this.idtargetLabel.Name = "idtargetLabel";
-            this.idtargetLabel.Size = new System.Drawing.Size(53, 22);
-            this.idtargetLabel.Text = "0 > 0";
-            this.idtargetLabel.ToolTipText = "Portal ID > target";
+            // targetLabel
+            // 
+            this.targetLabel.Image = global::EEditor.Properties.Resources.target;
+            this.targetLabel.Name = "targetLabel";
+            this.targetLabel.Size = new System.Drawing.Size(33, 22);
+            this.targetLabel.Text = "0";
             // 
             // toolStripSeparator7
             // 
@@ -1473,9 +1481,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripLabel backgroundLabel;
         private System.Windows.Forms.ToolStripLabel rotationLabel;
-        private System.Windows.Forms.ToolStripLabel idtargetLabel;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripLabel idLabel;
         private System.Windows.Forms.ToolStripLabel textLabel;
+        private System.Windows.Forms.ToolStripLabel targetLabel;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripLabel positionLabel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolStripButton replaceButton;
