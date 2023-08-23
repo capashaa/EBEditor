@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -13,86 +14,121 @@ namespace EEditor
     internal class LoadWorld
     {
 
-        public static Frame LoadData(string roomid)
+        public static Semaphore s1 = new Semaphore(0, 1);
+        public static Frame LoadData(string roomid, bool bigdb)
         {
+            Frame frame = null;
             Client sel = SelectAccount();
-
+            MainForm.userdata.level = roomid;
+            MainForm.editArea.MainForm.updateId.Text = roomid;
             if (sel != null)
             {
-                Console.WriteLine("Logged in");
-                var world = new World(InputType.BigDB, roomid, sel);
-                Frame frame = new Frame(world.Width, world.Height);
-                frame.nickname = world.OwnerUsername;
-                frame.levelname = world.Title;
-                frame.owner = world.Owner;
-                if (world.BackgroundColorUint != 0)
+                if (bigdb)
                 {
-                    MainForm.userdata.useColor = true;
-                    MainForm.userdata.thisColor = world.BackgroundColor;
-                }
-                foreach (var item in world.Blocks)
-                {
-                    int layer = item.Layer;
-                    int bid = item.Type;
-                    foreach (var pos in item.Locations)
+                    Console.WriteLine("Logged in");
+                    var world = new World(InputType.BigDB, roomid, sel);
+                    frame = new Frame(world.Width, world.Height);
+                    frame.nickname = world.OwnerUsername;
+                    frame.levelname = world.Title;
+                    frame.owner = world.Owner;
+                    if (world.BackgroundColorUint != 0)
                     {
-                        if (layer == 0)
-                        {
-                            frame.Foreground[pos.Y, pos.X] = bid;
-                            if (item.Name != null) frame.BlockData3[pos.Y, pos.X] = item.Name;
-                            if (item.TextMessage1 != null) frame.BlockData4[pos.Y, pos.X] = item.TextMessage1;
-                            if (item.TextMessage2 != null) frame.BlockData5[pos.Y, pos.X] = item.TextMessage2;
-                            if (item.TextMessage3 != null) frame.BlockData6[pos.Y, pos.X] = item.TextMessage3;
-                            if (item.Goal.ToString() != null) frame.BlockData[pos.Y, pos.X] = item.Goal;
-                            if (item.SignType.ToString() != null) frame.BlockData[pos.Y, pos.X] = item.SignType;
-                            if (item.Text != null) frame.BlockData3[pos.Y, pos.X] = item.Text;
-                            if (item.Rotation.ToString() != null) frame.BlockData[pos.Y, pos.X] = item.Rotation;
-                            if (Convert.ToString(item.Id) != null)
-                            {
-                                if (bdata.sound.Contains(bid))
-                                {
-                                    frame.BlockData[pos.Y, pos.X] = (int)Convert.ToUInt32(item.Id);
-                                }
-                                else
-                                {
-                                    frame.BlockData1[pos.Y, pos.X] = Convert.ToInt32(item.Id);
-                                }
-                            }
-                            if (bid == 242 || bid == 381) frame.BlockData2[pos.Y, pos.X] = Convert.ToInt32(item.Target);
-                            if (bid == 374) frame.BlockData3[pos.Y, pos.X] = Convert.ToString(item.Target);
-                            if (bid == 1000)
-                            {
-                                if (item.Text != null)
-                                {
-                                    int wrap = 200;
-                                    string hexcolor = "#FFFFFF";
-                                    frame.BlockData3[pos.Y, pos.X] = item.Text;
-                                    if (item.Hex != null)
-                                    {
-                                        hexcolor = item.Hex;
-                                    }
-                                    if (item.Wrap.ToString() != null)
-                                    {
-                                        wrap = item.Wrap;
-                                    }
-                                    frame.BlockData4[pos.Y, pos.X] = hexcolor;
-                                    frame.BlockData[pos.Y, pos.X] = wrap;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            frame.Background[pos.Y, pos.X] = bid;
-                        }
-
+                        MainForm.userdata.useColor = true;
+                        MainForm.userdata.thisColor = world.BackgroundColor;
                     }
+                    foreach (var item in world.Blocks)
+                    {
+                        int layer = item.Layer;
+                        int bid = item.Type;
+                        foreach (var pos in item.Locations)
+                        {
+                            if (layer == 0)
+                            {
+                                frame.Foreground[pos.Y, pos.X] = bid;
+                                if (item.Name != null) frame.BlockData3[pos.Y, pos.X] = item.Name;
+                                if (item.TextMessage1 != null) frame.BlockData4[pos.Y, pos.X] = item.TextMessage1;
+                                if (item.TextMessage2 != null) frame.BlockData5[pos.Y, pos.X] = item.TextMessage2;
+                                if (item.TextMessage3 != null) frame.BlockData6[pos.Y, pos.X] = item.TextMessage3;
+                                if (item.Goal.ToString() != null) frame.BlockData[pos.Y, pos.X] = item.Goal;
+                                if (item.SignType.ToString() != null) frame.BlockData[pos.Y, pos.X] = item.SignType;
+                                if (item.Text != null) frame.BlockData3[pos.Y, pos.X] = item.Text;
+                                if (item.Rotation.ToString() != null) frame.BlockData[pos.Y, pos.X] = item.Rotation;
+                                if (Convert.ToString(item.Id) != null)
+                                {
+                                    if (bdata.sound.Contains(bid))
+                                    {
+                                        frame.BlockData[pos.Y, pos.X] = (int)Convert.ToUInt32(item.Id);
+                                    }
+                                    else
+                                    {
+                                        frame.BlockData1[pos.Y, pos.X] = Convert.ToInt32(item.Id);
+                                    }
+                                }
+                                if (bid == 242 || bid == 381) frame.BlockData2[pos.Y, pos.X] = Convert.ToInt32(item.Target);
+                                if (bid == 374) frame.BlockData3[pos.Y, pos.X] = Convert.ToString(item.Target);
+                                if (bid == 1000)
+                                {
+                                    if (item.Text != null)
+                                    {
+                                        int wrap = 200;
+                                        string hexcolor = "#FFFFFF";
+                                        frame.BlockData3[pos.Y, pos.X] = item.Text;
+                                        if (item.Hex != null)
+                                        {
+                                            hexcolor = item.Hex;
+                                        }
+                                        if (item.Wrap.ToString() != null)
+                                        {
+                                            wrap = item.Wrap;
+                                        }
+                                        frame.BlockData4[pos.Y, pos.X] = hexcolor;
+                                        frame.BlockData[pos.Y, pos.X] = wrap;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                frame.Background[pos.Y, pos.X] = bid;
+                            }
+
+                        }
+                    }
+                    return frame;
                 }
-                return frame;
-            }
-            else
-            {
-                Console.WriteLine("no");
-                return null;
+                else
+                {
+                    int version = bdata.forceversion ? bdata.version : Convert.ToInt32(sel.BigDB.Load("config", "config")["version"]);
+                    sel.Multiplayer.CreateJoinRoom(roomid, $"{bdata.normal_room}{version}", false, null, null, (Connection con) =>
+                    {
+
+                        con.Send("init");
+                        con.OnMessage += (object sender, PlayerIOClient.Message m) =>
+                        {
+
+                            switch (m.Type)
+                            {
+                                case "init":
+                                    frame = Frame.FromMessage(m, m.GetInt(25), m.GetInt(26));
+                                    frame.levelname = m.GetString(1);
+                                    frame.owner = m.GetString(0);
+                                    s1.Release();
+                                    break;
+                            }
+                        };
+                        con.OnDisconnect += (object sender, string reason) =>
+                        {
+                            Console.WriteLine(reason);
+                            s1.Release();
+                        };
+
+                    }, (PlayerIOError error) =>
+                    {
+                        Console.WriteLine($"Error: {error}");
+                        s1.Release();
+                    });
+                    s1.WaitOne();
+                }
+                
             }
             /*int w = 0;
             int h = 0;
@@ -201,26 +237,14 @@ namespace EEditor
                 }
                 Close();
             }*/
+            return frame;
         }
         public static Client SelectAccount()
         {
 
-            var value = MainForm.accs[MainForm.selectedAcc].loginMethod;
-            if (value == 0 && MainForm.accs.ContainsKey(MainForm.selectedAcc))
+            if (MainForm.accs.ContainsKey(MainForm.selectedAcc))
             {
                 return PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, MainForm.accs[MainForm.selectedAcc].password, null);
-            }
-            else if (value == 1 && MainForm.accs.ContainsKey(MainForm.selectedAcc))
-            {
-                return PlayerIO.QuickConnect.FacebookOAuthConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, null, null);
-            }
-            else if (value == 2 && MainForm.accs.ContainsKey(MainForm.selectedAcc))
-            {
-                return PlayerIO.QuickConnect.KongregateConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, MainForm.accs[MainForm.selectedAcc].password, null);
-            }
-            else if (value == 3 && MainForm.accs.ContainsKey(MainForm.selectedAcc))
-            {
-                return PlayerIO.Authenticate(bdata.gameID, "secure", new Dictionary<string, string> { { "userId", MainForm.accs[MainForm.selectedAcc].login }, { "authToken", MainForm.accs[MainForm.selectedAcc].password } }, null);
             }
             else
             {
