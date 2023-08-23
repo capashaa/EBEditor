@@ -308,7 +308,8 @@ namespace EEditor
                 {
                     if (MainForm.userdata.level.StartsWith("OW"))
                     {
-                        client.Multiplayer.ListRooms($"Everybuildexists{bdata.version}", null, 0, 0,
+                        int version = bdata.forceversion ? bdata.version : Convert.ToInt32(client.BigDB.Load("config", "config")["version"]);
+                        client.Multiplayer.ListRooms($"Everybuildexists{version}", null, 0, 0,
                         (RoomInfo[] rinfo) =>
                         {
                             foreach (var val in rinfo)
@@ -334,7 +335,8 @@ namespace EEditor
                     {
                         if (client != null)
                         {
-                            Connection = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, $"Everybuildexists{bdata.version}", true, null, null);
+                            int version = bdata.forceversion ? bdata.version : Convert.ToInt32(client.BigDB.Load("config", "config")["version"]);
+                            Connection = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, $"Everybuildexists{version}", true, null, null);
                             Connection.OnMessage += OnMessage;
                             Connection.Send("init");
                             NeedsInit = false;
@@ -567,7 +569,7 @@ namespace EEditor
                 MapFrame = Frame.FromMessage(e);
                 if (MapFrame != null)
                 {
-                    if (e.GetUInt(21) == 0) { EEditor.MainForm.userdata.thisColor = Color.Transparent; }
+                    if (e.GetUInt(28) == 0) { EEditor.MainForm.userdata.thisColor = Color.Transparent; }
                     else
                     {
                         EEditor.MainForm.userdata.useColor = true;
@@ -575,7 +577,7 @@ namespace EEditor
                     }
 
                     var owner = e.GetString(0)?.Length == 0 ? "Unknown" : e.GetString(0);
-                    MainForm.Text = $"({e[1]}) [{owner}] ({e[18]}x{e[19]}) - EBEditor {this.ProductVersion}";
+                    MainForm.Text = $"({e[1]}) [{owner}] ({e[25]}x{e[26]}) - EBEditor {this.ProductVersion}";
                     SizeWidth = MapFrame.Width;
                     SizeHeight = MapFrame.Height;
                     Connection.Disconnect();
@@ -640,7 +642,7 @@ namespace EEditor
                 }
                 if (cntr.GetType() == typeof(GroupBox))
                 {
-                    cntr.ForeColor = MainForm.themecolors.foreground;
+                    cntr.ForeColor = MainForm.themecolors.groupbox;
                     cntr.BackColor = MainForm.themecolors.background;
                     foreach (Control cntrl in cntr.Controls)
                     {
