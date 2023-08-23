@@ -27,7 +27,7 @@ namespace EEditor
             {
                 if (this.Controls[i].GetType() == typeof(GroupBox))
                 {
-                    this.Controls[i].ForeColor = MainForm.themecolors.foreground;
+                    this.Controls[i].ForeColor = MainForm.themecolors.groupbox;
                     for (int a = 0; a < this.Controls[i].Controls.Count; a++)
                     {
                         if (this.Controls[i].Controls[a].GetType() == typeof(Label))
