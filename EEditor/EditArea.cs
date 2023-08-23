@@ -98,7 +98,35 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     InsertImageForm open = new InsertImageForm();
                     open.ShowDialog();
                 }
+                else if (Regex.IsMatch(Path.GetExtension(files[0]).ToLower(), "^.eelvl$"))
+                {
+                    //MainForm.SetDummy();
+                    string filename = files[0];
+                    Frame frame = Frame.LoadFromEELVL(filename);
+                    if (frame.toobig)
+                    {
+                        MessageBox.Show("Can't load this world. It's too big. Max size: 637x460 or 460x637", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        if (frame != null)
+                        {
+
+                            MainForm.Text = $".eelvl - ({frame.levelname}) [{frame.nickname}] ({frame.Width}x{frame.Height}) - EBEditor {this.ProductVersion}";
+                            ExecuteInitFrame(frame, false);
+                        }
+                        else
+                        {
+                            MessageBox.Show("The dropped EELVL is either invalid or corrupt.", "Invalid EELVL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
             }
+        }
+
+        private void ExecuteInitFrame(Frame frame, bool wat)
+        {
+            Init(frame, wat);
         }
 
         [DllImport("user32.dll")]
@@ -308,50 +336,26 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         {
             BlockHeight = height;
             BlockWidth = width;
-            int calc1 = BlockWidth * MainForm.Zoom;
-            int calc2 = BlockHeight * MainForm.Zoom;
-            int calc3 = calc1 + calc2;
-            if (calc3 > 23170)
-            {
-                MessageBox.Show("Can't load this world. It's too big.");
-            }
-            else
-            {
-                Size size = new Size(BlockWidth * MainForm.Zoom, BlockHeight * MainForm.Zoom);
-                Frame frame = new Frame(BlockWidth, BlockHeight);
-                frame.Reset(false);
-                Init(frame, false);
-            }
+            Frame frame = new Frame(BlockWidth, BlockHeight);
+            frame.Reset(false);
+            Init(frame, false);
         }
 
         public void Init(Frame frame, bool frme)
         {
+            //started = true;
             BlockHeight = frame.Height;
             BlockWidth = frame.Width;
-            int calc1 = BlockWidth * MainForm.Zoom;
-            int calc2 = BlockHeight * MainForm.Zoom;
-            int calc3 = calc1 + calc2;
-            if (calc3 > 23170)
-            {
-                started = false;
-                MessageBox.Show("Can't load this world. It's too big.");
-                
-            }
-            else
-            {
-                Frames.Clear();
-                Frames.Add(frame);
-                curFrame = 0;
-                Size size = new Size(BlockWidth * MainForm.Zoom, BlockHeight * MainForm.Zoom);
-                //Bricks = new Bitmap[3000];
-                //BricksFade = new Bitmap[BlockWidth * MainForm.Zoom];
-                Back = new Bitmap(BlockWidth * MainForm.Zoom, BlockHeight * MainForm.Zoom);
-                Minimap.Init(BlockWidth, BlockHeight);
-                PaintCurFrame();
-                this.AutoScrollMinSize = size;
-                this.Invalidate();
-                started = true;
-            }
+            Frames.Clear();
+            Frames.Add(frame);
+            curFrame = 0;
+            Size size = new Size(BlockWidth * MainForm.Zoom, BlockHeight * MainForm.Zoom);
+            Back = new Bitmap(BlockWidth * MainForm.Zoom, BlockHeight * MainForm.Zoom);
+            Minimap.Init(BlockWidth, BlockHeight);
+            PaintCurFrame();
+            started = false;
+
+            this.AutoScrollMinSize = size;
         }
         public void zoomRefresh()
         {
@@ -367,11 +371,17 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
 
         protected void PaintCurFrame()
         {
-            Graphics g = Graphics.FromImage(Back);
-            for (int x = 0; x < BlockWidth; ++x)
-                for (int y = 0; y < BlockHeight; ++y)
-                    Draw(x, y, g, Color.Transparent);
-            g.Save();
+            using (Graphics g = Graphics.FromImage(Back))
+            {
+                for (int x = 0; x < BlockWidth; ++x)
+                {
+                    for (int y = 0; y < BlockHeight; ++y)
+                    {
+                        Draw(x, y, g, Color.Transparent);
+                        this.Invalidate();
+                    }
+                }
+            }
         }
 
         /*public void Draw(int x, int y, Graphics g)
@@ -398,11 +408,11 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     Bitmap bmp2 = new Bitmap(16, 16);
                     if (bid >= 500 && bid <= 999 && bid < 2500)
                     {
-                        bmp2 = unknowBricks.Clone(new Rectangle(5 * 16, 0, 16, 16), unknowBricks.PixelFormat);
+                        bmp2 = unknowBricks.Clone(new Rectangle(3 * 16, 0, 16, 16), unknowBricks.PixelFormat);
                     }
                     else if (bid >= 2507 && bid <= 2513)
                     {
-                        bmp2 = unknowBricks.Clone(new Rectangle(6 * 16 + 1, 0, 16, 16), unknowBricks.PixelFormat);
+                        bmp2 = unknowBricks.Clone(new Rectangle(4 * 16 + 1, 0, 16, 16), unknowBricks.PixelFormat);
                     }
                     g.DrawImage(bmp2, x * 16, y * 16);
                     if (MainForm.unknown.Count > 0)
@@ -740,7 +750,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         {
             Tool.MouseMove(e);
             IsMouseUp = false;
-            if (started)
+            if (!started)
             {
                 Point p = Tool.GetLocation(e);
                 if (e.X / MainForm.Zoom <= CurFrame.Width && e.Y / MainForm.Zoom <= CurFrame.Height) MainForm.pos.Text = "X: " + p.X + " Y: " + p.Y;
@@ -761,6 +771,8 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                         }
                         MainForm.rot.Text = CurFrame.BlockData[p.Y, p.X].ToString();
                         MainForm.txt.Text = text;
+                        MainForm.rot.Visible = true;
+                        MainForm.txt.Visible = true;
                     }
                 }
                 else if (CurFrame.Foreground[p.Y, p.X] == 385)
@@ -778,6 +790,8 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                         }
                         MainForm.rot.Text = CurFrame.BlockData[p.Y, p.X].ToString();
                         MainForm.txt.Text = text;
+                        MainForm.rot.Visible = true;
+                        MainForm.txt.Visible = true;
                     }
                     catch
                     {
@@ -799,18 +813,27 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                         }
                         MainForm.rot.Text = CurFrame.BlockData[p.Y, p.X].ToString();
                         MainForm.txt.Text = text;
+                        MainForm.rot.Visible = true;
+                        MainForm.txt.Visible = true;
                     }
                 }
                 else if (bdata.portals.Contains(CurFrame.Foreground[p.Y, p.X]))
                 {
                     MainForm.rot.Text = CurFrame.BlockData[p.Y, p.X].ToString();
-                    MainForm.idtarget.Text = CurFrame.BlockData1[p.Y, p.X].ToString() + " > " + CurFrame.BlockData2[p.Y, p.X].ToString();
+                    MainForm.id.Text = CurFrame.BlockData1[p.Y, p.X].ToString();
+                    MainForm.target.Text = CurFrame.BlockData2[p.Y, p.X].ToString();
+                    MainForm.rot.Visible = true;
+                    MainForm.id.Visible = true;
+                    MainForm.target.Visible = true;
                 }
                 else
                 {
                     MainForm.rot.Text = CurFrame.BlockData[p.Y, p.X].ToString();
                     MainForm.txt.Text = "";
-                    MainForm.idtarget.Text = "0 > 0";
+                    MainForm.rot.Visible = true;
+                    MainForm.txt.Visible = false;
+                    MainForm.id.Visible = false;
+                    MainForm.target.Visible = false;
                 }
             }
         }
@@ -904,13 +927,13 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     if (MainForm.debug)
                     {
                         MainForm.debug = false;
-                        MainForm.Text = "EBEditor " + MainForm.ProductVersion;
+                        MainForm.Text = "EBEditor " + bdata.programVersion;
                         MainForm.rebuildGUI(false);
 
                     }
                     else
                     {
-                        MainForm.Text = "EBEditor " + MainForm.ProductVersion + " - Using Debug";
+                        MainForm.Text = "EBEditor " + bdata.programVersion + " - Using Debug";
                         MainForm.debug = true;
                         MainForm.rebuildGUI(false);
 
