@@ -1,31 +1,20 @@
-### Beta 3
-Added: EBE GameID and fixed so everything else works.
-
-###  Beta 4
-Fixed: bgcolor is set when reading from the database.
-Fixed: title of the world is added from the database.
-Fixed: owner name of the world is added from the database.
-Fixed: Rotation, Number, Text is added from database. 
-Added: Label reading from database and init.
-Fixed: that init read everything like it should in EBE Beta.
-
-###  Beta 5
-Fixed: Added all DLL-Files that is needed to be able to run EBEDitor.
-
-###  Beta 6
-Fixed so portals use the correct ids.
-Fixed NPC Astronaut to use correct id.
-Added label for admins and moderators. (Can't upload)
-Added replacer > Remove blocks.
-Removed updating tool, not needed.
-Changed selection tool options in setting.
-- Background: Ignore empty blocks when using selection tool.
-- Empty: Use empty blocks when using selection tool.
-Updated to latest EELVL.
+### EBEditor - Beta 0.0.9
+Fixed: Uploading of labels, labels checks and more.  
+Fixed: Width and Height in worlds, now use correct protocol.  
+Fixed: Background colours, is now added to .eelvl's reading.  
+Fixed: Initparser to read correct block id's.  
+Fixed: Reading worlds and information, use correct protocol.  
+Fixed: Reading information such as crew access, edit acces and a lot more.  
+Added: Groupbox colours.  
+Added: A better way of grabbing version of the game.  
 
 
-
-
+### EBEditor - Beta 0.0.8  
+Removed: Unused code in accounts.  
+Added: Admin access have all blocks.  
+Fixed: Block is not filling the whole screen.  
+Fixed: Y position is showing up correct in the Editor.  
+Changed: EEditor to EBEditor.  
 
 ### EBEditor - Beta 0.0.7
 
@@ -43,10 +32,28 @@ that have more than 200 in wrap.
 - Label should not load 3 times in a row.
 - Label crash because of memory leak, which is fixed now.
 
-### EBEditor - Beta 0.0.8  
-Removed: Unused code in accounts.  
-Added: Admin access have all blocks.  
-Fixed: Block is not filling the whole screen.  
-Fixed: Y position is showing up correct in the Editor.  
-Changed: EEditor to EBEditor.  
 
+###  Beta 6
+Fixed so portals use the correct ids.
+Fixed NPC Astronaut to use correct id.
+Added label for admins and moderators. (Can't upload)
+Added replacer > Remove blocks.
+Removed updating tool, not needed.
+Changed selection tool options in setting.
+- Background: Ignore empty blocks when using selection tool.
+- Empty: Use empty blocks when using selection tool.
+Updated to latest EELVL.
+
+###  Beta 5
+Fixed: Added all DLL-Files that is needed to be able to run EBEDitor.
+
+###  Beta 4
+Fixed: bgcolor is set when reading from the database.
+Fixed: title of the world is added from the database.
+Fixed: owner name of the world is added from the database.
+Fixed: Rotation, Number, Text is added from database. 
+Added: Label reading from database and init.
+Fixed: that init read everything like it should in EBE Beta.
+
+### Beta 3
+Added: EBE GameID and fixed so everything else works.
