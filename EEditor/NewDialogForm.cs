@@ -573,7 +573,7 @@ namespace EEditor
                     else
                     {
                         EEditor.MainForm.userdata.useColor = true;
-                        EEditor.MainForm.userdata.thisColor = UIntToColor(e.GetUInt(21));
+                        EEditor.MainForm.userdata.thisColor = UIntToColor(e.GetUInt(28));
                     }
 
                     var owner = e.GetString(0)?.Length == 0 ? "Unknown" : e.GetString(0);
