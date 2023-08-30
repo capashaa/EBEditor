@@ -1,3 +1,6 @@
+### EBEditor - Beta 0.1.0
+Fixed: background color used wrong id.  
+
 ### EBEditor - Beta 0.0.9
 Fixed: Uploading of labels, labels checks and more.  
 Fixed: Width and Height in worlds, now use correct protocol.  
