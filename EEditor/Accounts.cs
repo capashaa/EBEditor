@@ -144,12 +144,12 @@ namespace EEditor
                     {
                         if (property.Value["payvault"] != null)
                         {
-                            if (property.Value["login"].ToString() != "guest" && property.Value["password"].ToString() != "guest" && property.Value["login"] != null && property.Value["password"] != null && property.Value["loginMethod"] != null)
+                            if (property.Value["login"].ToString() != "guest" && property.Value["password"].ToString() != "guest" && property.Value["login"] != null && property.Value["password"] != null)
                             {
                                 try
                                 {
                                     Dictionary<string, int> values = JsonConvert.DeserializeObject<Dictionary<string, int>>(property.Value["payvault"].ToString());
-                                    MainForm.accs.Add(property.Key, new accounts() { login = property.Value["login"].ToString(), password = property.Value["password"].ToString(), loginMethod = (int)property.Value["loginMethod"],admin = (bool)property.Value["admin"], moderator = (bool)property.Value["moderator"], payvault = values });
+                                    MainForm.accs.Add(property.Key, new accounts() { login = property.Value["login"].ToString(), password = property.Value["password"].ToString(),admin = (bool)property.Value["admin"], moderator = (bool)property.Value["moderator"], payvault = values });
                                     mf.cb.Items.Add(property.Key);
                                 }
                                 catch (Exception)
