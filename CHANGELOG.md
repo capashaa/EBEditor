@@ -1,4 +1,4 @@
-### EBEditor - Beta 0.1.0
+### EBEditor - Beta 0.1.0  
 Fixed: background color used wrong id.  
 
 ### EBEditor - Beta 0.0.9
