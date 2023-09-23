@@ -1,8 +1,8 @@
 
 ### EBEditor - Beta 0.1.1
-Removed: Rotation id when using replace tool with basic blocks.
-Fixed: Bot will no longer stay online if using load world from "My Own Worlds".
-Added: Colored backgrounds.
+Removed: Rotation id when using replace tool with basic blocks.  
+Fixed: Bot will no longer stay online if using load world from "My Own Worlds".  
+Added: Colored backgrounds.  
 
 
 ### EBEditor - Beta 0.1.0  
