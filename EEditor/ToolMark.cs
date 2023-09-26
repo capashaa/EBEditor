@@ -17,6 +17,8 @@ namespace EEditor
         public string[,] Text2 { get; set; }
         public string[,] Text3 { get; set; }
         public string[,] Text4 { get; set; }
+
+        public string[,] Cblock { get; set; }
         public Rectangle Rect { get; set; }
         public enum Progress { Select, Selected }
         public Progress progress;
@@ -139,6 +141,7 @@ namespace EEditor
                     Text2 = new string[Rect.Height, Rect.Width];
                     Text3 = new string[Rect.Height, Rect.Width];
                     Text4 = new string[Rect.Height, Rect.Width];
+                    Cblock = new string[Rect.Height, Rect.Width];
                     Frame frame = editArea.CurFrame;
                     for (int y = 0; y < Rect.Height; ++y)
                     {
@@ -155,6 +158,7 @@ namespace EEditor
                             Text2[y, x] = frame.BlockData4[yy, xx];
                             Text3[y, x] = frame.BlockData5[yy, xx];
                             Text4[y, x] = frame.BlockData6[yy, xx];
+                            Cblock[y, x] = Convert.ToString(frame.BlockData7[yy, xx]);
                             editArea.CurFrame.Foreground[yy, xx] = (xx == 0 || yy == 0 || xx == frame.Width - 1 || yy == frame.Height - 1) ? 9 : 0;
                             editArea.CurFrame.Background[yy, xx] = 0;
                         }
@@ -276,7 +280,7 @@ namespace EEditor
                     if (0 <= x + r.X && x + r.X < editArea.BlockWidth && 0 <= y + r.Y && y + r.Y < editArea.BlockHeight)
                     {
 
-                        editArea.Draw(x + r.X, y + r.Y, g, Convert.ToInt32(Back[y, x]), Convert.ToInt32(Front[y, x]), Convert.ToInt32(Coins[y, x]), Convert.ToInt32(Id1[y, x]), Convert.ToInt32(Target1[y, x]), Text1[y, x], Text2[y, x], Text3[y, x], Text4[y, x], MainForm.userdata.thisColor);
+                        editArea.Draw(x + r.X, y + r.Y, g, Convert.ToInt32(Back[y, x]), Convert.ToInt32(Front[y, x]), Convert.ToInt32(Coins[y, x]), Convert.ToInt32(Id1[y, x]), Convert.ToInt32(Target1[y, x]), Text1[y, x], Text2[y, x], Text3[y, x], Text4[y, x],Convert.ToUInt32(Cblock[y,x]), MainForm.userdata.thisColor);
 
                     }
                     //g.DrawImage(editArea.Bricks[Area[y, x]], (x + r.X) * 16, (y + r.Y) * 16);
@@ -292,7 +296,7 @@ namespace EEditor
         {
             if (e.Control && e.KeyCode == Keys.C && progress == Progress.Selected)
             {
-                Clipboard.SetData("EEData", new string[][,] { Front, Back, Coins, Id1, Target1, Text1, Text2, Text3, Text4 });
+                Clipboard.SetData("EEData", new string[][,] { Front, Back, Coins, Id1, Target1, Text1, Text2, Text3, Text4,Cblock });
                 CleanUp(false);
             }
             if (e.Control && e.KeyCode == Keys.A)
@@ -323,7 +327,7 @@ namespace EEditor
                 Text2 = new string[Rect.Height, Rect.Width];
                 Text3 = new string[Rect.Height, Rect.Width];
                 Text4 = new string[Rect.Height, Rect.Width];
-
+                Cblock = new string[Rect.Height, Rect.Width];
                 Frame frame = editArea.CurFrame;
                 for (int y = 0; y < Rect.Height; ++y)
                 {
@@ -340,6 +344,7 @@ namespace EEditor
                         Text2[y, x] = frame.BlockData4[yy, xx];
                         Text3[y, x] = frame.BlockData5[yy, xx];
                         Text4[y, x] = frame.BlockData6[yy, xx];
+                        Cblock[y, x] = Convert.ToString(frame.BlockData7[yy, xx]);
                         editArea.CurFrame.Foreground[yy, xx] = (xx == 0 || yy == 0 || xx == frame.Width - 1 || yy == frame.Height - 1) ? 9 : 0;
                         editArea.CurFrame.Background[yy, xx] = 0;
 
@@ -350,7 +355,7 @@ namespace EEditor
             }
             else if (e.Control && e.KeyCode == Keys.X && progress == Progress.Selected)
             {
-                Clipboard.SetData("EEData", new string[][,] { Front, Back, Coins, Id1, Target1, Text1, Text2, Text3, Text4 });
+                Clipboard.SetData("EEData", new string[][,] { Front, Back, Coins, Id1, Target1, Text1, Text2, Text3, Text4,Cblock });
                 RemoveBorder();
                 Clear();
                 progress = Progress.Select;
@@ -359,12 +364,12 @@ namespace EEditor
             }
             else if (e.Control && e.KeyCode == Keys.G && progress == Progress.Selected)
             {
-                Clipboard.SetData("EEBrush", new string[][,] { Front, Back, Coins, Id1, Target1, Text1, Text2, Text3, Text4 });
+                Clipboard.SetData("EEBrush", new string[][,] { Front, Back, Coins, Id1, Target1, Text1, Text2, Text3, Text4,Cblock });
                 CleanUp(true);
             }
             else if (e.Control && e.KeyCode == Keys.M && progress == Progress.Selected)
             {
-                Clipboard.SetData("EEBlueprints", new string[][,] { Front, Back, Coins, Id1, Target1, Text1, Text2, Text3, Text4 });
+                Clipboard.SetData("EEBlueprints", new string[][,] { Front, Back, Coins, Id1, Target1, Text1, Text2, Text3, Text4,Cblock });
                 CleanUp(true);
 
             }
@@ -417,7 +422,7 @@ namespace EEditor
                                 frame.BlockData4[yy, xx] = "Unknown";
                                 frame.BlockData5[yy, xx] = "Unknown";
                                 frame.BlockData6[yy, xx] = "Unknown";
-                            
+                                frame.BlockData7[yy, xx] = 0;
 
                             //frame.Background[yy, xx] = 0;
                             editArea.Draw(xx, yy, g, MainForm.userdata.thisColor);
@@ -451,7 +456,7 @@ namespace EEditor
                                 frame.BlockData4[yy, xx] = "Unknown";
                                 frame.BlockData5[yy, xx] = "Unknown";
                                 frame.BlockData6[yy, xx] = "Unknown";
-                            
+                                frame.BlockData7[yy, xx] = 0;
 
                             //if (frame.Foreground[yy, xx] == 0) Back[y, x] = Convert.ToString(frame.Background[yy, xx]);
 
@@ -466,6 +471,7 @@ namespace EEditor
                             Text2[y, x] = frame.BlockData4[yy, xx];
                             Text3[y, x] = frame.BlockData5[yy, xx];
                             Text4[y, x] = frame.BlockData6[yy, xx];
+                            Cblock[y, x] = Convert.ToString(frame.BlockData7[yy, xx]);
                             editArea.Draw(xx, yy, g, MainForm.userdata.thisColor);
                             //g.DrawImage(editArea.Bricks[frame.Map[yy, xx]], (x + Rect.X) * 16, (y + Rect.Y) * 16);
                         }
@@ -541,6 +547,7 @@ namespace EEditor
                                     if (Text2[y, x] != null) frame.BlockData4[yy, xx] = Text2[y, x];
                                 if (Text3[y, x] != null) frame.BlockData5[yy, xx] = Text3[y, x];
                                 if (Text4[y, x] != null) frame.BlockData6[yy, xx] = Text4[y, x];
+                                if (Cblock[y, x] != null) frame.BlockData7[yy, xx] = Convert.ToUInt32(Cblock[y, x]);
                             
                             editArea.Draw(xx, yy, g, MainForm.userdata.thisColor);
                             //g.DrawImage(editArea.Bricks[frame.Map[yy, xx]], (x + Rect.X) * 16, (y + Rect.Y) * 16);
