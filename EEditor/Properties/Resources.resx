@@ -328,9 +328,6 @@
   <data name="blocktext" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\blocktext.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="BLOCKS_back" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BLOCKS_back.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -360,5 +357,11 @@
   </data>
   <data name="nokiafc22" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\nokiafc22.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="fgs_overlays" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fgs_overlays.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bgs_overlays" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bgs_overlays.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
