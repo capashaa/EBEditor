@@ -235,7 +235,7 @@
             this.toolStripSeparator1,
             this.hideBlocksButton,
             this.minimapButton});
-            this.viewToolStrip.Location = new System.Drawing.Point(618, 0);
+            this.viewToolStrip.Location = new System.Drawing.Point(631, 0);
             this.viewToolStrip.Name = "viewToolStrip";
             this.viewToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.viewToolStrip.Size = new System.Drawing.Size(180, 27);
@@ -804,6 +804,7 @@
             // 
             // delayTextBox
             // 
+            this.delayTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.delayTextBox.Name = "delayTextBox";
             this.delayTextBox.Size = new System.Drawing.Size(40, 25);
             this.delayTextBox.Text = "-Delay-";
@@ -838,6 +839,7 @@
             // 
             // levelTextbox
             // 
+            this.levelTextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.levelTextbox.Name = "levelTextbox";
             this.levelTextbox.Size = new System.Drawing.Size(76, 27);
             this.levelTextbox.Text = "Level ID";
@@ -854,11 +856,11 @@
             this.refreshButton.Size = new System.Drawing.Size(24, 24);
             this.refreshButton.Text = "Refresh";
             this.refreshButton.ToolTipText = "Left click: load current level (F5)\r\nRight click: load saved level ";
-            //this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             this.refreshButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.refreshButton_MouseUp);
             // 
             // codeTextbox
             // 
+            this.codeTextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.codeTextbox.Name = "codeTextbox";
             this.codeTextbox.Size = new System.Drawing.Size(76, 27);
             this.codeTextbox.Text = "Code";
@@ -967,7 +969,7 @@
             this.flowLayoutPanel6.AutoScroll = true;
             this.flowLayoutPanel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 523);
+            this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 399);
             this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel6.Name = "flowLayoutPanel6";
             this.flowLayoutPanel6.Size = new System.Drawing.Size(1005, 124);
@@ -978,7 +980,7 @@
             this.flowLayoutPanel5.AutoScroll = true;
             this.flowLayoutPanel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 523);
+            this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 275);
             this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel5.Name = "flowLayoutPanel5";
             this.flowLayoutPanel5.Size = new System.Drawing.Size(1005, 124);
@@ -989,7 +991,7 @@
             this.flowLayoutPanel4.AutoScroll = true;
             this.flowLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 523);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 151);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Size = new System.Drawing.Size(1005, 124);
@@ -1000,7 +1002,7 @@
             this.flowLayoutPanel2.AutoScroll = true;
             this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 523);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, -97);
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(1005, 124);
@@ -1011,7 +1013,7 @@
             this.flowLayoutPanel3.AutoScroll = true;
             this.flowLayoutPanel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 523);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 27);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
             this.flowLayoutPanel3.Size = new System.Drawing.Size(1005, 124);
@@ -1049,7 +1051,7 @@
             this.statusToolStrip.Location = new System.Drawing.Point(0, 0);
             this.statusToolStrip.Name = "statusToolStrip";
             this.statusToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.statusToolStrip.Size = new System.Drawing.Size(286, 25);
+            this.statusToolStrip.Size = new System.Drawing.Size(231, 25);
             this.statusToolStrip.TabIndex = 2;
             this.statusToolStrip.Text = "toolStrip1";
             // 
@@ -1088,6 +1090,7 @@
             this.rotationLabel.Size = new System.Drawing.Size(33, 22);
             this.rotationLabel.Text = "0";
             this.rotationLabel.ToolTipText = "Block rotation";
+            // 
             // idLabel
             // 
             this.idLabel.Image = global::EEditor.Properties.Resources.id;
@@ -1122,7 +1125,7 @@
             this.filterTextBox,
             this.pickerButton,
             this.toolStripSeparator10});
-            this.findToolStrip.Location = new System.Drawing.Point(218, 0);
+            this.findToolStrip.Location = new System.Drawing.Point(231, 0);
             this.findToolStrip.Name = "findToolStrip";
             this.findToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.findToolStrip.Size = new System.Drawing.Size(138, 27);
@@ -1131,6 +1134,7 @@
             // 
             // filterTextBox
             // 
+            this.filterTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.filterTextBox.Name = "filterTextBox";
             this.filterTextBox.Size = new System.Drawing.Size(100, 27);
             this.filterTextBox.ToolTipText = "Filter blocks by pack (Enter to search)";
@@ -1169,7 +1173,7 @@
             this.BlockPicker9,
             this.BlockPicker10,
             this.toolStripSeparator9});
-            this.BlockPickerToolStrip.Location = new System.Drawing.Point(356, 0);
+            this.BlockPickerToolStrip.Location = new System.Drawing.Point(369, 0);
             this.BlockPickerToolStrip.Name = "BlockPickerToolStrip";
             this.BlockPickerToolStrip.Size = new System.Drawing.Size(262, 25);
             this.BlockPickerToolStrip.TabIndex = 4;
@@ -1290,7 +1294,7 @@
             this.lastUsedBlockButton2,
             this.lastUsedBlockButton3,
             this.lastUsedBlockButton4});
-            this.lastUsedToolStrip.Location = new System.Drawing.Point(798, 0);
+            this.lastUsedToolStrip.Location = new System.Drawing.Point(811, 0);
             this.lastUsedToolStrip.Name = "lastUsedToolStrip";
             this.lastUsedToolStrip.Size = new System.Drawing.Size(118, 25);
             this.lastUsedToolStrip.TabIndex = 3;
