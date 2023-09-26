@@ -271,12 +271,12 @@ namespace EEditor
 
         private void rbIgnoreEmpty_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbIgnoreEmpty.Checked) { MainForm.userdata.oldmark = true; }
+            if (rbIgnoreEmpty.Checked)MainForm.userdata.oldmark = true;
         }
 
         private void rbAcceptEmpty_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbAcceptEmpty.Checked) { MainForm.userdata.oldmark = false; }
+            if (rbAcceptEmpty.Checked) MainForm.userdata.oldmark = false;
         }
     }
 }
