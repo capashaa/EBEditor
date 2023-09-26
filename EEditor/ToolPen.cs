@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Net;
+using System.Security.Cryptography;
 
 namespace EEditor
 {
@@ -17,6 +19,7 @@ namespace EEditor
         }
 
         public static Dictionary<int, int> rotation = new Dictionary<int, int>();
+        public static Dictionary<int,uint> color = new Dictionary<int, uint>();
         public static Dictionary<int, int> id = new Dictionary<int, int>();
         public static Dictionary<int, int> target = new Dictionary<int, int>();
         public static Dictionary<int, string> text = new Dictionary<int, string>();
@@ -131,10 +134,7 @@ namespace EEditor
                                 }
                                 if (PenID != 77 && PenID != 83 && PenID != 1520)
                                 {
-                                    if (IsPaintable(x, y, PenID, true) && IsPaintable(x, y, PenID, false))
-                                    {
-                                        editArea.CurFrame.Foreground[y, x] = PenID;
-                                    }
+                                    editArea.CurFrame.Foreground[y, x] = PenID;
                                     if (rotation.ContainsKey(PenID))
                                     {
                                         editArea.CurFrame.BlockData[y, x] = rotation[PenID];
@@ -178,6 +178,8 @@ namespace EEditor
                                 }
                             }
                             editArea.CurFrame.Background[y, x] = PenID;
+                            if (editArea.Tool.coloredBlock != 1) { editArea.CurFrame.BlockData7[y, x] = editArea.Tool.coloredBlock; }
+                            else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
                         }
                     }
                 }
@@ -190,6 +192,44 @@ namespace EEditor
                         editArea.MainForm.setBrick(editArea.CurFrame.Foreground[y, x], false);
                     }
                     else editArea.MainForm.setBrick(editArea.CurFrame.Background[y, x], false);
+                }
+                else if (PenID >= 500 && PenID <= 999)
+                {
+                    if (PenID == 631 || PenID == 632 || PenID == 633)
+                    {
+                        if (!mouseMove)
+                        {
+                            if (button)
+                            {
+                                ColorDialog cd = new ColorDialog();
+                                if (cd.ShowDialog() == DialogResult.OK)
+                                {
+                                    editArea.CurFrame.Background[y, x] = PenID;
+                                    editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(cd.Color);
+                                    if (!color.ContainsKey(PenID)) color.Add(PenID, bdata.ColorToUint(cd.Color));
+                                    
+
+                                }
+                                else
+                                {
+                                    editArea.CurFrame.Background[y, x] = PenID;
+                                    if (editArea.Tool.coloredBlock != 1) { editArea.CurFrame.BlockData7[y, x] = editArea.Tool.coloredBlock; }
+                                    else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
+                                }
+                                editArea.mouseDown = false;
+                            }
+                        }
+                        else
+                        {
+                            editArea.CurFrame.Background[y, x] = PenID;
+                            if (editArea.Tool.coloredBlock != 1) { editArea.CurFrame.BlockData7[y, x] = editArea.Tool.coloredBlock; }
+                            else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
+                        }
+                    }
+                    else
+                    {
+                        editArea.CurFrame.Background[y, x] = PenID;
+                    }
                 }
                 else
                 {
@@ -390,7 +430,7 @@ namespace EEditor
                                 editArea.CurFrame.BlockData3[y, x] = "Hello World!";
                                 editArea.CurFrame.BlockData4[y, x] = "#FFFFFF";
                             }
-                            
+
                         }
                         else if (bdata.isNPC(bid))
                         {
@@ -628,6 +668,7 @@ namespace EEditor
             }
         }
 
+
         public override void MouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -755,7 +796,8 @@ namespace EEditor
                 int x = pos.X;
                 int y = pos.Y;
                 Frame f = editArea.CurFrame;
-                if (bdata.canusePlus(f.Foreground[y,x])) {
+                if (bdata.canusePlus(f.Foreground[y, x]))
+                {
                     Point p = new Point(x * 16 - Math.Abs(editArea.AutoScrollPosition.X), y * 16 - Math.Abs(editArea.AutoScrollPosition.Y));
                     f.BlockData[y, x] = Math.Max(1, Math.Min(f.BlockData[y, x] + delta, 999));
                     Graphics g = Graphics.FromImage(editArea.Back);
