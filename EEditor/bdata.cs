@@ -90,7 +90,18 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             }
             return false;
         }
-
+        public static uint ColorToUint(Color color)
+        {
+            return (uint)(color.ToArgb() & 0x00FFFFFF);
+        }
+        public static Color UIntToColor(uint color)
+        {
+            byte a = (byte)(color >> 24);
+            byte r = (byte)(color >> 16);
+            byte g = (byte)(color >> 8);
+            byte b = (byte)(color >> 0);
+            return Color.FromArgb(a, r, g, b);
+        }
         public static Bitmap getRotation(int fid, int coins)
         {
             if (fid == 385)
