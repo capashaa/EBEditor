@@ -9,6 +9,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using EELVL;
 using static System.Windows.Forms.MonthCalendar;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace EEditor
 {
@@ -25,6 +26,8 @@ namespace EEditor
         public string[,] BlockData4 { get; set; }
         public string[,] BlockData5 { get; set; }
         public string[,] BlockData6 { get; set; }
+
+        public uint[,] BlockData7 { get; set; }
         public string nickname { get; set; }
         public string owner { get; set; }
         public string levelname { get; set; }
@@ -46,6 +49,7 @@ namespace EEditor
             BlockData = new int[Height, Width];
             BlockData1 = new int[Height, Width];
             BlockData2 = new int[Height, Width];
+            BlockData7 = new uint[Height, Width];
             BlockData3 = new string[height, width];
             BlockData4 = new string[height, width];
             BlockData5 = new string[height, width];
@@ -188,7 +192,7 @@ namespace EEditor
                 {
                     if (chunk.Args.Length == 0)
                     {
-                        if ((int)chunk.Layer == 1)
+                        if ((int)chunk.Layer == 1 && (int)chunk.Type != 631 && (int)chunk.Type != 632 && (int)chunk.Type != 633)
                         {
                             int x = pos.X;
                             int y = pos.Y;
@@ -232,8 +236,19 @@ namespace EEditor
                                     frame.BlockData3[pos.Y, pos.X] = chunk.Args[0].ToString();
                                     frame.BlockData4[pos.Y, pos.X] = chunk.Args[2].ToString();
                                 }
+                                else if ((int)chunk.Type == 1200 && (int)chunk.Layer == 0)
+                                {
 
-                                if ((int)chunk.Type != 374 && (int)chunk.Type != 385)
+                                    frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
+                                    frame.BlockData7[pos.Y, pos.X] = Convert.ToUInt32(chunk.Args[0]);
+                                }
+                                else if ((int)chunk.Type == 631 || (int)chunk.Type == 632 || (int)chunk.Type == 633)
+                                {
+                                    
+                                    frame.Background[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
+                                    frame.BlockData7[pos.Y, pos.X] = Convert.ToUInt32(chunk.Args[0]);
+                                }
+                                else if ((int)chunk.Type != 374 && (int)chunk.Type != 385 && (int)chunk.Type != 631 && (int)chunk.Type != 632 && (int)chunk.Type != 633)
                                 {
                                     if ((int)chunk.Layer == 1)
                                     {
@@ -252,7 +267,7 @@ namespace EEditor
                         }
                         else if (Convert.ToString(chunk.Args[0]) == "we")
                         {
-                            if ((int)chunk.Layer == 1)
+                            if ((int)chunk.Layer == 1 && (int)chunk.Type != 631 && (int)chunk.Type != 632 && (int)chunk.Type != 633)
                             {
                                 int x = pos.X;
                                 int y = pos.Y;
@@ -270,20 +285,33 @@ namespace EEditor
                     {
                         if (Convert.ToString(chunk.Args[0]) != "we")
                         {
-                            frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
+
                             if (chunk.Type == 385)
                             {
+                                frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
                                 frame.BlockData[pos.Y, pos.X] = Convert.ToInt32(chunk.Args[1]);
                                 frame.BlockData3[pos.Y, pos.X] = chunk.Args[0].ToString();
                             }
                             else if (chunk.Type == 374)
                             {
+                                frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
                                 frame.BlockData3[pos.Y, pos.X] = chunk.Args[0].ToString();
                                 frame.BlockData[pos.Y, pos.X] = Convert.ToInt32(chunk.Args[1]);
                             }
-
+                            else if ((int)chunk.Type == 1200)
+                            {
+                                frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
+                                frame.BlockData7[pos.Y, pos.X] = Convert.ToUInt32(chunk.Args[0]);
+                            }
+                            else if ((int)chunk.Type == 631 || (int)chunk.Type == 632 || (int)chunk.Type == 633)
+                            {
+                                
+                                frame.Background[pos.Y, pos.X] = (int)chunk.Type;
+                                frame.BlockData7[pos.Y, pos.X] = Convert.ToUInt32(chunk.Args[0]);
+                            }
                             else if (bdata.goal.Contains((int)chunk.Type) || bdata.morphable.Contains((int)chunk.Type) || bdata.rotate.Contains((int)chunk.Type))
                             {
+                                frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
                                 frame.BlockData[pos.Y, pos.X] = Convert.ToInt32(chunk.Args[0]);
                             }
                         }
@@ -568,6 +596,11 @@ namespace EEditor
                         {
                             res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData[y, x].ToString(), BlockData3[y, x].ToString(), BlockData4[y, x].ToString() });
                         }
+                        else if (Foreground[y, x] == 1200)
+                        {
+                            res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData7[y, x].ToString() });
+
+                        }
                         else
                         {
                             if (MainForm.userdata.level.StartsWith("OW") && !MainForm.OpenWorldCode && MainForm.OpenWorld)
@@ -652,10 +685,41 @@ namespace EEditor
                                 res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData[y, x].ToString(), BlockData3[y, x], BlockData4[y, x] });
                             }
                         }
+                        else if (Foreground[y, x] == 1200)
+                        {
+                            if (BlockData7[y, x] != f.BlockData7[y, x])
+                            {
+                                res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData7[y, x].ToString() });
+                            }
+                        }
+                    }
+                    
+                    if (Background[y, x] == f.Background[y, x])
+                    {
+                        if (Background[y, x] == 631 || Background[y, x] == 632 || Background[y, x] == 633)
+                        {
+                            if (BlockData7[y, x] != f.BlockData7[y, x])
+                            {
+                                res.Add(new string[] { x.ToString(), y.ToString(), Background[y, x].ToString(), "1", BlockData7[y, x].ToString() });
+                            }
+                        }
+                        else
+                        {
+                            res.Add(new string[] { x.ToString(), y.ToString(), Background[y, x].ToString(), "1" });
+                        }
+
                     }
                     if (Background[y, x] != f.Background[y, x])
                     {
-                        res.Add(new string[] { x.ToString(), y.ToString(), Background[y, x].ToString(), "1" });
+                        if (Background[y, x] == 631 || Background[y, x] == 632 || Background[y, x] == 633)
+                        {
+                            res.Add(new string[] { x.ToString(), y.ToString(), Background[y, x].ToString(), "1", BlockData7[y, x].ToString() });
+
+                        }
+                        else
+                        {
+                            res.Add(new string[] { x.ToString(), y.ToString(), Background[y, x].ToString(), "1" });
+                        }
                     }
                     /*if (Foreground[y, x] != f.Foreground[y, x])
                     {
