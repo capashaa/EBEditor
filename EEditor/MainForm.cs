@@ -12,6 +12,9 @@ using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Reflection.Emit;
+using Microsoft.VisualBasic.ApplicationServices;
+using System.Windows.Markup;
+using static System.Windows.Forms.MonthCalendar;
 
 namespace EEditor
 {
@@ -28,6 +31,8 @@ namespace EEditor
         public static Dictionary<int, Bitmap> ForegroundBlocks = new Dictionary<int, Bitmap>();
         public static Dictionary<int, Bitmap> DecorationBlocks = new Dictionary<int, Bitmap>();
         public static Dictionary<int, Bitmap> BackgroundBlocks = new Dictionary<int, Bitmap>();
+        public static Dictionary<int, Bitmap> ColoredBlocks = new Dictionary<int, Bitmap>();
+        public static Dictionary<int, Bitmap> ColoredBGBlocks = new Dictionary<int, Bitmap>();
         private ToolStripButton lastBlockpicker;
         public static string pathSettings = $"{Directory.GetCurrentDirectory()}\\settings.json";
         private Dictionary<int, Bitmap> sblocks = new Dictionary<int, Bitmap>();
@@ -41,11 +46,15 @@ namespace EEditor
         private int[] misc = new int[3000];
         private int[] decos = new int[3000];
         private int[] bgs = new int[3000];
+        private int[] colblock = new int[3000];
+        private int[] colbgblock = new int[3000];
         private System.Timers.Timer timer = new System.Timers.Timer(1000);
         public static int[] foregroundBMI = new int[3000];
         public static int[] miscBMI = new int[3000];
         public static int[] decosBMI = new int[3000];
         public static int[] backgroundBMI = new int[3000];
+        public static int[] colblocksBMI = new int[3000];
+        public static int[] colbgblocksBMI = new int[3000];
         public int pressed = 0;
         private Color backgroundColor = Color.FromArgb(71, 71, 71);
         public static List<unknownBlock> unknown = new List<unknownBlock>();
@@ -69,6 +78,8 @@ namespace EEditor
         private int[,] miscInit;
         private int[,] decorInit;
         private int[,] bgInit;
+        private int[,] cbInit;
+        private int[,] cbbgInit;
         private bool starting = false;
         private bool starting1 = false;
         public static Dictionary<int, int> amountOfID = new Dictionary<int, int>();
@@ -82,6 +93,8 @@ namespace EEditor
         public static Bitmap miscBMD = new Bitmap(Properties.Resources.misc.Width, 16);
         public static Bitmap decosBMD = new Bitmap(Properties.Resources.BLOCKS_deco.Width, 16);
         public static Bitmap backgroundBMD = new Bitmap(Properties.Resources.BLOCKS_back.Width, 16);
+        public static Bitmap cblockBMD = new Bitmap(Properties.Resources.fgs_overlays.Width, 16);
+        public static Bitmap cbackBMD = new Bitmap(Properties.Resources.bgs_overlays.Width, 16);
         public string frt = "MU9tR29kJE1hY0hpbmU0";
         public static System.Windows.Forms.NotifyIcon notification = new System.Windows.Forms.NotifyIcon();
         private ToolStripTextBox tsb = new ToolStripTextBox();
@@ -253,7 +266,7 @@ namespace EEditor
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Right
             };
             editArea.Minimap = minimap;
-
+            
             panel1.Controls.Add(minimap);
             minimap.BringToFront();
 
@@ -469,6 +482,23 @@ namespace EEditor
 
             #endregion Blocks
 
+            cbInit = new int[,] {
+                { 1200,0 }
+            };
+            for (int i = 0; i < cbInit.Length / 2; i++)
+            {
+                colblock[cbInit[i, 1]] = cbInit[i, 0]; //Add imageid and blockid (blocks[imageID] blockID)
+                colblocksBMI[cbInit[i, 0]] = cbInit[i, 1]; //Add blockid and imageid (foregroundBMI[blockID] imageID)
+            }
+
+            cbbgInit = new int[,] {
+                { 631,0 }, { 632,1 }, { 633, 2}
+            };
+            for (int i = 0; i < cbbgInit.Length / 2; i++)
+            {
+                colbgblock[cbbgInit[i, 1]] = cbbgInit[i, 0]; //Add imageid and blockid (blocks[imageID] blockID)
+                colbgblocksBMI[cbbgInit[i, 0]] = cbbgInit[i, 1]; //Add blockid and imageid (foregroundBMI[blockID] imageID)
+            }
             //SetupBricks();
             SetupImages();
             DetectBlocks();
@@ -1175,6 +1205,12 @@ namespace EEditor
             //Backgrounds
             Graphics g3 = Graphics.FromImage(backgroundBMD);
             g3.DrawImage(Properties.Resources.BLOCKS_back, new Rectangle(0, 0, Properties.Resources.BLOCKS_back.Width, 16));
+
+            Graphics g4 = Graphics.FromImage(cblockBMD);
+            g4.DrawImage(Properties.Resources.fgs_overlays, new Rectangle(0, 0, Properties.Resources.fgs_overlays.Width, 16));
+
+            Graphics g5 = Graphics.FromImage(cbackBMD);
+            g5.DrawImage(Properties.Resources.bgs_overlays, new Rectangle(0, 0, Properties.Resources.bgs_overlays.Width, 16));
             resetLastBlocks();
         }
 
@@ -1228,6 +1264,7 @@ namespace EEditor
             #region Foreground
 
             //Foreground 1
+            if (accs[MainForm.userdata.username].admin) AddToolStrip(cblockBMD, 4, new int[] { 0 },null, false, "", 0, 0, true);
             AddToolStrip(foregroundBMD, 0, new int[] { 260, 156, 9, 10, 11, 12, 13, 14, 15, 205 }, new uint[] { 0xB1B1B1, 0x282828, 0x6E6E6E, 0x3552A8, 0x9735A7, 0xA83554, 0x93A835, 0x42A836, 0x359EA6, 0xB24521 }, true, "Basic", 0, 0, true);
             if (ihavethese.ContainsKey("beta") || accs[MainForm.userdata.username].admin) { AddToolStrip(foregroundBMD, 0, new int[] { 261, 37, 38, 39, 40, 41, 42, 206, 207, 208 }, new uint[] { 0xE5E5E5, 0xCE62CF, 0x4AC882, 0x4D84C6, 0xCF6650, 0xD2A945, 0x999999, 0x49C2C6, 0xCE7E50, 0x474747 }, false, "Beta", 0, 0, true); } else { AddToolStrip(foregroundBMD, 0, new int[] { 261, 37, 38, 39, 40, 41, 42, 206, 207, 208 }, new uint[] { 0xE5E5E5, 0xCE62CF, 0x4AC882, 0x4D84C6, 0xCF6650, 0xD2A945, 0x999999, 0x49C2C6, 0xCE7E50, 0x474747 }, false, "Beta", 0, 0, false); }
             AddToolStrip(foregroundBMD, 0, new int[] { 262, 16, 17, 18, 19, 20, 21, 209, 210, 211 }, new uint[] { 0x888888, 0x8B3E09, 0x246F4D, 0x4E246F, 0x438310, 0x6F2429, 0x6F5D24, 0x4C4C4C, 0x092164, 0x181818 }, false, "Brick", 0, 0, true);
@@ -1523,6 +1560,7 @@ namespace EEditor
             #region Background
 
             //Backgrounds
+            AddToolStrip(cbackBMD, 5, new int[] { 0,1,2 }, null, false, "", 3, 1, true);
             AddToolStrip(backgroundBMD, 3, new int[] { 209, 0, 1, 2, 3, 4, 5, 6, 138, 139 }, new uint[] { 0x707070, 0x343434, 0x1A2955, 0x4A1751, 0x551A2A, 0x465217, 0x1E5218, 0x174F53, 0x6F370B, 0x050505 }, false, "Basic", 3, 0, true);
             if (ihavethese.ContainsKey("beta") || accs[MainForm.userdata.username].admin) { AddToolStrip(backgroundBMD, 3, new int[] { 237, 238, 239, 240, 241, 242, 243, 244, 245, 246 }, new uint[] { 0x3F3F3F, 0x292928, 0x181818, 0x491912, 0x472510, 0x45320D, 0x0F461B, 0x0E4245, 0x13254B, 0x461247 }, false, "Beta", 3, 0, true); } else { AddToolStrip(backgroundBMD, 3, new int[] { 237, 238, 239, 240, 241, 242, 243, 244, 245, 246 }, new uint[] { 0x3F3F3F, 0x292928, 0x181818, 0x491912, 0x472510, 0x45320D, 0x0F461B, 0x0E4245, 0x13254B, 0x461247 }, false, "Beta", 3, 0, false); }
             AddToolStrip(backgroundBMD, 3, new int[] { 210, 8, 9, 10, 11, 12, 140, 141, 142, 7 }, new uint[] { 0x5B5B5B, 0x113726, 0x251136, 0x214108, 0x371214, 0x372E12, 0x282828, 0x051132, 0x0F0F0F, 0x441D04 }, false, "Brick", 3, 0, true);
@@ -1664,7 +1702,14 @@ namespace EEditor
                             {
                                 values[i] += bgs[ids[i]];
                             }
-
+                            else if (mode == 4)
+                            {
+                                values[i] += colblock[ids[i]];
+                            }
+                            else if (mode == 5)
+                            {
+                                values[i] += colbgblock[ids[i]];
+                            }
                         }
                         ownedb.Add(new ownedBlocks() { mode = mode, blocks = values, name = desc });
                     }
@@ -1679,7 +1724,6 @@ namespace EEditor
                     {
                         bid = ids[j];
                         Bitmap brick = bitmap.Clone(new Rectangle(16 * ids[j], 0, 16, 16), System.Drawing.Imaging.PixelFormat.DontCare);
-
 
                         if (mode == 0)
                         {
@@ -1742,6 +1786,22 @@ namespace EEditor
                             }
                             ids[j] = bgs[ids[j]];
 
+                        }
+                        if (mode == 4)
+                        {
+                            if (!ColoredBlocks.ContainsKey(colblock[bid]))
+                            {
+                                ColoredBlocks.Add(colblock[bid], cblockBMD.Clone(new Rectangle(bid * 16, 0, 16, 16), cblockBMD.PixelFormat));
+                            }
+                            ids[j] = colblock[ids[j]];
+                        }
+                        if (mode == 5)
+                        {
+                            /*if (!ColoredBGBlocks.ContainsKey(colbgblock[bid]))
+                            {
+                                ColoredBGBlocks.Add(colbgblock[bid], cbackBMD.Clone(new Rectangle(bid * 16, 0, 16, 16), cbackBMD.PixelFormat));
+                            }*/
+                            ids[j] = colbgblock[ids[j]];
                         }
                         int i = ids[j];
                         if (userdata.newestBlocks.Count >= 1)
@@ -2601,6 +2661,15 @@ namespace EEditor
                                             }
                                     }
                                 }
+                                if (cur.ID == 631)
+                                {
+                                    ColorDialog cd = new ColorDialog();
+                                    if (cd.ShowDialog() == DialogResult.OK)
+                                    {
+                                        editArea.Tool.PenID = cur.ID;
+                                        editArea.Tool.coloredBlock = bdata.ColorToUint(cd.Color);
+                                    }
+                                }
                             }
                         }
                         MainForm.pressed += 1;
@@ -3082,8 +3151,6 @@ namespace EEditor
                 codeTextbox.Text = userdata.levelPass;
                 InsertImageForm.Background.Clear();
                 InsertImageForm.Blocks.Clear();
-                MainForm.userdata.useColor = false;
-                MainForm.userdata.thisColor = Color.Transparent;
                 MainForm.editArea.Back = null;
                 MainForm.editArea.Back1 = null;
                 rebuildGUI(true);
@@ -3095,6 +3162,24 @@ namespace EEditor
                 {
                     ExecuteInitWH(form.SizeWidth, form.SizeHeight);
                 }
+                using (Graphics g = Graphics.FromImage(editArea.Back))
+                {
+                    for (int y = 0; y < editArea.Frames[0].Height; y++)
+                    {
+                        for (int x = 0; x < editArea.Frames[0].Width; x++)
+                        {
+                            if (x == 0 || y == 0 || x == editArea.Frames[0].Width - 1 || y == editArea.Frames[0].Height - 1)
+                            {
+                                editArea.Draw(x, y, g, Color.Transparent);
+                            }
+                            else
+                            {
+                                editArea.Draw(x, y, g, userdata.thisColor);
+                            }
+                        }
+                    }
+                }
+                editArea.Invalidate();
             }
             else
             {
@@ -3484,7 +3569,6 @@ namespace EEditor
             filledCircleButton.Checked = false;
             editArea.Tool.CleanUp(false);
             editArea.Tool = new ToolMark(editArea);
-            Console.WriteLine(selectedBrick.ID);
             editArea.Tool.PenID = selectedBrick.ID == 1550 ? 0 : selectedBrick.ID;
             SetTransFormToolStrip(true);
             selectionTool = true;
@@ -4586,6 +4670,7 @@ namespace EEditor
             ToolPen.text.Clear();
             ToolPen.id.Clear();
             ToolPen.target.Clear();
+            ToolPen.color.Clear();
         }
 
         #endregion Form loading and closing
@@ -5080,7 +5165,6 @@ namespace EEditor
         {
             ToolStripButton button = e.Data.GetData(typeof(ToolStripButton))
                            as ToolStripButton;
-            Console.WriteLine(button.Name);
         }
 
         private void BlockPickerToolStrip_DragEnter(object sender, DragEventArgs e)
