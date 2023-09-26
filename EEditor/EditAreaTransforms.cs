@@ -22,6 +22,7 @@ namespace EEditor
                 string[,] Text3 = new string[width, height];
                 string[,] Text4 = new string[width, height];
                 string[,] Text5 = new string[width, height];
+                string[,] Cblock = new string[width, height];
 
                 for (int x = 0; x < width; ++x)
                     for (int y = 0; y < height; ++y)
@@ -44,9 +45,10 @@ namespace EEditor
                         Text3[ny, nx] = tool.Text2[y, x];
                         Text4[ny, nx] = tool.Text3[y, x];
                         Text5[ny, nx] = tool.Text4[y, x];
+                        Cblock[ny,nx] = tool.Cblock[y, x];
 
                     }
-                SetMarkBlock(Area, Back, Coins, Id, Target, Text2, Text3, Text4, Text5, tool.Rect.X, tool.Rect.Y);
+                SetMarkBlock(Area, Back, Coins, Id, Target, Text2, Text3, Text4, Text5,Cblock, tool.Rect.X, tool.Rect.Y);
             }
             catch
             {
@@ -71,6 +73,7 @@ namespace EEditor
                 string[,] Text3 = new string[height, width];
                 string[,] Text4 = new string[height, width];
                 string[,] Text5 = new string[height, width];
+                string[,] Cblock = new string[height, width];
                 for (int x = 0; x < width; ++x)
                     for (int y = 0; y < height; ++y)
                     {
@@ -116,8 +119,9 @@ namespace EEditor
                         Text3[ny, x] = tool.Text2[y, x];
                         Text4[ny, x] = tool.Text3[y, x];
                         Text5[ny, x] = tool.Text4[y, x];
+                        Cblock[ny,x] = tool.Cblock[y, x];
                     }
-                SetMarkBlock(Area, Back, Coins, Id, Target, Text2, Text3, Text4, Text5, tool.Rect.X, tool.Rect.Y);
+                SetMarkBlock(Area, Back, Coins, Id, Target, Text2, Text3, Text4, Text5,Cblock, tool.Rect.X, tool.Rect.Y);
             }
             catch
             {
@@ -142,6 +146,7 @@ namespace EEditor
                 string[,] Text3 = new string[height, width];
                 string[,] Text4 = new string[height, width];
                 string[,] Text5 = new string[height, width];
+                string[,] Cblock = new string[height, width];
                 for (int x = 0; x < width; ++x)
                     for (int y = 0; y < height; ++y)
                     {
@@ -188,8 +193,9 @@ namespace EEditor
                         Text3[y, nx] = tool.Text2[y, x];
                         Text4[y, nx] = tool.Text3[y, x];
                         Text5[y, nx] = tool.Text4[y, x];
+                        Cblock[y,nx] = tool.Cblock[y, x];
                     }
-                SetMarkBlock(Area, Back, Coins, Id, Target, Text2, Text3, Text4, Text5, tool.Rect.X, tool.Rect.Y);
+                SetMarkBlock(Area, Back, Coins, Id, Target, Text2, Text3, Text4, Text5,Cblock, tool.Rect.X, tool.Rect.Y);
             }
             catch (Exception ex)
             {
