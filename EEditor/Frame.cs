@@ -181,7 +181,6 @@ namespace EEditor
             Frame frame;
             int width1 = width;
             int height1 = height;
-            Console.WriteLine(width + " " + height);
             frame = new Frame(width, height);
             Console.WriteLine(e);
             //var chunks = InitParse.Parse(e);
@@ -258,7 +257,7 @@ namespace EEditor
                     id = BitConverter.ToUInt32(bytes, i, true);
                     i += 4;
                 }
-                if (bdata.coloredBlocks.Contains((int)type))
+                if (bdata.coloredBlocks.Contains((int)type) || type == 1200)
                 {
                     colour = BitConverter.ToUInt32(bytes, i, true);
                     i += 4;
@@ -562,6 +561,10 @@ namespace EEditor
                     else
                     {
                         frame.Foreground[ny, nx] = (int)type;
+                        if (type == 1200)
+                        {
+                            frame.BlockData7[ny, nx] = colour;
+                        }
                         if (bdata.goalNew.Contains((int)type))
                         {
                             frame.BlockData[ny, nx] = (int)goal;
@@ -610,8 +613,9 @@ namespace EEditor
                     }
                     //this.SetBlock(nx, ny, type, layerNum, goal, rotation, target, id, colour, signType, wrapLength, targetP, text, textColour, name, message1, message2, message3);
                 }
-            }
 
+            }
+            Console.WriteLine("Finished");
 
 
             /*foreach (var chunk in chunks)
@@ -806,7 +810,7 @@ namespace EEditor
 
                 }*/
 
-            
+
 
             return frame;
 
