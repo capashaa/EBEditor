@@ -144,7 +144,6 @@ namespace EEditor
 
                         int blockId = Convert.ToInt32(cur[2]);
                         int layer = Convert.ToInt32(cur[3]);
-
                         if (layer == 0)
                         {
                             if (remoteFrame.Foreground[y, x] != blockId)
@@ -326,6 +325,8 @@ namespace EEditor
                                 }
                             }
                         }
+                        if (layer == 1)
+                        {
                             if (remoteFrame.Background[y, x] != blockId)
                             {
                                 if (blockId == 631 || blockId == 632 || blockId == 633)
@@ -334,6 +335,10 @@ namespace EEditor
                                     {
                                         correctWay = true;
                                     }
+                                }
+                                else
+                                {
+                                    correctWay = true;
                                 }
                             }
                             else if (remoteFrame.Background[y, x] == blockId)
@@ -350,7 +355,8 @@ namespace EEditor
                                         }
                                     }
                                 }
-                            
+
+                            }
                         }
                         if (correctWay)
                         {
