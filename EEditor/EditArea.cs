@@ -734,7 +734,6 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             {
                 if (bid == 631) 
                 {
-                    Console.WriteLine("yes");
                     Minimap.SetColor(x, y, UIntToColor(cblock));
                     if (fid != -1 && Minimap.ImageColor[fid]) Minimap.SetPixel(x, y, fid);
                 }
