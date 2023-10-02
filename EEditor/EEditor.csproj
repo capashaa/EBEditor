@@ -297,6 +297,7 @@
     <Compile Include="BgColor.Designer.cs">
       <DependentUpon>BgColor.cs</DependentUpon>
     </Compile>
+    <Compile Include="BitConverter.cs" />
     <Compile Include="BluePrints.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -321,6 +322,7 @@
     <Compile Include="CoinsOptions.Designer.cs">
       <DependentUpon>CoinsOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Decompress.cs" />
     <Compile Include="Drums.cs">
       <SubType>Form</SubType>
     </Compile>
