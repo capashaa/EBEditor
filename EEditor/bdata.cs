@@ -23,6 +23,72 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         public static string normal_room = "Everybuildexists";
 
         public static int[] goal = { 77, 83, 43, 165, 213, 214, 417, 418, 419, 420, 421, 422, 423, 1027, 1028, 113, 185, 184, 1011, 1012, 453, 461, 467, 1079, 1080, 1520,1582,1619,1620 };
+
+        public static int[] goalNew =
+        {
+            //coin gates
+            165, 214, 
+
+            //coin doors
+            43, 213,
+
+            //Death door and gate
+            1011, 1012,
+
+            //Purple switches and doors
+            185, 184, 1619, 113,
+
+            //orange switches and doors
+            1080, 1079, 1620, 467,
+
+            //Team door, gate and activation
+            423, 1028, 1027,
+
+            //Effects
+            1584, 422, 418, 420, 453, 461, 419, 417
+
+        };
+
+        public static int[] rotationNew =
+        {
+
+            //One ways
+            1001, 1002, 1003, 1004, 1052, 
+            1053, 1054, 1055, 1056, 1092,
+
+            //Spikes
+            361, 1625, 1627, 1629, 1631, 1633, 1635,
+
+            //Half blocks
+            1075, 1076, 1077, 1078, 1116, 1117, 1118, 
+            1119, 1120, 1121,1122, 1123, 1124, 1125,
+            1041, 1042, 1043, 
+
+            //Morph
+
+            375, 376, 379, 380, 438, 439, 378,
+            338,339, 340,447,448,1536,1537,
+            449,450,451,452,1538,456,457,458,
+            475, 476, 477,1502,1500,499,464,465,
+            471,481,482,483,497,492,493,494,
+            1507,1506,1581,1587,1588,1592,1593,
+            1594,1595,1597,1596,1605,1606,
+            1607,1608,1609,1610,1611,1612,
+            1614,1615,1616,1617,276,277,279,
+            280,440,275,329,273,328,327,1535,
+            1140,1141,1134,1135,1155,
+
+
+            //Misc
+            1517,
+
+
+        };
+
+        public static int[] coloredBlocks =
+        {
+            631, 632, 633
+        };
         //public static int[] effects = { 417, 418, 419, 420, 421, 422, 453 };
         //spikes
         public static int[] rotate = { 1001, 1002, 1003, 1004, 1027, 1028, 361, 385, 374, 1052, 1053, 1054, 1055, 1056, 1092, 1625, 1627, 1629, 1631, 1633, 1635 };
@@ -100,7 +166,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             byte r = (byte)(color >> 16);
             byte g = (byte)(color >> 8);
             byte b = (byte)(color >> 0);
-            return Color.FromArgb(a, r, g, b);
+            return Color.FromArgb(255, r, g, b);
         }
         public static Bitmap getRotation(int fid, int coins)
         {
