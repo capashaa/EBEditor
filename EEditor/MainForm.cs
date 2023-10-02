@@ -5171,6 +5171,55 @@ namespace EEditor
         {
             e.Effect = DragDropEffects.Copy;
         }
+
+        private void eBELevelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetDummy();
+            try
+            {
+                MainForm.editArea.Back = null;
+                MainForm.editArea.Back1 = null;
+                OpenFileDialog ofd = new OpenFileDialog()
+                {
+                    Title = "Select a level to load from",
+                    DefaultExt = "ebelvl",
+                    Filter = "EBE level (*.ebelvl)|*.ebelvl",
+                    FilterIndex = 1,
+                    AddExtension = true,
+                    RestoreDirectory = true,
+                    CheckFileExists = true
+                };
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    Frame frame = Frame.LoadFromEBELVL(ofd.FileName);
+                    if (frame.toobig)
+                    {
+                        MessageBox.Show("Can't load this world. It's too big. Max size: 637x460 or 460x637", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ofd.Dispose();
+                    }
+                    else
+                    {
+                        if (frame != null)
+                        {
+                            this.Text = $".eelvl - ({frame.levelname}) [{frame.nickname}] ({frame.Width}x{frame.Height}) - EERditor {this.ProductVersion}";
+                            ExecuteInitFrame(frame, false);
+                        }
+
+                        else MessageBox.Show("The selected EELVL is either invalid or corrupt.", "Invalid EELVL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ofd.Dispose();
+                    }
+                }
+                else
+                {
+                    ofd.Dispose();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error has occured: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 
     public class ownedBlocks
