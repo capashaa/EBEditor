@@ -1,5 +1,5 @@
 ### EBEditor - Beta 0.1.2
-Fixed: Morphs.
+Fixed: Morphs.  
 
 ### EBEditor - Beta 0.1.1
 Removed: Rotation id when using replace tool with basic blocks.  
