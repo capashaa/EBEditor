@@ -43,7 +43,7 @@ namespace EEditor
             using (Graphics g = Graphics.FromImage(Bitmap)) { g.Clear(Color.Black); }
             Point relativePos = new Point(-25, -25);
             Location = new Point(Parent.ClientSize.Width - Width + relativePos.X, Parent.ClientSize.Height - Height + relativePos.Y);
-            //Invalidate();
+            Invalidate();
         }
 
         public void SetPixel(int x, int y, int id)
