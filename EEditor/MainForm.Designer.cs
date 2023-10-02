@@ -146,6 +146,7 @@
             this.lastUsedBlockButton2 = new System.Windows.Forms.ToolStripButton();
             this.lastUsedBlockButton3 = new System.Windows.Forms.ToolStripButton();
             this.lastUsedBlockButton4 = new System.Windows.Forms.ToolStripButton();
+            this.eBELevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.morphToolStrip.SuspendLayout();
             this.viewToolStrip.SuspendLayout();
             this.settingsToolStrip.SuspendLayout();
@@ -340,7 +341,7 @@
             this.accountsComboBox,
             this.settingsButton,
             this.aboutButton});
-            this.settingsToolStrip.Location = new System.Drawing.Point(612, 0);
+            this.settingsToolStrip.Location = new System.Drawing.Point(643, 0);
             this.settingsToolStrip.Name = "settingsToolStrip";
             this.settingsToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.settingsToolStrip.Size = new System.Drawing.Size(156, 27);
@@ -389,7 +390,7 @@
             this.fileToolStrip.Location = new System.Drawing.Point(0, 0);
             this.fileToolStrip.Name = "fileToolStrip";
             this.fileToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.fileToolStrip.Size = new System.Drawing.Size(96, 27);
+            this.fileToolStrip.Size = new System.Drawing.Size(127, 27);
             this.fileToolStrip.TabIndex = 7;
             // 
             // newWorldButton
@@ -408,6 +409,7 @@
             this.openWorldDropButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.openWorldDropButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.eEditor38ToolStripMenuItem,
+            this.eBELevelToolStripMenuItem,
             this.eELVLToolStripMenuItem,
             this.toolStripSeparator5,
             this.eEditor37ToolStripMenuItem,
@@ -583,7 +585,7 @@
             this.insertDropButton,
             this.toolStripSeparator8,
             this.replaceButton});
-            this.toolToolStrip.Location = new System.Drawing.Point(96, 0);
+            this.toolToolStrip.Location = new System.Drawing.Point(127, 0);
             this.toolToolStrip.Name = "toolToolStrip";
             this.toolToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.toolToolStrip.Size = new System.Drawing.Size(204, 27);
@@ -831,7 +833,7 @@
             this.refreshButton,
             this.codeTextbox,
             this.uploadButton});
-            this.uploadToolStrip.Location = new System.Drawing.Point(402, 0);
+            this.uploadToolStrip.Location = new System.Drawing.Point(433, 0);
             this.uploadToolStrip.Name = "uploadToolStrip";
             this.uploadToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.uploadToolStrip.Size = new System.Drawing.Size(210, 27);
@@ -904,7 +906,7 @@
             this.redoButton,
             this.historyButton,
             this.StatisticButton});
-            this.historyToolStrip.Location = new System.Drawing.Point(300, 0);
+            this.historyToolStrip.Location = new System.Drawing.Point(331, 0);
             this.historyToolStrip.Name = "historyToolStrip";
             this.historyToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.historyToolStrip.Size = new System.Drawing.Size(102, 27);
@@ -1350,6 +1352,13 @@
             this.lastUsedBlockButton4.Size = new System.Drawing.Size(23, 22);
             this.lastUsedBlockButton4.Click += new System.EventHandler(this.lastUsedBlockButton);
             // 
+            // eBELevelToolStripMenuItem
+            // 
+            this.eBELevelToolStripMenuItem.Name = "eBELevelToolStripMenuItem";
+            this.eBELevelToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.eBELevelToolStripMenuItem.Text = "EBE Offline Level";
+            this.eBELevelToolStripMenuItem.Click += new System.EventHandler(this.eBELevelToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1522,6 +1531,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripButton BlockPicker10;
+        private System.Windows.Forms.ToolStripMenuItem eBELevelToolStripMenuItem;
     }
 }
 
