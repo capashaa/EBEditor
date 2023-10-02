@@ -1,8 +1,10 @@
+### EBEditor - Beta 0.1.2
+Fixed: Morphs.
 
 ### EBEditor - Beta 0.1.1
 Removed: Rotation id when using replace tool with basic blocks.  
 Fixed: Bot will no longer stay online if using load world from "My Own Worlds".  
-Fixed: World reading.
+Fixed: World reading.  
 Added: Colored backgrounds (Doesn't work so good).  
 
 
