@@ -269,41 +269,9 @@ namespace EEditor
 
             try
             {
-                var value = MainForm.accs[MainForm.selectedAcc].loginMethod;
-                if (value == 0 && MainForm.accs.ContainsKey(MainForm.selectedAcc))
+                if (MainForm.accs.ContainsKey(MainForm.selectedAcc))
                 {
                     client = PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, MainForm.accs[MainForm.selectedAcc].password, null);
-                }
-                else if (value == 1 && MainForm.accs.ContainsKey(MainForm.selectedAcc))
-                {
-                    client = PlayerIO.QuickConnect.FacebookOAuthConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, null, null);
-                }
-                else if (value == 2 && MainForm.accs.ContainsKey(MainForm.selectedAcc))
-                {
-                    client = PlayerIO.QuickConnect.KongregateConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, MainForm.accs[MainForm.selectedAcc].password, null);
-                }
-                else if (value == 3 && MainForm.accs.ContainsKey(MainForm.selectedAcc))
-                {
-                    client = PlayerIO.Authenticate(bdata.gameID, "secure", new Dictionary<string, string> { { "userId", MainForm.accs[MainForm.selectedAcc].login }, { "authToken", MainForm.accs[MainForm.selectedAcc].password } }, null);
-                }
-                else if (MainForm.accs[MainForm.selectedAcc].loginMethod == 4 && MainForm.accs.ContainsKey(MainForm.selectedAcc))
-                {
-                    PlayerIO.QuickConnect.SimpleConnect(bdata.gameID, MainForm.accs[MainForm.selectedAcc].login, MainForm.accs[MainForm.selectedAcc].password, null, (Client cli) =>
-                    {
-                        cli.Multiplayer.CreateJoinRoom("$service-room", "AuthRoom", true, null, new Dictionary<string, string>() { { "type", "Link" } }, (Connection con1) =>
-                        {
-                            con1.OnMessage += (object sender1, PlayerIOClient.Message m) =>
-                            {
-                                if (m.Type == "auth")
-                                {
-                                    client = PlayerIO.Authenticate("everybody-edits-su9rn58o40itdbnw69plyw", "connected", new Dictionary<string, string>() { { "userId", m.GetString(0) }, { "auth", m.GetString(1) } }, null);
-                                    s1.Release();
-                                }
-                            };
-                        },
-                        (PlayerIOError error) => MessageBox.Show(error.Message, "Error"));
-                    }, (PlayerIOError error) => MessageBox.Show(error.Message, "Error"));
-                    s1.WaitOne();
                 }
 
                 if (datas == 0)
@@ -332,6 +300,7 @@ namespace EEditor
                         },
                         (PlayerIOError error) => Console.WriteLine(error.Message));
                         s.WaitOne();
+                        Connection.Disconnect();
                     }
                     else
                     {
@@ -343,6 +312,7 @@ namespace EEditor
                             Connection.Send("init");
                             NeedsInit = false;
                             s.WaitOne();
+                            Connection.Disconnect();
                         }
                         else
                         {
@@ -582,7 +552,7 @@ namespace EEditor
                     MainForm.Text = $"({e[1]}) [{owner}] ({e[25]}x{e[26]}) - EBEditor {this.ProductVersion}";
                     SizeWidth = MapFrame.Width;
                     SizeHeight = MapFrame.Height;
-                    Connection.Disconnect();
+                    
                     Connection.OnMessage -= OnMessage;
                     s.Release();
                     DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -591,6 +561,7 @@ namespace EEditor
                 else
                 {
                     MessageBox.Show("Couldn't read mapdata", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Connection.Disconnect();
                     s.Release();
                     DialogResult = System.Windows.Forms.DialogResult.Cancel;
                     Close();
@@ -599,6 +570,7 @@ namespace EEditor
             else if (e.Type == "upgrade")
             {
                 MessageBox.Show("Game got updated.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Connection.Disconnect();
                 s.Release();
                 DialogResult = System.Windows.Forms.DialogResult.Cancel;
                 Close();
@@ -609,6 +581,7 @@ namespace EEditor
                 if (e.Type == "info")
                 {
                     MessageBox.Show(e.GetString(1), e.GetString(0), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Connection.Disconnect();
                     s.Release();
                     DialogResult = System.Windows.Forms.DialogResult.Cancel;
                     Close();
