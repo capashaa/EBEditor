@@ -9,6 +9,9 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using EELVL;
 using static System.Windows.Forms.MonthCalendar;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using System.Text;
+using System.Linq.Expressions;
 
 namespace EEditor
 {
@@ -25,6 +28,8 @@ namespace EEditor
         public string[,] BlockData4 { get; set; }
         public string[,] BlockData5 { get; set; }
         public string[,] BlockData6 { get; set; }
+
+        public uint[,] BlockData7 { get; set; }
         public string nickname { get; set; }
         public string owner { get; set; }
         public string levelname { get; set; }
@@ -46,6 +51,7 @@ namespace EEditor
             BlockData = new int[Height, Width];
             BlockData1 = new int[Height, Width];
             BlockData2 = new int[Height, Width];
+            BlockData7 = new uint[Height, Width];
             BlockData3 = new string[height, width];
             BlockData4 = new string[height, width];
             BlockData5 = new string[height, width];
@@ -168,13 +174,16 @@ namespace EEditor
         }
 
         #region read from init
+
+
         public static Frame FromMessage(PlayerIOClient.Message e, int width, int height)
         {
             Frame frame;
             int width1 = width;
             int height1 = height;
             frame = new Frame(width, height);
-            var chunks = InitParse.Parse(e);
+            Console.WriteLine(e);
+            //var chunks = InitParse.Parse(e);
 
 
             if (MainForm.userdata.level.StartsWith("OW"))
@@ -182,13 +191,440 @@ namespace EEditor
                 if (e.GetBoolean(14)) { MainForm.OpenWorld = true; MainForm.OpenWorldCode = false; }
                 else if (!e.GetBoolean(14)) { MainForm.OpenWorld = true; MainForm.OpenWorldCode = true; }
             }
-            foreach (var chunk in chunks)
+            var bytes = Decompress.Decompression(e.GetByteArray(49));
+            for (var i = 0; i < bytes.Length;)
+            {
+                var type = BitConverter.ToUInt32(bytes, i, true); i += 4;
+                var layerNum = BitConverter.ToInt32(bytes, i, true); i += 4;
+
+                var goal = 0u;
+                var rotation = 0u;
+                var target = 0u;
+                var id = 0u;
+                var colour = 0u;
+                var signType = 0u;
+                var wrapLength = 0u;
+                var targetP = "";
+                var text = "";
+                var textColour = "";
+                var name = "";
+                var message1 = "";
+                var message2 = "";
+                var message3 = "";
+
+
+                var xsLength = BitConverter.ToUInt32(bytes, i, true); i += 4;
+                var xs = new byte[xsLength];
+
+                for (int x = 0; x < xsLength; x++)
+                {
+                    xs[x] = bytes[i++];
+                }
+
+                var ysLength = BitConverter.ToUInt32(bytes, i, true); i += 4;
+                var ys = new byte[ysLength];
+                for (int y = 0; y < ysLength; y++)
+                {
+                    ys[y] = bytes[i++];
+                }
+
+                if (bdata.goalNew.Contains((int)type))
+                {
+                    goal = BitConverter.ToUInt32(bytes, i, true);
+                    i += 4;
+                }
+                if (bdata.rotationNew.Contains((int)type))
+                {
+                    rotation = BitConverter.ToUInt32(bytes, i, true);
+                    i += 4;
+                }
+                if (type == 381 || type == 242)
+                {
+                    rotation = BitConverter.ToUInt32(bytes, i, true);
+                    id = BitConverter.ToUInt32(bytes, i + 4, true);
+                    target = BitConverter.ToUInt32(bytes, i + 8, true);
+                    i += 12;
+                }
+                if (type == 374)
+                {
+                    var targetLength = BitConverter.ToInt32(bytes, i, true);
+                    targetP = Encoding.UTF8.GetString(bytes, i + 4, targetLength);
+                    id = BitConverter.ToUInt32(bytes, i + 4 + targetLength, true);
+                    i += (8 + targetLength);
+                }
+                if (type == 1582)
+                {
+                    id = BitConverter.ToUInt32(bytes, i, true);
+                    i += 4;
+                }
+                if (bdata.coloredBlocks.Contains((int)type) || type == 1200)
+                {
+                    colour = BitConverter.ToUInt32(bytes, i, true);
+                    i += 4;
+                }
+                if (type == 1000)
+                {
+                    var textLength = BitConverter.ToInt32(bytes, i, true);
+                    text = Encoding.UTF8.GetString(bytes, i + 4, textLength);
+
+                    var textColorLength = BitConverter.ToInt32(bytes, i + 4 + textLength, true);
+                    textColour = Encoding.UTF8.GetString(bytes, i + 8 + textLength, textColorLength);
+
+                    wrapLength = BitConverter.ToUInt32(bytes, i + 8 + textLength + textColorLength, true);
+
+                    i += (12 + textLength + textColorLength);
+                }
+                if (type == 77 || type == 83 || type == 1520)
+                {
+                    id = BitConverter.ToUInt32(bytes, i, true);
+                    i += 4;
+                }
+                if (type == 385)
+                {
+                    var textLength = BitConverter.ToInt32(bytes, i, true);
+                    text = Encoding.UTF8.GetString(bytes, i + 4, textLength);
+                    signType = BitConverter.ToUInt32(bytes, i + 4 + textLength, true);
+                    i += (8 + textLength);
+                }
+                if (bdata.isNPC((int)type))
+                {
+                    var nameLength = BitConverter.ToInt32(bytes, i, true);
+                    name = Encoding.UTF8.GetString(bytes, i + 4, nameLength);
+
+                    var msg1Length = BitConverter.ToInt32(bytes, i + 4 + nameLength, true);
+                    message1 = Encoding.UTF8.GetString(bytes, i + 8 + nameLength, msg1Length);
+
+                    var msg2Length = BitConverter.ToInt32(bytes, i + 8 + nameLength + msg1Length, true);
+                    message2 = Encoding.UTF8.GetString(bytes, i + 12 + nameLength + msg1Length, msg2Length);
+
+                    var msg3Length = BitConverter.ToInt32(bytes, i + 12 + nameLength + msg1Length + msg2Length, true);
+                    message3 = Encoding.UTF8.GetString(bytes, i + 16 + nameLength + msg1Length + msg2Length, msg3Length);
+                    i += (16 + nameLength + msg1Length + msg2Length + msg3Length);
+                }
+                /*switch (type)
+                {
+                    case (uint)ItemTypes.CoinDoor:
+                    case (uint)ItemTypes.CoinGate:
+                    case (uint)ItemTypes.BlueCoinDoor:
+                    case (uint)ItemTypes.BlueCoinGate:
+                    case (uint)ItemTypes.DeathDoor:
+                    case (uint)ItemTypes.DeathGate:
+                    case (uint)ItemTypes.DoorPurple:
+                    case (uint)ItemTypes.GatePurple:
+                    case (uint)ItemTypes.SwitchPurple:
+                    case (uint)ItemTypes.ResetPurple:
+                    case (uint)ItemTypes.DoorOrange:
+                    case (uint)ItemTypes.GateOrange:
+                    case (uint)ItemTypes.SwitchOrange:
+                    case (uint)ItemTypes.ResetOrange:
+                    case (uint)ItemTypes.EffectTeam:
+                    case (uint)ItemTypes.TeamDoor:
+                    case (uint)ItemTypes.TeamGate:
+                    case (uint)ItemTypes.EffectCurse:
+                    case (uint)ItemTypes.EffectZombie:
+                    case (uint)ItemTypes.EffectPoison:
+                    case (uint)ItemTypes.EffectFly:
+                    case (uint)ItemTypes.EffectProtection:
+                    case (uint)ItemTypes.EffectLowGravity:
+                    case (uint)ItemTypes.EffectJump:
+                    case (uint)ItemTypes.EffectSpeed:
+                    case (uint)ItemTypes.EffectMultijump:
+                        goal = BitConverter.ToUInt32(bytes, i);
+                        i += 4;
+                        break;
+
+                    case (uint)ItemTypes.PortalInvisible:
+                    case (uint)ItemTypes.Portal:
+                        rotation = BitConverter.ToUInt32(bytes, i);
+                        id = BitConverter.ToUInt32(bytes, i + 4);
+                        target = BitConverter.ToUInt32(bytes, i + 8);
+                        i += 12;
+                        break;
+
+                    case (uint)ItemTypes.WorldPortal:
+                        var targetLength = BitConverter.ToInt32(bytes, i);
+                        targetP = Encoding.UTF8.GetString(bytes, i + 4, targetLength);
+                        id = BitConverter.ToUInt32(bytes, i + 4 + targetLength);
+                        i += (8 + targetLength);
+                        break;
+
+                    case (uint)ItemTypes.WorldPortalSpawn:
+                        id = BitConverter.ToUInt32(bytes, i);
+                        i += 4;
+                        break;
+
+                    case (uint)ItemTypes.ColourWheelPlainBG:
+                    case (uint)ItemTypes.ColourWheelCanvasBG:
+                    case (uint)ItemTypes.ColourWheelCheckerBG:
+                    case (uint)ItemTypes.ColourWheelCaveBG:
+                    case (uint)ItemTypes.ColourWheelTileBG:
+                    case (uint)ItemTypes.ColourWheelBasic:
+                        colour = BitConverter.ToUInt32(bytes, i);
+                        i += 4;
+                        break;
+
+                    case (uint)ItemTypes.GlowyLineBlueStraight:
+                    case (uint)ItemTypes.GlowyLineBlueSlope:
+                    case (uint)ItemTypes.GlowyLineGreenSlope:
+                    case (uint)ItemTypes.GlowyLineGreenStraight:
+                    case (uint)ItemTypes.GlowyLineYellowSlope:
+                    case (uint)ItemTypes.GlowyLineYellowStraight:
+                    case (uint)ItemTypes.GlowyLineRedSlope:
+                    case (uint)ItemTypes.GlowyLineRedStraight:
+                    case (uint)ItemTypes.OnewayCyan:
+                    case (uint)ItemTypes.OnewayOrange:
+                    case (uint)ItemTypes.OnewayYellow:
+                    case (uint)ItemTypes.OnewayPink:
+                    case (uint)ItemTypes.OnewayGray:
+                    case (uint)ItemTypes.OnewayBlue:
+                    case (uint)ItemTypes.OnewayRed:
+                    case (uint)ItemTypes.OnewayGreen:
+                    case (uint)ItemTypes.OnewayBlack:
+                    case (uint)ItemTypes.OnewayWhite:
+                    case (uint)ItemTypes.Spike:
+                    case (uint)ItemTypes.SpikeSilver:
+                    case (uint)ItemTypes.SpikeBlack:
+                    case (uint)ItemTypes.SpikeRed:
+                    case (uint)ItemTypes.SpikeGold:
+                    case (uint)ItemTypes.SpikeGreen:
+                    case (uint)ItemTypes.SpikeBlue:
+                    case (uint)ItemTypes.MedievalAxe:
+                    case (uint)ItemTypes.MedievalBanner:
+                    case (uint)ItemTypes.MedievalCoatOfArms:
+                    case (uint)ItemTypes.MedievalShield:
+                    case (uint)ItemTypes.MedievalSword:
+                    case (uint)ItemTypes.ToothBig:
+                    case (uint)ItemTypes.ToothSmall:
+                    case (uint)ItemTypes.ToothTriple:
+                    case (uint)ItemTypes.DomesticLightBulb:
+                    case (uint)ItemTypes.DomesticTap:
+                    case (uint)ItemTypes.DomesticPainting:
+                    case (uint)ItemTypes.DomesticVase:
+                    case (uint)ItemTypes.DomesticTv:
+                    case (uint)ItemTypes.DomesticWindow:
+                    case (uint)ItemTypes.HalfBlockDomesticBrown:
+                    case (uint)ItemTypes.HalfBlockDomesticWhite:
+                    case (uint)ItemTypes.HalfBlockDomesticYellow:
+                    case (uint)ItemTypes.Halloween2015WindowRect:
+                    case (uint)ItemTypes.Halloween2015WindowCircle:
+                    case (uint)ItemTypes.Halloween2015Lamp:
+                    case (uint)ItemTypes.FairytaleFlowers:
+                    case (uint)ItemTypes.HalfBlockFairytaleOrange:
+                    case (uint)ItemTypes.HalfBlockFairytaleGreen:
+                    case (uint)ItemTypes.HalfBlockFairytaleBlue:
+                    case (uint)ItemTypes.HalfBlockFairytalePink:
+                    case (uint)ItemTypes.HalfBlockWhite:
+                    case (uint)ItemTypes.HalfBlockGray:
+                    case (uint)ItemTypes.HalfBlockBlack:
+                    case (uint)ItemTypes.HalfBlockRed:
+                    case (uint)ItemTypes.HalfBlockOrange:
+                    case (uint)ItemTypes.HalfBlockYellow:
+                    case (uint)ItemTypes.HalfBlockGreen:
+                    case (uint)ItemTypes.HalfBlockCyan:
+                    case (uint)ItemTypes.HalfBlockBlue:
+                    case (uint)ItemTypes.HalfBlockPurple:
+                    case (uint)ItemTypes.SpringDaisy:
+                    case (uint)ItemTypes.SpringTulip:
+                    case (uint)ItemTypes.SpringDaffodil:
+                    case (uint)ItemTypes.SummerIceCream:
+                    case (uint)ItemTypes.RestaurantBowl:
+                    case (uint)ItemTypes.RestaurantCup:
+                    case (uint)ItemTypes.RestaurantPlate:
+                    case (uint)ItemTypes.Halloween2016Eyes:
+                    case (uint)ItemTypes.Halloween2016Rotatable:
+                    case (uint)ItemTypes.Halloween2016Pumpkin:
+                    case (uint)ItemTypes.EffectGravity:
+                    case (uint)ItemTypes.HalfBlockWinter2018Snow:
+                    case (uint)ItemTypes.HalfBlockWinter2018Glacier:
+                    case (uint)ItemTypes.ToxicWasteBarrel:
+                    case (uint)ItemTypes.SewerPipe:
+                    case (uint)ItemTypes.MetalPlatform:
+                    case (uint)ItemTypes.DungeonPillarBottom:
+                    case (uint)ItemTypes.DungeonPillarMiddle:
+                    case (uint)ItemTypes.DungeonPillarTop:
+                    case (uint)ItemTypes.DungeonArchLeft:
+                    case (uint)ItemTypes.DungeonArchRight:
+                    case (uint)ItemTypes.DungeonTorch:
+                    case (uint)ItemTypes.NewYear2015Balloon:
+                    case (uint)ItemTypes.NewYear2015Streamer:
+                    case (uint)ItemTypes.Christmas2016LightsDown:
+                    case (uint)ItemTypes.Christmas2016LightsUp:
+                    case (uint)ItemTypes.MedievalTimber:
+                    case (uint)ItemTypes.SummerFlag:
+                    case (uint)ItemTypes.SummerAwning:
+                    case (uint)ItemTypes.CaveCrystal:
+                    case (uint)ItemTypes.DojoLightLeft:
+                    case (uint)ItemTypes.DojoLightRight:
+                    case (uint)ItemTypes.DojoDarkLeft:
+                    case (uint)ItemTypes.DojoDarkRight:
+                    case (uint)ItemTypes.IndustrialTable:
+                    case (uint)ItemTypes.IndustrialPipeThick:
+                    case (uint)ItemTypes.IndustrialPipeThin:
+                    case (uint)ItemTypes.DomesticPipeStraight:
+                    case (uint)ItemTypes.ShadowC:
+                    case (uint)ItemTypes.ShadowH:
+                    case (uint)ItemTypes.DomesticPipeT:
+                    case (uint)ItemTypes.ShadowA:
+                    case (uint)ItemTypes.ShadowB:
+                    case (uint)ItemTypes.ShadowD:
+                    case (uint)ItemTypes.ShadowF:
+                    case (uint)ItemTypes.ShadowG:
+                    case (uint)ItemTypes.ShadowI:
+                    case (uint)ItemTypes.ShadowK:
+                    case (uint)ItemTypes.ShadowL:
+                    case (uint)ItemTypes.ShadowM:
+                    case (uint)ItemTypes.ShadowN:
+                    case (uint)ItemTypes.DomesticFrameBorder:
+                    case (uint)ItemTypes.Fireworks:
+                        rotation = BitConverter.ToUInt32(bytes, i);
+                        i += 4;
+                        break;
+
+                    case (int)ItemTypes.Label:
+                        {
+                            var textLength = BitConverter.ToInt32(bytes, i);
+                            text = Encoding.UTF8.GetString(bytes, i + 4, textLength);
+
+                            var textColorLength = BitConverter.ToInt32(bytes, i + 4 + textLength);
+                            textColour = Encoding.UTF8.GetString(bytes, i + 8 + textLength, textColorLength);
+
+                            wrapLength = BitConverter.ToUInt32(bytes, i + 8 + textLength + textColorLength);
+
+                            i += (12 + textLength + textColorLength);
+                            break;
+                        }
+
+                    case (int)ItemTypes.Piano:
+                    case (int)ItemTypes.Drums:
+                    case (int)ItemTypes.Guitar:
+                        id = BitConverter.ToUInt32(bytes, i);
+                        i += 4;
+                        break;
+                    case (int)ItemTypes.TextSign:
+                        {
+                            var textLength = BitConverter.ToInt32(bytes, i);
+                            text = Encoding.UTF8.GetString(bytes, i + 4, textLength);
+                            signType = BitConverter.ToUInt32(bytes, i + 4 + textLength);
+                            i += (8 + textLength);
+                            break;
+                        }
+                    case (int)ItemTypes.NpcSmile:
+                    case (int)ItemTypes.NpcSad:
+                    case (int)ItemTypes.NpcOld:
+                    case (int)ItemTypes.NpcAngry:
+                    case (int)ItemTypes.NpcSlime:
+                    case (int)ItemTypes.NpcRobot:
+                    case (int)ItemTypes.NpcKnight:
+                    case (int)ItemTypes.NpcMeh:
+                    case (int)ItemTypes.NpcCow:
+                    case (int)ItemTypes.NpcFrog:
+                    case (int)ItemTypes.NpcBruce:
+                    case (uint)ItemTypes.NpcStarfish:
+                    case (uint)ItemTypes.NpcDT:
+                    case (uint)ItemTypes.NpcSkeleton:
+                    case (uint)ItemTypes.NpcZombie:
+                    case (uint)ItemTypes.NpcGhost:
+                    case (uint)ItemTypes.NpcAstronaut:
+                    case (uint)ItemTypes.NpcSanta:
+                    case (uint)ItemTypes.NpcSnowman:
+                    case (uint)ItemTypes.NpcWalrus:
+                    case (uint)ItemTypes.NpcCrab:
+                        {
+                            var nameLength = BitConverter.ToInt32(bytes, i);
+                            name = Encoding.UTF8.GetString(bytes, i + 4, nameLength);
+
+                            var msg1Length = BitConverter.ToInt32(bytes, i + 4 + nameLength);
+                            message1 = Encoding.UTF8.GetString(bytes, i + 8 + nameLength, msg1Length);
+
+                            var msg2Length = BitConverter.ToInt32(bytes, i + 8 + nameLength + msg1Length);
+                            message2 = Encoding.UTF8.GetString(bytes, i + 12 + nameLength + msg1Length, msg2Length);
+
+                            var msg3Length = BitConverter.ToInt32(bytes, i + 12 + nameLength + msg1Length + msg2Length);
+                            message3 = Encoding.UTF8.GetString(bytes, i + 16 + nameLength + msg1Length + msg2Length, msg3Length);
+                            i += (16 + nameLength + msg1Length + msg2Length + msg3Length);
+                            break;
+                        }
+                }*/
+
+                for (var b = 0; b < xs.Length; b += 2)
+                {
+                    var nx = (uint)((xs[b] << 8) + xs[b + 1]);
+                    var ny = (uint)((ys[b] << 8) + ys[b + 1]);
+                    if (layerNum == 1)
+                    {
+                        frame.Background[ny, nx] = (int)type;
+                        if (bdata.coloredBlocks.Contains((int)type))
+                        {
+                            frame.BlockData7[ny, nx] = colour;
+                        }
+                    }
+                    else
+                    {
+                        frame.Foreground[ny, nx] = (int)type;
+                        if (type == 1200)
+                        {
+                            frame.BlockData7[ny, nx] = colour;
+                        }
+                        if (bdata.goalNew.Contains((int)type))
+                        {
+                            frame.BlockData[ny, nx] = (int)goal;
+                        }
+                        if (bdata.rotationNew.Contains((int)type))
+                        {
+                            frame.BlockData[ny, nx] = (int)rotation;
+                        }
+                        if (type == 381 || type == 242)
+                        {
+                            frame.BlockData[ny, nx] = (int)rotation;
+                            frame.BlockData1[ny, nx] = (int)id;
+                            frame.BlockData2[ny, nx] = (int)target;
+                        }
+                        if (type == 374)
+                        {
+                            frame.BlockData[ny, nx] = (int)id;
+                            frame.BlockData3[ny, nx] = targetP;
+                        }
+                        if (type == 1582)
+                        {
+                            frame.BlockData[ny, nx] = (int)id;
+                        }
+                        if (type == 1000)
+                        {
+                            frame.BlockData[ny, nx] = (int)wrapLength;
+                            frame.BlockData3[ny, nx] = text;
+                            frame.BlockData4[ny, nx] = textColour;
+                        }
+                        if (type == 77 || type == 83 || type == 1520)
+                        {
+                            frame.BlockData[ny, nx] = (int)id;
+                        }
+                        if (type == 385)
+                        {
+                            frame.BlockData[ny, nx] = (int)signType;
+                            frame.BlockData3[ny, nx] = text;
+                        }
+                        if (bdata.isNPC((int)type))
+                        {
+                            frame.BlockData3[ny, nx] = name;
+                            frame.BlockData4[ny, nx] = message1;
+                            frame.BlockData5[ny, nx] = message2;
+                            frame.BlockData6[ny, nx] = message3;
+                        }
+                    }
+                    //this.SetBlock(nx, ny, type, layerNum, goal, rotation, target, id, colour, signType, wrapLength, targetP, text, textColour, name, message1, message2, message3);
+                }
+
+            }
+            Console.WriteLine("Finished");
+
+
+            /*foreach (var chunk in chunks)
             {
                 foreach (var pos in chunk.Locations)
                 {
                     if (chunk.Args.Length == 0)
                     {
-                        if ((int)chunk.Layer == 1)
+                        if ((int)chunk.Layer == 1 && (int)chunk.Type != 631 && (int)chunk.Type != 632 && (int)chunk.Type != 633)
                         {
                             int x = pos.X;
                             int y = pos.Y;
@@ -232,8 +668,19 @@ namespace EEditor
                                     frame.BlockData3[pos.Y, pos.X] = chunk.Args[0].ToString();
                                     frame.BlockData4[pos.Y, pos.X] = chunk.Args[2].ToString();
                                 }
+                                else if ((int)chunk.Type == 1200 && (int)chunk.Layer == 0)
+                                {
 
-                                if ((int)chunk.Type != 374 && (int)chunk.Type != 385)
+                                    frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
+                                    frame.BlockData7[pos.Y, pos.X] = Convert.ToUInt32(chunk.Args[0]);
+                                }
+                                else if ((int)chunk.Type == 631 || (int)chunk.Type == 632 || (int)chunk.Type == 633)
+                                {
+                                    
+                                    frame.Background[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
+                                    frame.BlockData7[pos.Y, pos.X] = Convert.ToUInt32(chunk.Args[0]);
+                                }
+                                else if ((int)chunk.Type != 374 && (int)chunk.Type != 385 && (int)chunk.Type != 631 && (int)chunk.Type != 632 && (int)chunk.Type != 633)
                                 {
                                     if ((int)chunk.Layer == 1)
                                     {
@@ -252,7 +699,7 @@ namespace EEditor
                         }
                         else if (Convert.ToString(chunk.Args[0]) == "we")
                         {
-                            if ((int)chunk.Layer == 1)
+                            if ((int)chunk.Layer == 1 && (int)chunk.Type != 631 && (int)chunk.Type != 632 && (int)chunk.Type != 633)
                             {
                                 int x = pos.X;
                                 int y = pos.Y;
@@ -270,20 +717,33 @@ namespace EEditor
                     {
                         if (Convert.ToString(chunk.Args[0]) != "we")
                         {
-                            frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
+
                             if (chunk.Type == 385)
                             {
+                                frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
                                 frame.BlockData[pos.Y, pos.X] = Convert.ToInt32(chunk.Args[1]);
                                 frame.BlockData3[pos.Y, pos.X] = chunk.Args[0].ToString();
                             }
                             else if (chunk.Type == 374)
                             {
+                                frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
                                 frame.BlockData3[pos.Y, pos.X] = chunk.Args[0].ToString();
                                 frame.BlockData[pos.Y, pos.X] = Convert.ToInt32(chunk.Args[1]);
                             }
-
+                            else if ((int)chunk.Type == 1200)
+                            {
+                                frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
+                                frame.BlockData7[pos.Y, pos.X] = Convert.ToUInt32(chunk.Args[0]);
+                            }
+                            else if ((int)chunk.Type == 631 || (int)chunk.Type == 632 || (int)chunk.Type == 633)
+                            {
+                                
+                                frame.Background[pos.Y, pos.X] = (int)chunk.Type;
+                                frame.BlockData7[pos.Y, pos.X] = Convert.ToUInt32(chunk.Args[0]);
+                            }
                             else if (bdata.goal.Contains((int)chunk.Type) || bdata.morphable.Contains((int)chunk.Type) || bdata.rotate.Contains((int)chunk.Type))
                             {
+                                frame.Foreground[pos.Y, pos.X] = Convert.ToInt32(chunk.Type);
                                 frame.BlockData[pos.Y, pos.X] = Convert.ToInt32(chunk.Args[0]);
                             }
                         }
@@ -348,11 +808,12 @@ namespace EEditor
                         }
                     }
 
-                }
+                }*/
 
-            }
+
 
             return frame;
+
         }
         #endregion
 
@@ -568,6 +1029,11 @@ namespace EEditor
                         {
                             res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData[y, x].ToString(), BlockData3[y, x].ToString(), BlockData4[y, x].ToString() });
                         }
+                        else if (Foreground[y, x] == 1200)
+                        {
+                            res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData7[y, x].ToString() });
+
+                        }
                         else
                         {
                             if (MainForm.userdata.level.StartsWith("OW") && !MainForm.OpenWorldCode && MainForm.OpenWorld)
@@ -652,10 +1118,37 @@ namespace EEditor
                                 res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData[y, x].ToString(), BlockData3[y, x], BlockData4[y, x] });
                             }
                         }
+                        else if (Foreground[y, x] == 1200)
+                        {
+                            if (BlockData7[y, x] != f.BlockData7[y, x])
+                            {
+                                res.Add(new string[] { x.ToString(), y.ToString(), Foreground[y, x].ToString(), "0", BlockData7[y, x].ToString() });
+                            }
+                        }
+                    }
+
+                    if (Background[y, x] == f.Background[y, x])
+                    {
+                        if (Background[y, x] == 631 || Background[y, x] == 632 || Background[y, x] == 633)
+                        {
+                            if (BlockData7[y, x] != f.BlockData7[y, x])
+                            {
+                                res.Add(new string[] { x.ToString(), y.ToString(), Background[y, x].ToString(), "1", BlockData7[y, x].ToString() });
+                            }
+                        }
+
                     }
                     if (Background[y, x] != f.Background[y, x])
                     {
-                        res.Add(new string[] { x.ToString(), y.ToString(), Background[y, x].ToString(), "1" });
+                        if (Background[y, x] == 631 || Background[y, x] == 632 || Background[y, x] == 633)
+                        {
+                            res.Add(new string[] { x.ToString(), y.ToString(), Background[y, x].ToString(), "1", BlockData7[y, x].ToString() });
+
+                        }
+                        else
+                        {
+                            res.Add(new string[] { x.ToString(), y.ToString(), Background[y, x].ToString(), "1" });
+                        }
                     }
                     /*if (Foreground[y, x] != f.Foreground[y, x])
                     {
@@ -1103,7 +1596,128 @@ namespace EEditor
                 MessageBox.Show("The world is too small to handle EEBuilder files.\nWorlds should be larger or equal to width 30 and height 41", "World too small", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
+        public static Frame LoadFromEBELVL(string file)
+        {
+            using (FileStream fs = new FileStream(file, FileMode.Open))
+            {
+                Level.Ebe = true;
+                Level lvl = Level.Open(fs);
+                if (lvl.Version == 1)
+                {
+                    Frame f = new Frame(lvl.Width, lvl.Height);
+                    f.levelname = lvl.WorldName;
+                    f.nickname = lvl.OwnerName;
 
+                    if (lvl.BackgroundColor != 0)
+                    {
+                        MainForm.userdata.useColor = true;
+                        MainForm.userdata.thisColor = UIntToColor(lvl.BackgroundColor);
+                    }
+                    else
+                    {
+                        MainForm.userdata.useColor = false;
+                        MainForm.userdata.thisColor = Color.Transparent;
+                    }
+                    if (lvl.Width <= 637 && lvl.Height <= 460 || lvl.Width <= 460 && lvl.Height <= 637)
+                    {
+                        for (int x = 0; x < lvl.Width; ++x)
+                        {
+                            for (int y = 0; y < lvl.Height; ++y)
+                            {
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Normal))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Rotatable) || Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.RotatableButNotReally))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                    f.BlockData[y, x] = ((Blocks.RotatableBlock)lvl[0, x, y]).Rotation;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.NPC))
+                                {
+
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                    f.BlockData3[y, x] = ((Blocks.NPCBlock)lvl[0, x, y]).Name;
+                                    f.BlockData4[y, x] = ((Blocks.NPCBlock)lvl[0, x, y]).Message1;
+                                    f.BlockData5[y, x] = ((Blocks.NPCBlock)lvl[0, x, y]).Message2;
+                                    f.BlockData6[y, x] = ((Blocks.NPCBlock)lvl[0, x, y]).Message3;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Sign))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                    f.BlockData3[y, x] = ((Blocks.SignBlock)lvl[0, x, y]).Text;
+                                    f.BlockData[y, x] = ((Blocks.SignBlock)lvl[0, x, y]).Morph;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Portal))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+
+                                    f.BlockData[y, x] = ((Blocks.PortalBlock)lvl[0, x, y]).Rotation;
+                                    f.BlockData1[y, x] = ((Blocks.PortalBlock)lvl[0, x, y]).ID;
+                                    f.BlockData2[y, x] = ((Blocks.PortalBlock)lvl[0, x, y]).Target;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Morphable))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                    f.BlockData[y, x] = ((Blocks.MorphableBlock)lvl[0, x, y]).Morph;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Number))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                    f.BlockData[y, x] = ((Blocks.NumberBlock)lvl[0, x, y]).Number;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Enumerable))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                    f.BlockData[y, x] = ((Blocks.EnumerableBlock)lvl[0, x, y]).Variant;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.WorldPortal))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                    f.BlockData[y, x] = ((Blocks.WorldPortalBlock)lvl[0, x, y]).Spawn;
+                                    f.BlockData3[y, x] = ((Blocks.WorldPortalBlock)lvl[0, x, y]).Target;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Music))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                    int temp = ((Blocks.MusicBlock)lvl[0, x, y]).Note;
+                                    f.BlockData[y, x] = temp;
+                                }
+                                if (Blocks.IsType(lvl[1, x, y].BlockID, Blocks.BlockType.Normal))
+                                {
+                                    f.Background[y, x] = lvl[1, x, y].BlockID;
+                                }
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Label))
+                                {
+                                    f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                    f.BlockData[y, x] = ((Blocks.LabelBlock)lvl[0, x, y]).Wrap;
+                                    f.BlockData3[y, x] = ((Blocks.LabelBlock)lvl[0, x, y]).Text;
+                                    f.BlockData4[y, x] = ((Blocks.LabelBlock)lvl[0, x, y]).Color;
+                                }
+                                if (Blocks.IsType(lvl[1, x, y].BlockID, Blocks.BlockType.BlockColor))
+                                {
+                                    f.Background[y, x] = lvl[1, x, y].BlockID;
+                                    f.BlockData7[y, x] = ((Blocks.ColoredBlock)lvl[1, x, y]).Colour;
+                                }
+                            }
+                        }
+                        f.toobig = false;
+                    }
+                    else
+                    {
+                        f.toobig = true;
+                    }
+                    Level.Ebe = false;
+                    return f;
+                }
+                else
+                {
+                    Level.Ebe = false;
+                    return null;
+                }
+
+            }
+        }
         public static Frame LoadFromEELVL(string file)
         {
             using (FileStream fs = new FileStream(file, FileMode.Open))

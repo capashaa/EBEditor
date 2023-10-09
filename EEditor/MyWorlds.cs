@@ -264,6 +264,7 @@ namespace EEditor
                         {
                             if (m[(UInt32)total].ToString() != null) worlds.Add(m[(UInt32)total].ToString(), new myWorlds() { name = "Untitled World", size = "world3x" });
                         }
+                        con.Disconnect();
                         s1.Release();
                         LoadWorld();
                         break;

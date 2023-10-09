@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,6 +7,7 @@ namespace EEditor
 {
     public partial class Minimap : UserControl
     {
+
         public int BlockWidth { get; set; }
         public int BlockHeight { get; set; }
         public static Bitmap Bitmap { get; set; }
@@ -29,7 +31,7 @@ namespace EEditor
                 ControlStyles.UserPaint |
                 ControlStyles.DoubleBuffer, true);
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            BackColor = Color.Transparent;
+            BackColor = Color.Black;
         }
 
         public void Init(int width, int height)
@@ -38,10 +40,10 @@ namespace EEditor
             BlockHeight = height;
             Size = new Size(width, height);
             Bitmap = new Bitmap(width, height);
-            for (int x = 0; x < width; ++x) for (int y = 0; y < height; ++y) Bitmap.SetPixel(x, y, Color.Black);
+            using (Graphics g = Graphics.FromImage(Bitmap)) { g.Clear(Color.Black); }
             Point relativePos = new Point(-25, -25);
             Location = new Point(Parent.ClientSize.Width - Width + relativePos.X, Parent.ClientSize.Height - Height + relativePos.Y);
-
+            Invalidate();
         }
 
         public void SetPixel(int x, int y, int id)
@@ -49,15 +51,17 @@ namespace EEditor
             uint color = 4278190080;
             if (id < Colors.Length && Colors[id] != 321) color = Colors[id];
 
-            if (this.InvokeRequired) { this.Invoke((MethodInvoker)delegate { Bitmap.SetPixel(x, y, Color.FromArgb((int)color)); }); }
-            else { Bitmap.SetPixel(x, y, Color.FromArgb((int)color)); }
+            if (this.InvokeRequired) this.Invoke((MethodInvoker)delegate { Bitmap.SetPixel(x, y, Color.FromArgb((int)color)); });
+            else Bitmap.SetPixel(x, y, Color.FromArgb((int)color));
             Invalidate(new Rectangle(x, y, 1, 1));
         }
 
         public void SetColor(int x, int y, Color color)
         {
-            Bitmap.SetPixel(x, y, color);
+            if (this.InvokeRequired) this.Invoke((MethodInvoker)delegate { Bitmap.SetPixel(x, y, color); });
+            else Bitmap.SetPixel(x, y, color);
             Invalidate(new Rectangle(x, y, 1, 1));
+
         }
 
         protected override void OnPaint(PaintEventArgs e)

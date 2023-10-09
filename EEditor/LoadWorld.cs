@@ -15,6 +15,7 @@ namespace EEditor
     {
 
         public static Semaphore s1 = new Semaphore(0, 1);
+        public static Connection conn = null;
         public static Frame LoadData(string roomid, bool bigdb)
         {
             Frame frame = null;
@@ -100,7 +101,7 @@ namespace EEditor
                     int version = bdata.forceversion ? bdata.version : Convert.ToInt32(sel.BigDB.Load("config", "config")["version"]);
                     sel.Multiplayer.CreateJoinRoom(roomid, $"{bdata.normal_room}{version}", false, null, null, (Connection con) =>
                     {
-
+                        conn = con;
                         con.Send("init");
                         con.OnMessage += (object sender, PlayerIOClient.Message m) =>
                         {
@@ -127,6 +128,7 @@ namespace EEditor
                         s1.Release();
                     });
                     s1.WaitOne();
+                    conn.Disconnect();
                 }
                 
             }

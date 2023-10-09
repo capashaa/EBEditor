@@ -295,7 +295,7 @@ namespace EEditor
                         label4.Text = null;
                         button5.Enabled = true;
                         button1.Enabled = true;
-                        replaceRotate.Value = 1;
+                        replaceRotate.Value = 0;
                     }
                     else
                     {

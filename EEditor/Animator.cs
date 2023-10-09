@@ -141,10 +141,9 @@ namespace EEditor
                     else { drawblocks = true; }
                     if (drawblocks)
                     {
-                        
+
                         int blockId = Convert.ToInt32(cur[2]);
                         int layer = Convert.ToInt32(cur[3]);
-
                         if (layer == 0)
                         {
                             if (remoteFrame.Foreground[y, x] != blockId)
@@ -162,6 +161,13 @@ namespace EEditor
                                     }
                                 }
                                 else if (bdata.rotate.Contains(blockId) && blockId != 385 && blockId != 374)
+                                {
+                                    if (cur.Length == 5)
+                                    {
+                                        correctWay = true;
+                                    }
+                                }
+                                else if (blockId == 1200)
                                 {
                                     if (cur.Length == 5)
                                     {
@@ -247,6 +253,16 @@ namespace EEditor
                                         }
                                     }
                                 }
+                                else if (blockId == 1200)
+                                {
+                                    if (cur.Length == 5)
+                                    {
+                                        if (remoteFrame.BlockData7[y, x] != Convert.ToUInt32(cur[4]))
+                                        {
+                                            correctWay = true;
+                                        }
+                                    }
+                                }
                                 else if (blockId == 385)
                                 {
                                     if (cur.Length == 6)
@@ -313,7 +329,33 @@ namespace EEditor
                         {
                             if (remoteFrame.Background[y, x] != blockId)
                             {
-                                correctWay = true;
+                                if (blockId == 631 || blockId == 632 || blockId == 633)
+                                {
+                                    if (cur.Length == 5)
+                                    {
+                                        correctWay = true;
+                                    }
+                                }
+                                else
+                                {
+                                    correctWay = true;
+                                }
+                            }
+                            else if (remoteFrame.Background[y, x] == blockId)
+                            {
+                                //Console.WriteLine(blockId);
+                                if (blockId == 631 || blockId == 632 || blockId == 633)
+                                {
+                                    //Console.WriteLine(cur.Length);
+                                    if (cur.Length == 5)
+                                    {
+                                        if (remoteFrame.BlockData7[y, x] != Convert.ToUInt32(cur[4]))
+                                        {
+                                            correctWay = true;
+                                        }
+                                    }
+                                }
+
                             }
                         }
                         if (correctWay)
@@ -334,6 +376,20 @@ namespace EEditor
                                 if (cur.Length == 5)
                                 {
                                     param = new object[] { layer, x, y, blockId, Convert.ToInt32(cur[4]) };
+                                }
+                            }
+                            else if (blockId == 1200)
+                            {
+                                if (cur.Length == 5)
+                                {
+                                    param = new object[] { layer, x, y, blockId, Convert.ToUInt32(cur[4]) };
+                                }
+                            }
+                            else if (blockId == 631 || blockId == 632 || blockId == 633)
+                            {
+                                if (cur.Length == 5)
+                                {
+                                    param = new object[] { layer, x, y, blockId, Convert.ToUInt32(cur[4]) };
                                 }
                             }
                             else if (blockId == 385)
@@ -404,20 +460,20 @@ namespace EEditor
                             if (MainForm.userdata.SaveXBlocks == savexblocks && MainForm.userdata.saveWorldCrew)
                             {
 
-                                    if (AnimateForm.saveRights)
+                                if (AnimateForm.saveRights)
+                                {
                                     {
-                                        {
-                                            conn.Send("save");
-                                        }
+                                        conn.Send("save");
                                     }
-                                
+                                }
+
                                 savexblocks = 0;
                             }
                             else if (savexblocks < MainForm.userdata.SaveXBlocks && MainForm.userdata.saveWorldCrew)
                             {
                                 savexblocks += 1;
                             }
-                            
+
                             OnStatusChanged("", epochStartTime, false, firstFrame.Count, Gcurrent1);
                             int progress = (int)Math.Round((double)(100 * Gcurrent) / Gtotal);
                             if (progress == 50) goto stopit;
@@ -480,12 +536,12 @@ namespace EEditor
                     ++Gcurrent;
                     ++Gcurrent1;
                     OnStatusChanged("Uploading blocks to level. (Total: " + Gcurrent1 + "/" + firstFrame.Count + ")", DateTime.MinValue, false, Gtotal, Gcurrent);
-                    if (Convert.ToDouble(Gcurrent1) <= pb.Maximum && Convert.ToDouble(Gcurrent1) >= pb.Minimum) 
-                    { 
-                        if (pb.InvokeRequired) pb.Invoke((MethodInvoker)delegate { pb.Value = Gcurrent1; }); 
-                        TaskbarProgress.SetValue(afHandle, Gcurrent1, firstFrame.Count); 
+                    if (Convert.ToDouble(Gcurrent1) <= pb.Maximum && Convert.ToDouble(Gcurrent1) >= pb.Minimum)
+                    {
+                        if (pb.InvokeRequired) pb.Invoke((MethodInvoker)delegate { pb.Value = Gcurrent1; });
+                        TaskbarProgress.SetValue(afHandle, Gcurrent1, firstFrame.Count);
                     }
-                    
+
                 }
             }
             else if (e.Type == "br")
@@ -526,6 +582,23 @@ namespace EEditor
                     ++Gcurrent;
                     ++Gcurrent1;
                     OnStatusChanged("Uploading world portals to level. (Total: " + Gcurrent1 + "/" + firstFrame.Count + ")", DateTime.MinValue, false, Gtotal, Gcurrent);
+                    if (Convert.ToDouble(Gcurrent1) <= pb.Maximum && Convert.ToDouble(Gcurrent1) >= pb.Minimum) { if (pb.InvokeRequired) pb.Invoke((MethodInvoker)delegate { pb.Value = Gcurrent1; }); TaskbarProgress.SetValue(afHandle, Gcurrent1, firstFrame.Count); }
+                    //placeBlocks.Remove(new blocks() { layer = 0, x = e.GetInt(0), y = e.GetInt(1), bid = e.GetInt(2), data = new object[] { e[3], e.GetInt(4) } });
+                }
+
+            }
+            else if (e.Type == "bco")
+            {
+                if (botid == (int)e.GetInt(5))
+                {
+                    int x = e.GetInt(0), y = e.GetInt(1);
+                    if (e.GetInt(4) == 0) remoteFrame.Foreground[y, x] = e.GetInt(2);
+                    else remoteFrame.Background[y, x] = e.GetInt(2);
+
+                    remoteFrame.BlockData7[y, x] = e.GetUInt(3);
+                    ++Gcurrent;
+                    ++Gcurrent1;
+                    OnStatusChanged("Uploading Colored blocks to level. (Total: " + Gcurrent1 + "/" + firstFrame.Count + ")", DateTime.MinValue, false, Gtotal, Gcurrent);
                     if (Convert.ToDouble(Gcurrent1) <= pb.Maximum && Convert.ToDouble(Gcurrent1) >= pb.Minimum) { if (pb.InvokeRequired) pb.Invoke((MethodInvoker)delegate { pb.Value = Gcurrent1; }); TaskbarProgress.SetValue(afHandle, Gcurrent1, firstFrame.Count); }
                     //placeBlocks.Remove(new blocks() { layer = 0, x = e.GetInt(0), y = e.GetInt(1), bid = e.GetInt(2), data = new object[] { e[3], e.GetInt(4) } });
                 }
@@ -595,13 +668,12 @@ namespace EEditor
             }
             else if (e.Type == "lb")
             {
-                if (botid == (int)e.GetInt(6))
+                if (botid == (int)e.GetInt(5))
                 {
                     int x = e.GetInt(0), y = e.GetInt(1);
                     remoteFrame.Foreground[y, x] = e.GetInt(2);
-                    remoteFrame.BlockData[y, x] = e.GetInt(3);
-                    remoteFrame.BlockData3[y, x] = e.GetString(4);
-                    remoteFrame.BlockData4[y, x] = e.GetString(5);
+                    remoteFrame.BlockData3[y, x] = e.GetString(3);
+                    remoteFrame.BlockData4[y, x] = e.GetString(4);
                     ++Gcurrent;
                     ++Gcurrent1;
                     OnStatusChanged("Uploading label to level. (Total: " + Gcurrent1 + "/" + firstFrame.Count + ")", DateTime.MinValue, false, Gtotal, Gcurrent);

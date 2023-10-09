@@ -20,6 +20,7 @@ namespace EELVL
 			Number = I | (1 << 3),
 			Enumerable = I | (1 << 4),
 			Music = I | (1 << 5),
+			BlockColor = I | (1 << 6),
 
 			SI = 1 << 10,
 			Sign = SI | (1 << 0),
@@ -81,7 +82,10 @@ namespace EELVL
 				1550, 1551, 1552, 1553, 1554, 1555, 1556, 1557, 1558, 1559,
 				1569, 1570, 1571, 1572, 1573, 1574, 1575, 1576, 1577, 1578,
 				1579
-			}
+			},
+			{ BlockType.BlockColor,
+				631,632,633
+				}
 		};
 
 		public static readonly Block Empty = new Block(0);
@@ -111,6 +115,7 @@ namespace EELVL
 				BlockType.WorldPortal => new WorldPortalBlock(bid, reader.ReadString(), reader.ReadInt()),
 				BlockType.Label => new LabelBlock(bid, reader.ReadString(), reader.ReadString(), reader.ReadInt()),
 				BlockType.NPC => new NPCBlock(bid, reader.ReadString(), reader.ReadString(), reader.ReadString(), reader.ReadString()),
+				BlockType.BlockColor => new ColoredBlock(bid,reader.ReadUInt()),
 				_ => throw new Exception("This shouldn't happen")
 			};
 
@@ -185,7 +190,27 @@ namespace EELVL
 				=> base.GetHashCode() * 1619 + Morph;
 		}
 
-		public class RotatableBlock : Block
+        public class ColoredBlock : Block
+        {
+            public uint Colour { get; }
+
+            internal ColoredBlock(BlockType type, int bid, uint colour) : base(type, bid)
+            {
+                Colour = colour;
+            }
+
+            public ColoredBlock(int bid, uint colour)
+                : this(BlockType.BlockColor, bid, colour) { }
+
+            public override bool Equals(object obj)
+                => obj is ColoredBlock b && base.Equals(b)
+                && b.Colour == Colour;
+
+            public override int GetHashCode()
+                => (int)(((uint)base.GetHashCode() * 1619) + Colour);
+        }
+
+        public class RotatableBlock : Block
 		{
 			public int Rotation { get; }
 

@@ -8,6 +8,8 @@ using System.Drawing.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Drawing.Imaging;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EEditor
 {
@@ -398,8 +400,9 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         }*/
 
         #region draw
-        public void Draw(int x, int y, Graphics g, int bid, int fid, int coins, int id, int target, string text, string text1, string text2, string text3, Color color)
+        public void Draw(int x, int y, Graphics g, int bid, int fid, int coins, int id, int target, string text, string text1, string text2, string text3, uint cblock, Color color)
         {
+            //Console.WriteLine(bid + " " + fid);
             //Graphics g = Graphics.FromImage(Back);
             if (Bricks[bid] == null || bid == -1)
             {
@@ -438,43 +441,65 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     }
                 }
             }
-            else if (bid >= 500 && bid <= 999 || bid == 0)
+            if (bid >= 500 && bid <= 999 || bid == 0)
             {
-                Bitmap bmp0 = new Bitmap(Bricks[bid], MainForm.Zoom, MainForm.Zoom);
-                if (!MainForm.userdata.useColor)
+                if (bid == 631)
                 {
+                    g.FillRectangle(new SolidBrush(UIntToColor(cblock)), new Rectangle(x * 16, y * 16, 16, 16));
+                    Minimap.SetColor(x, y, UIntToColor(cblock));
+                }
+                if (bid == 632)
+                {
+                    g.FillRectangle(new SolidBrush(UIntToColor(cblock)), new Rectangle(x * 16, y * 16, 16, 16));
+                    g.DrawImage(Properties.Resources.bgs_overlays, new Rectangle(x * 16, y * 16, 16, 16), new Rectangle(16, 0, 16, 16), GraphicsUnit.Pixel);
+                    Minimap.SetColor(x, y, UIntToColor(cblock));
 
-                    g.DrawImage(bmp0, x * MainForm.Zoom, y * MainForm.Zoom);
+                }
+                if (bid == 633)
+                {
+                    g.FillRectangle(new SolidBrush(UIntToColor(cblock)), new Rectangle(x * 16, y * 16, 16, 16));
+                    g.DrawImage(Properties.Resources.bgs_overlays, new Rectangle(x * 16, y * 16, 16, 16), new Rectangle(32, 0, 16, 16), GraphicsUnit.Pixel);
+                    Minimap.SetColor(x, y, UIntToColor(cblock));
+
                 }
                 else
                 {
-                    if (bid != 0)
+                    Bitmap bmp0 = new Bitmap(Bricks[bid], MainForm.Zoom, MainForm.Zoom);
+                    if (!MainForm.userdata.useColor)
                     {
-                        g.DrawImage(Bricks[bid], x * 16, y * 16);
+
+                        g.DrawImage(bmp0, x * MainForm.Zoom, y * MainForm.Zoom);
                     }
                     else
                     {
-                        //if (BlockWidth < x && BlockHeight < y) mouseBlocksB[x, y] = 0;
-                        if (Color.Transparent == color)
+                        if (bid != 0)
                         {
-                            if (MainForm.userdata.thisColor != Color.Transparent)
-                            {
-                                g.FillRectangle(new SolidBrush(MainForm.userdata.thisColor), new Rectangle(x * 16, y * 16, 16, 16));
-                            }
-                            else
-                            {
-                                g.DrawImage(Bricks[bid], x * 16, y * 16);
-                            }
+                            g.DrawImage(Bricks[bid], x * 16, y * 16);
                         }
                         else
                         {
-                            if (MainForm.userdata.thisColor != Color.Transparent)
+                            //if (BlockWidth < x && BlockHeight < y) mouseBlocksB[x, y] = 0;
+                            if (Color.Transparent == color)
                             {
-                                g.FillRectangle(new SolidBrush(MainForm.userdata.thisColor), new Rectangle(x * 16, y * 16, 16, 16));
+                                if (MainForm.userdata.thisColor != Color.Transparent)
+                                {
+                                    g.FillRectangle(new SolidBrush(MainForm.userdata.thisColor), new Rectangle(x * 16, y * 16, 16, 16));
+                                }
+                                else
+                                {
+                                    g.DrawImage(Bricks[bid], x * 16, y * 16);
+                                }
                             }
                             else
                             {
-                                g.DrawImage(bmp0, x * MainForm.Zoom, y * MainForm.Zoom);
+                                if (MainForm.userdata.thisColor != Color.Transparent)
+                                {
+                                    g.FillRectangle(new SolidBrush(MainForm.userdata.thisColor), new Rectangle(x * 16, y * 16, 16, 16));
+                                }
+                                else
+                                {
+                                    g.DrawImage(bmp0, x * MainForm.Zoom, y * MainForm.Zoom);
+                                }
                             }
                         }
                     }
@@ -588,11 +613,11 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             }
             if (bdata.goal.Contains(fid) && fid != 423 && fid != 417 && fid != 418 && fid != 419 && fid != 420 && fid != 421 && fid != 422 && fid != 453 && fid != 1027 && fid != 1028 && fid != 1582)
             {
-                
+
                 int offSet = coins >= 10 ? 4 : 9;
                 if (fid == 467 || fid == 1079 || fid == 1080 || fid == 1012 || fid == 113 || fid == 184 || fid == 185 || fid == 461 || fid == 1619 || fid == 1620)
                 {
-                    
+
                     if (fid == 461 && coins == 0 || coins > 1 && coins <= 999)
                     {
                         DrawText(coins.ToString(), Back, Brushes.White, bfont.Families[0], 8, "bottom", "right", x * 16, y * 16, false);
@@ -625,7 +650,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                 {
                     if (coins <= 999)
                     {
-                        DrawText(coins.ToString(), Back, fid == 43 ? Brushes.Black:Brushes.White, bfont.Families[0], 8, "bottom", "right", x * 16, y * 16, false);
+                        DrawText(coins.ToString(), Back, fid == 43 ? Brushes.Black : Brushes.White, bfont.Families[0], 8, "bottom", "right", x * 16, y * 16, false);
                     }
                     else
                     {
@@ -641,7 +666,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     }
                     else
                     {
-                        DrawText("999", Back,Brushes.Black, bfont.Families[0], 8, "bottom", "right", x * 16, y * 16, false);
+                        DrawText("999", Back, Brushes.Black, bfont.Families[0], 8, "bottom", "right", x * 16, y * 16, false);
                     }
                 }
             }
@@ -652,6 +677,13 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     string texta = text;
                     g.DrawRectangle(new Pen(ColorTranslator.FromHtml(text1)), new Rectangle(x * 16, y * 16, 15, 15));
                 }
+                if (fid == 1200)
+                {
+                    g.FillRectangle(new SolidBrush(UIntToColor(cblock)), new Rectangle(x * 16, y * 16, 16, 16));
+                    g.DrawImage(Properties.Resources.fgs_overlays, new Point(x * 16, y * 16));
+
+                }
+
                 if (fid == 242 || fid == 381)
                 {
                     Bitmap bmp3 = bdata.getRotation(fid, coins);
@@ -700,9 +732,27 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             }
             else
             {
-                Minimap.SetPixel(x, y, bid);
-                if (fid != -1 && Minimap.ImageColor[fid]) Minimap.SetPixel(x, y, fid);
+                if (bid == 631) 
+                {
+                    Minimap.SetColor(x, y, UIntToColor(cblock));
+                    if (fid != -1 && Minimap.ImageColor[fid]) Minimap.SetPixel(x, y, fid);
+                }
+                else
+                {
+                    if (bid != 0) Minimap.SetPixel(x, y, bid);
+                    if (fid != -1 && Minimap.ImageColor[fid]) Minimap.SetPixel(x, y, fid);
+                }
+
             }
+        }
+
+        private Color UIntToColor(uint color)
+        {
+            byte a = (byte)(color >> 24);
+            byte r = (byte)(color >> 16);
+            byte g = (byte)(color >> 8);
+            byte b = (byte)(color >> 0);
+            return Color.FromArgb(255, r, g, b);
         }
 
         public void Draw(int x, int y, Graphics g, Color color)
@@ -712,11 +762,12 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             int fid = CurFrame.Foreground[y, x];
             int id = CurFrame.BlockData1[y, x];
             int target = CurFrame.BlockData2[y, x];
+            uint cblock = CurFrame.BlockData7[y, x];
             string text = CurFrame.BlockData3[y, x];
             string text1 = CurFrame.BlockData4[y, x];
             string text2 = CurFrame.BlockData5[y, x];
             string text3 = CurFrame.BlockData6[y, x];
-            Draw(x, y, g, bid, fid, coins, id, target, text, text1, text2, text3, color);
+            Draw(x, y, g, bid, fid, coins, id, target, text, text1, text2, text3, cblock, color);
         }
         #endregion
 
@@ -805,7 +856,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     {
                         if (CurFrame.BlockData3[p.Y, p.X].Length >= 10)
                         {
-                            text = CurFrame.BlockData3[p.Y, p.X].Substring(0, 10) + "....";
+                            text = CurFrame.BlockData3[p.Y, p.X].Substring(0, 10) + "..";
                         }
                         else
                         {
@@ -825,6 +876,11 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     MainForm.rot.Visible = true;
                     MainForm.id.Visible = true;
                     MainForm.target.Visible = true;
+                }
+                else if (CurFrame.Background[p.Y, p.X] == 631)
+                {
+                    MainForm.txt.Text = CurFrame.BlockData7[p.Y, p.X].ToString();
+                    MainForm.txt.Visible = true;
                 }
                 else
                 {
@@ -868,12 +924,12 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             return PointToClient(MousePosition);
         }
 
-        public void SetMarkBlock(string[,] Area, string[,] Back, string[,] Coins, string[,] id, string[,] target, string[,] text, string[,] text1, string[,] text2, string[,] text3)
+        public void SetMarkBlock(string[,] Area, string[,] Back, string[,] Coins, string[,] id, string[,] target, string[,] text, string[,] text1, string[,] text2, string[,] text3, string[,] cblock)
         {
-            SetMarkBlock(Area, Back, Coins, id, target, text, text1, text2, text3, Math.Abs(AutoScrollPosition.X) / 16, Math.Abs(AutoScrollPosition.Y) / 16);
+            SetMarkBlock(Area, Back, Coins, id, target, text, text1, text2, text3, cblock, Math.Abs(AutoScrollPosition.X) / 16, Math.Abs(AutoScrollPosition.Y) / 16);
         }
 
-        public void SetMarkBlock(string[,] Area, string[,] Back, string[,] Coins, string[,] id, string[,] target, string[,] text, string[,] text1, string[,] text2, string[,] text3, int xPos, int yPos)
+        public void SetMarkBlock(string[,] Area, string[,] Back, string[,] Coins, string[,] id, string[,] target, string[,] text, string[,] text1, string[,] text2, string[,] text3, string[,] cblock, int xPos, int yPos)
         {
             try
             {
@@ -887,6 +943,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                 tm.Text2 = text1;
                 tm.Text3 = text2;
                 tm.Text4 = text3;
+                tm.Cblock = cblock;
                 tm.Rect = new Rectangle(xPos, yPos, Area.GetLength(1), Area.GetLength(0));
                 tm.progress = ToolMark.Progress.Selected;
                 tm.PlaceBorderRect();
@@ -910,10 +967,11 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             {
                 if (!MainForm.selectionTool) MainForm.SetMarkTool();
                 string[][,] data = (string[][,])Clipboard.GetData("EEData");
-                if (data?.Length == 9)
+                Console.WriteLine(data.Length);
+                if (data?.Length == 10)
                 {
                     Tool.CleanUp(false);
-                    SetMarkBlock(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
+                    SetMarkBlock(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]);
                 }
             }
             if ((int)Keys.D0 <= (int)e.KeyCode && (int)e.KeyCode <= (int)Keys.D9)

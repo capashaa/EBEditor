@@ -251,10 +251,12 @@ namespace EEditor
                     gr.Clear(Color.Transparent);
                     gr.DrawRectangle(new Pen(GetContrastColor(MainForm.themecolors.accent)),new Rectangle(0,0,bmp.Width -1,bmp.Height -1));   
                 }
+                usebg = false;
             }
             pbColor.Image= bmp;
             //Properties.Settings.Default.usecolor = false;
             //Properties.Settings.Default.Save();
+
         }
         private void updateData(string title,string owner, int width, int height)
         {
