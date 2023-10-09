@@ -182,7 +182,6 @@ namespace EEditor
             int width1 = width;
             int height1 = height;
             frame = new Frame(width, height);
-            Console.WriteLine(e);
             //var chunks = InitParse.Parse(e);
 
 
@@ -197,8 +196,8 @@ namespace EEditor
                 var type = BitConverter.ToUInt32(bytes, i, true); i += 4;
                 var layerNum = BitConverter.ToInt32(bytes, i, true); i += 4;
 
-                var goal = 0u;
                 var rotation = 0u;
+                var datta = 0u;
                 var target = 0u;
                 var id = 0u;
                 var colour = 0u;
@@ -228,14 +227,10 @@ namespace EEditor
                     ys[y] = bytes[i++];
                 }
 
-                if (bdata.goalNew.Contains((int)type))
+                if (EELVL.Blocks.IsType((int)type, Blocks.BlockType.Morphable) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Rotatable) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Number) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Enumerable))
+                    
                 {
-                    goal = BitConverter.ToUInt32(bytes, i, true);
-                    i += 4;
-                }
-                if (bdata.rotationNew.Contains((int)type))
-                {
-                    rotation = BitConverter.ToUInt32(bytes, i, true);
+                    datta = BitConverter.ToUInt32(bytes, i, true);
                     i += 4;
                 }
                 if (type == 381 || type == 242)
@@ -252,12 +247,7 @@ namespace EEditor
                     id = BitConverter.ToUInt32(bytes, i + 4 + targetLength, true);
                     i += (8 + targetLength);
                 }
-                if (type == 1582)
-                {
-                    id = BitConverter.ToUInt32(bytes, i, true);
-                    i += 4;
-                }
-                if (bdata.coloredBlocks.Contains((int)type) || type == 1200)
+                if (EELVL.Blocks.IsType((int)type, Blocks.BlockType.BlockColor) || type == 1200)
                 {
                     colour = BitConverter.ToUInt32(bytes, i, true);
                     i += 4;
@@ -553,7 +543,7 @@ namespace EEditor
                     if (layerNum == 1)
                     {
                         frame.Background[ny, nx] = (int)type;
-                        if (bdata.coloredBlocks.Contains((int)type))
+                        if (EELVL.Blocks.IsType((int)type,Blocks.BlockType.BlockColor))
                         {
                             frame.BlockData7[ny, nx] = colour;
                         }
@@ -565,13 +555,9 @@ namespace EEditor
                         {
                             frame.BlockData7[ny, nx] = colour;
                         }
-                        if (bdata.goalNew.Contains((int)type))
+                        if (EELVL.Blocks.IsType((int)type,Blocks.BlockType.Morphable) || EELVL.Blocks.IsType((int)type,Blocks.BlockType.Rotatable) || EELVL.Blocks.IsType((int)type,Blocks.BlockType.Number) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Enumerable))
                         {
-                            frame.BlockData[ny, nx] = (int)goal;
-                        }
-                        if (bdata.rotationNew.Contains((int)type))
-                        {
-                            frame.BlockData[ny, nx] = (int)rotation;
+                            frame.BlockData[ny, nx] = (int)datta;
                         }
                         if (type == 381 || type == 242)
                         {
@@ -583,10 +569,6 @@ namespace EEditor
                         {
                             frame.BlockData[ny, nx] = (int)id;
                             frame.BlockData3[ny, nx] = targetP;
-                        }
-                        if (type == 1582)
-                        {
-                            frame.BlockData[ny, nx] = (int)id;
                         }
                         if (type == 1000)
                         {
@@ -1230,7 +1212,7 @@ namespace EEditor
                     {
                         savelvl[0, x, y] = new Blocks.SignBlock(fid, BlockData3[y, x], BlockData[y, x]);
                     }
-                    if (Blocks.IsType(fid, Blocks.BlockType.Rotatable) || Blocks.IsType(fid, Blocks.BlockType.RotatableButNotReally))
+                    if (Blocks.IsType(fid, Blocks.BlockType.Rotatable))
                     {
                         int bdata = BlockData[y, x];
                         savelvl[0, x, y] = new Blocks.RotatableBlock(fid, bdata);
@@ -1628,7 +1610,7 @@ namespace EEditor
                                 {
                                     f.Foreground[y, x] = lvl[0, x, y].BlockID;
                                 }
-                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Rotatable) || Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.RotatableButNotReally))
+                                if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Rotatable))
                                 {
                                     f.Foreground[y, x] = lvl[0, x, y].BlockID;
                                     f.BlockData[y, x] = ((Blocks.RotatableBlock)lvl[0, x, y]).Rotation;
@@ -1746,7 +1728,7 @@ namespace EEditor
                             {
                                 f.Foreground[y, x] = lvl[0, x, y].BlockID;
                             }
-                            if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Rotatable) || Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.RotatableButNotReally))
+                            if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.Rotatable))
                             {
                                 f.Foreground[y, x] = lvl[0, x, y].BlockID;
                                 f.BlockData[y, x] = ((Blocks.RotatableBlock)lvl[0, x, y]).Rotation;
