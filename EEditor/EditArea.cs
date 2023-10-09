@@ -732,14 +732,14 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             }
             else
             {
-                if (bid == 631) 
+                if (bid == 631 || bid == 632 || bid == 633) 
                 {
                     Minimap.SetColor(x, y, UIntToColor(cblock));
                     if (fid != -1 && Minimap.ImageColor[fid]) Minimap.SetPixel(x, y, fid);
                 }
                 else
                 {
-                    if (bid != 0) Minimap.SetPixel(x, y, bid);
+                    Minimap.SetPixel(x, y, bid);
                     if (fid != -1 && Minimap.ImageColor[fid]) Minimap.SetPixel(x, y, fid);
                 }
 
@@ -877,7 +877,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     MainForm.id.Visible = true;
                     MainForm.target.Visible = true;
                 }
-                else if (CurFrame.Background[p.Y, p.X] == 631)
+                else if (EELVL.Blocks.IsType(CurFrame.Background[p.Y, p.X],EELVL.Blocks.BlockType.BlockColor))
                 {
                     MainForm.txt.Text = CurFrame.BlockData7[p.Y, p.X].ToString();
                     MainForm.txt.Visible = true;
@@ -967,7 +967,6 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             {
                 if (!MainForm.selectionTool) MainForm.SetMarkTool();
                 string[][,] data = (string[][,])Clipboard.GetData("EEData");
-                Console.WriteLine(data.Length);
                 if (data?.Length == 10)
                 {
                     Tool.CleanUp(false);
