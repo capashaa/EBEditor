@@ -1,3 +1,8 @@
+### EBEditor - Beta 0.1.3  
+Fixed: rotations, morphs and such.  
+Fixed: Downloading worlds.  
+Fixed: Mark tool was drawing a color everywhere.  
+
 ### EBEditor - Beta 0.1.2
 Fixed: Morphs.  
 
