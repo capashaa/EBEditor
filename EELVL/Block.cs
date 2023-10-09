@@ -16,7 +16,7 @@ namespace EELVL
 			I = 1 << 9,
 			Morphable = I | (1 << 0),
 			Rotatable = I | (1 << 1),
-			RotatableButNotReally = Rotatable | (1 << 2),
+			//RotatableButNotReally = Rotatable | (1 << 2),
 			Number = I | (1 << 3),
 			Enumerable = I | (1 << 4),
 			Music = I | (1 << 5),
@@ -53,9 +53,9 @@ namespace EELVL
 				1155, 1596, 1605, 1606, 1607, 1609, 1610, 1611, 1612, 1614,
 				1615, 1616, 1617, 361, 1625, 1627, 1629, 1631, 1633, 1635
 			},
-			{ BlockType.RotatableButNotReally,
+			/*{ BlockType.RotatableButNotReally,
 				1101, 1102, 1103, 1104, 1105
-			},
+			},*/
 			{ BlockType.Number,
 				165, 43, 213, 214, 1011, 1012, 113, 1619, 184, 185,
 				467, 1620, 1079, 1080, 1582, 421, 422, 461, 1584
@@ -106,7 +106,7 @@ namespace EELVL
 				BlockType.Normal => new Block(bid),
 				BlockType.Morphable => new MorphableBlock(bid, reader.ReadInt()),
 				BlockType.Rotatable => new RotatableBlock(bid, reader.ReadInt()),
-				BlockType.RotatableButNotReally => new RotatableBlock(bid, reader.ReadInt()),
+				/*BlockType.RotatableButNotReally => new RotatableBlock(bid, reader.ReadInt()),*/
 				BlockType.Number => new NumberBlock(bid, reader.ReadInt()),
 				BlockType.Enumerable => new EnumerableBlock(bid, reader.ReadInt()),
 				BlockType.Music => new MusicBlock(bid, reader.ReadInt()),
