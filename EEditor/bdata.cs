@@ -51,7 +51,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         public static int[] rotationNew =
         {
             //Glowy Lines
-            376, 375, 379, 380, 377, 376, 438, 439,
+            376, 375, 379, 380, 377, 378, 438, 439,
 
 
             //OneWay
