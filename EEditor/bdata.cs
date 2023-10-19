@@ -22,68 +22,126 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         public static string lobby = "Lobby";
         public static string normal_room = "Everybuildexists";
 
-        public static int[] goal = { 77, 83, 43, 165, 213, 214, 417, 418, 419, 420, 421, 422, 423, 1027, 1028, 113, 185, 184, 1011, 1012, 453, 461, 467, 1079, 1080, 1520,1582,1619,1620 };
+        public static int[] goal = { 77, 83, 43, 165, 213, 214, 417, 418, 419, 420, 421, 422, 423, 1027, 1028, 113, 185, 184, 1011, 1012, 453, 461, 467, 1079, 1080, 1520, 1582, 1619, 1620 };
 
         public static int[] goalNew =
         {
-            //coin gates
-            165, 214, 
+            //Coin door/gates
+            43, 165, 213, 214,
 
-            //coin doors
-            43, 213,
-
-            //Death door and gate
+            //Death door/gate
             1011, 1012,
 
-            //Purple switches and doors
-            185, 184, 1619, 113,
+            //Purple switches
+            184, 185, 113, 1619,
 
-            //orange switches and doors
-            1080, 1079, 1620, 467,
+            //orange switches
+            1079, 1080, 467, 1620,
+                    
 
-            //Team door, gate and activation
-            423, 1028, 1027,
+            //Team Effects 
+            423, 1027, 1028,
 
-            //Effects
-            1584, 422, 418, 420, 453, 461, 419, 417
+            /*Effects: Curse, Zombie, Poison, Fly, 
+            Protection, Lowgravity, Jump, Speed, Multijump*/
+            421, 422, 1584, 418, 420, 453, 417, 419, 461
 
         };
 
         public static int[] rotationNew =
         {
+            //Glowy Lines
+            376, 375, 379, 380, 377, 376, 438, 439,
 
-            //One ways
-            1001, 1002, 1003, 1004, 1052, 
+
+            //OneWay
+            1001,1002, 1003,1004, 1052,
             1053, 1054, 1055, 1056, 1092,
+
 
             //Spikes
             361, 1625, 1627, 1629, 1631, 1633, 1635,
 
-            //Half blocks
-            1075, 1076, 1077, 1078, 1116, 1117, 1118, 
-            1119, 1120, 1121,1122, 1123, 1124, 1125,
-            1041, 1042, 1043, 
+            //## Morph
 
-            //Morph
+            //Medival
+            275, 327, 328, 273, 329,440,
 
-            375, 376, 377, 379, 380, 438, 439, 378,
-            338,339, 340,447,448,1536,1537,
-            449,450,451,452,1538,456,457,458,
-            475, 476, 477,1502,1500,499,464,465,
-            471,481,482,483,497,492,493,494,
-            1507,1506,1581,1587,1588,1592,1593,
-            1594,1595,1597,1596,1605,1606,
-            1607,1608,1609,1610,1611,1612,
-            1614,1615,1616,1617,276,277,279,
-            280,440,275,329,273,328,327,1535,
-            1140,1141,1134,1135,1155,1160,
+            //Monster
+            338, 339, 340,
+
+            //Domestic
+            447, 448, 449, 450, 451, 452, 1537, 1538,
+
+            //Halloween 2015
+            456, 457, 458,
+
+            //Fairytale
+            471,
+
+            //Spring
+            475, 476, 477,
+
+            //Summer
+            483, 481, 482,
+
+            //Restaurant
+            494, 492, 493,
+
+            //Halloween 2016
+            1502, 499, 1500,
+
+            //Toxic
+            1587,
+
+            //Sewer
+            1588, 1155,
+
+            //dungeon
+            1592, 1593, 1160, 1594, 1595, 1597,
 
 
+            //New year 2015
+            464, 465,
 
-            //Misc
+            //Cave 
+            497, 
+
+            //Christmas 2016
+            1506, 1507,
+
+            //Dojo
+            276, 277, 279, 280,
+
+            //Industrial
+            1134, 1135, 1535, 1536,
+
+            //Fireworks
+            1581,
+
+            //Shadow
+            1596, 1605, 1606, 1607, 1609, 1610,
+            1611, 1612, 1614, 1615, 1616, 1617,
+
+            //## Half Blocks
+
+            //Domestic
+            1042, 1043, 1041,
+
+            //Fairytale
+            1075, 1076, 1077, 1078,
+
+            //Basic
+            1116,1117, 1118, 1119, 1120, 1121,
+            1122, 1123, 1124, 1125,
+
+            //Winter 2018
+            1140, 1141,
+
+            //## Effects
+
+            //Gravity 
             1517,
-
-
         };
 
         public static int[] coloredBlocks =
@@ -111,8 +169,8 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
             1056, 1075, 1076, 1077, 1078, 1092, 492, 493, 494, 499, 1502, 1116, 1117, 1118, 1119, 1120, 1121, 1122, 1123,
             1124, 1125, 1537,1140,1141,1155,1160,1592,1593,1594,1595,1596,1597,1605,1607,1609,1610,1612,1614,1615,1616,1617,1625,1627,1629,1631,1633,1635};
         public static int[] increase2 = { 417, 276, 277, 279, 280, 471, 475, 476, 477, 483, 1134, 419 };
-        public static int[] increase1 = { 418, 420, 453, 456, 457, 458, 1135, 1536,1535, 1500,1587, 1606,1611 };
-        public static int[] increase4 = { 1507, 1506, 464, 465,1588,1517 };
+        public static int[] increase1 = { 418, 420, 453, 456, 457, 458, 1135, 1536, 1535, 1500, 1587, 1606, 1611 };
+        public static int[] increase4 = { 1507, 1506, 464, 465, 1588, 1517 };
         public static int[] increase5 = { 440, 481, 482, 497, 1581 };
         public static int[] increase11 = { 1538 };
 
@@ -200,17 +258,17 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     Bitmap bmp2 = MainForm.foregroundBMD.Clone(new Rectangle(MainForm.foregroundBMI[fid] * 16, 0, 16, 16), MainForm.foregroundBMD.PixelFormat);
                     return bmp2;
                 }
-                else if (fid == 276 || fid == 277 || fid == 279 || fid == 280 || fid == 338 || 
-                    fid == 339 || fid == 340 || fid == 1041 || fid == 1042 || fid == 1043 || 
-                    fid == 456 || fid == 457 || fid == 458 || fid == 447 || fid == 448 || 
-                    fid == 449 || fid == 450 || fid == 451 || fid == 452 || fid >= 1075 && fid <= 1078 || 
-                    fid == 471 || fid == 475 || fid == 476 || fid == 477 || fid == 497 || fid == 492 || 
-                    fid == 493 || fid == 494 || fid == 499 || fid == 1500 || fid == 1502 || fid == 1506 || 
-                    fid == 1507 || fid == 1517 || fid >= 1116 && fid <= 1125 || fid == 1135 || fid == 1134 
-                    || fid == 1538 || fid == 1536 || fid == 1537 || fid == 1140 || fid == 1141 || fid == 1535 
-                    || fid == 1581 || fid == 1587 || fid == 1588 || fid == 1155 || fid == 1160 || fid == 1592 
-                    || fid == 1593 || fid == 1594 || fid == 1595 || fid == 1596 || fid == 1597 || fid == 1584 
-                    || fid == 1605 || fid == 1606 || fid == 1607 || fid == 1609 || fid == 1610 || fid == 1611 
+                else if (fid == 276 || fid == 277 || fid == 279 || fid == 280 || fid == 338 ||
+                    fid == 339 || fid == 340 || fid == 1041 || fid == 1042 || fid == 1043 ||
+                    fid == 456 || fid == 457 || fid == 458 || fid == 447 || fid == 448 ||
+                    fid == 449 || fid == 450 || fid == 451 || fid == 452 || fid >= 1075 && fid <= 1078 ||
+                    fid == 471 || fid == 475 || fid == 476 || fid == 477 || fid == 497 || fid == 492 ||
+                    fid == 493 || fid == 494 || fid == 499 || fid == 1500 || fid == 1502 || fid == 1506 ||
+                    fid == 1507 || fid == 1517 || fid >= 1116 && fid <= 1125 || fid == 1135 || fid == 1134
+                    || fid == 1538 || fid == 1536 || fid == 1537 || fid == 1140 || fid == 1141 || fid == 1535
+                    || fid == 1581 || fid == 1587 || fid == 1588 || fid == 1155 || fid == 1160 || fid == 1592
+                    || fid == 1593 || fid == 1594 || fid == 1595 || fid == 1596 || fid == 1597 || fid == 1584
+                    || fid == 1605 || fid == 1606 || fid == 1607 || fid == 1609 || fid == 1610 || fid == 1611
                     || fid == 1612 || fid == 1614 || fid == 1615 || fid == 1616 || fid == 1617)
                 {
                     int roted = 15;
@@ -698,7 +756,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     Bitmap bmp2 = MainForm.miscBMD.Clone(new Rectangle(roted * 16, 0, 16, 16), MainForm.miscBMD.PixelFormat);
                     return bmp2;
                 }
-                    //Summer 2016
+                //Summer 2016
                 else if (fid == 481 || fid == 482 || fid == 483)
                 {
                     int roted = 15;
@@ -912,7 +970,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                         if (fid == 1055) rote = 235;
                         if (fid == 1056) rote = 239;
                         if (fid == 1092) rote = 307;
-                        
+
                         break;
                     case 1:
                         if (fid == 1001) { rote = 55; }
@@ -1027,12 +1085,12 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                 return (p == 4) || (p == 6) || (p == 128);
             }
         }
-        public static string tostring(string link,bool useof)
+        public static string tostring(string link, bool useof)
         {
-                string linkedof = null;
-                if (useof) { var linkedto = System.Text.Encoding.UTF8.GetBytes(link); linkedof = System.Convert.ToBase64String(linkedto); }
-                else { var linkedto = System.Convert.FromBase64String(link); linkedof = System.Text.Encoding.UTF8.GetString(linkedto); }
-                return linkedof;
+            string linkedof = null;
+            if (useof) { var linkedto = System.Text.Encoding.UTF8.GetBytes(link); linkedof = System.Convert.ToBase64String(linkedto); }
+            else { var linkedto = System.Convert.FromBase64String(link); linkedof = System.Text.Encoding.UTF8.GetString(linkedto); }
+            return linkedof;
         }
         public static bool canusePlus(int bid)
         {
