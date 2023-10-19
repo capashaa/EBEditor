@@ -279,8 +279,8 @@ namespace EEditor
                 {
                     if (0 <= x + r.X && x + r.X < editArea.BlockWidth && 0 <= y + r.Y && y + r.Y < editArea.BlockHeight)
                     {
-
-                        editArea.Draw(x + r.X, y + r.Y, g, Convert.ToInt32(Back[y, x]), Convert.ToInt32(Front[y, x]), Convert.ToInt32(Coins[y, x]), Convert.ToInt32(Id1[y, x]), Convert.ToInt32(Target1[y, x]), Text1[y, x], Text2[y, x], Text3[y, x], Text4[y, x],Convert.ToUInt32(Cblock[y,x]), MainForm.userdata.thisColor);
+                        var cblock = Cblock == null ? 0 : Convert.ToUInt32(Cblock[y, x]);
+                        editArea.Draw(x + r.X, y + r.Y, g, Convert.ToInt32(Back[y, x]), Convert.ToInt32(Front[y, x]), Convert.ToInt32(Coins[y, x]), Convert.ToInt32(Id1[y, x]), Convert.ToInt32(Target1[y, x]), Text1[y, x], Text2[y, x], Text3[y, x], Text4[y, x], cblock, MainForm.userdata.thisColor);
 
                     }
                     //g.DrawImage(editArea.Bricks[Area[y, x]], (x + r.X) * 16, (y + r.Y) * 16);
@@ -538,8 +538,8 @@ namespace EEditor
                             //frame.Foreground[yy, xx] = Convert.ToInt32(0);
                             //if (frame.Background[yy, xx] == 0) frame.Background[yy, xx] = Convert.ToInt32(Back[y, x]);
                             //frame.Background[yy, xx] = Convert.ToInt32(Back[y, x]);
-
-                                if (Coins[y, x] != null) frame.BlockData[yy, xx] = Convert.ToInt32(Coins[y, x]);
+                            var cblock = Cblock == null ? 0: Convert.ToUInt32(Cblock[y, x]);
+                            if (Coins[y, x] != null) frame.BlockData[yy, xx] = Convert.ToInt32(Coins[y, x]);
                                 if (Id1[y, x] != null) frame.BlockData1[yy, xx] = Convert.ToInt32(Id1[y, x]);
                                 if (Target1[y, x] != null) frame.BlockData2[yy, xx] = Convert.ToInt32(Target1[y, x]);
                                 if (Text1[y, x] != null) frame.BlockData3[yy, xx] = Text1[y, x];
@@ -547,7 +547,7 @@ namespace EEditor
                                     if (Text2[y, x] != null) frame.BlockData4[yy, xx] = Text2[y, x];
                                 if (Text3[y, x] != null) frame.BlockData5[yy, xx] = Text3[y, x];
                                 if (Text4[y, x] != null) frame.BlockData6[yy, xx] = Text4[y, x];
-                                if (Cblock[y, x] != null) frame.BlockData7[yy, xx] = Convert.ToUInt32(Cblock[y, x]);
+                                frame.BlockData7[yy, xx] = Convert.ToUInt32(cblock);
                             
                             editArea.Draw(xx, yy, g, MainForm.userdata.thisColor);
                             //g.DrawImage(editArea.Bricks[frame.Map[yy, xx]], (x + Rect.X) * 16, (y + Rect.Y) * 16);
