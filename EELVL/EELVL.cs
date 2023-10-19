@@ -29,13 +29,15 @@ namespace EELVL
         public static bool Ebe { get; set; }
         public int Version { get; set; }
 
+        public bool fucker { get; set; }
+
         private readonly Block?[,,] blocks;
+
         public Block this[int l, int x, int y]
         {
             get => blocks[l, x, y] ?? Empty;
             set => blocks[l, x, y] = value.BlockID == 0 ? null : value;
         }
-
         public Level(
             int version,
             string ownerName,
@@ -71,7 +73,7 @@ namespace EELVL
             blocks = new Block[2, Width, Height];
         }
 
-        public Level(int width, int height, int borderID = 9) : this(0,"", "Untitled World", width, height, 1, 0, "", false, "", "", 1, true, "")
+        public Level(int width, int height, int borderID = 9) : this(0, "", "Untitled World", width, height, 1, 0, "", false, "", "", 1, true, "")
         {
             Block border = new Block(borderID);
             for (int x = 0; x < Width; x++)
