@@ -187,8 +187,8 @@ namespace EEditor
 
             if (MainForm.userdata.level.StartsWith("OW"))
             {
-                if (e.GetBoolean(14)) { MainForm.OpenWorld = true; MainForm.OpenWorldCode = false; }
-                else if (!e.GetBoolean(14)) { MainForm.OpenWorld = true; MainForm.OpenWorldCode = true; }
+                if (e.GetBoolean(21)) { MainForm.OpenWorld = true; MainForm.OpenWorldCode = false; }
+                else if (!e.GetBoolean(21)) { MainForm.OpenWorld = true; MainForm.OpenWorldCode = true; }
             }
             var bytes = Decompress.Decompression(e.GetByteArray(49));
             for (var i = 0; i < bytes.Length;)
@@ -226,8 +226,7 @@ namespace EEditor
                 {
                     ys[y] = bytes[i++];
                 }
-
-                if (EELVL.Blocks.IsType((int)type, Blocks.BlockType.Morphable) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Rotatable) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Number) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Enumerable))
+                if (bdata.goalNew.Contains((int)type) || bdata.rotationNew.Contains((int)type))
                     
                 {
                     datta = BitConverter.ToUInt32(bytes, i, true);
@@ -247,7 +246,12 @@ namespace EEditor
                     id = BitConverter.ToUInt32(bytes, i + 4 + targetLength, true);
                     i += (8 + targetLength);
                 }
-                if (EELVL.Blocks.IsType((int)type, Blocks.BlockType.BlockColor) || type == 1200)
+                if (type == 1582)
+                {
+                    datta = BitConverter.ToUInt32(bytes, i, true);
+                    i += 4;
+                }
+                if (bdata.coloredBlocks.Contains((int)type) || type == 1200)
                 {
                     colour = BitConverter.ToUInt32(bytes, i, true);
                     i += 4;
@@ -1584,6 +1588,7 @@ namespace EEditor
             {
                 Level.Ebe = true;
                 Level lvl = Level.Open(fs);
+                Console.WriteLine(lvl.Version);
                 if (lvl.Version == 1)
                 {
                     Frame f = new Frame(lvl.Width, lvl.Height);
@@ -1732,6 +1737,12 @@ namespace EEditor
                             {
                                 f.Foreground[y, x] = lvl[0, x, y].BlockID;
                                 f.BlockData[y, x] = ((Blocks.RotatableBlock)lvl[0, x, y]).Rotation;
+                            }
+
+                            if (Blocks.IsType(lvl[0,x,y].BlockID,Blocks.BlockType.RotatableButNotReally))
+                            {
+                                f.Foreground[y, x] = lvl[0, x, y].BlockID;
+                                f.BlockData[y, x] = 0;
                             }
                             if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.NPC))
                             {
