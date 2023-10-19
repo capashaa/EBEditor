@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EEditor
 {
@@ -21,6 +26,7 @@ namespace EEditor
         private string[,] Text2;
         private string[,] Text3;
         private string[,] Text4;
+        private string[,] Cbcolor;
         private string fontname = "Calibri";
         private int fontsize = 20;
         private Bitmap bmp = new Bitmap(25, 25);
@@ -35,7 +41,7 @@ namespace EEditor
             var message = textBox1.Text;
             if (!string.IsNullOrEmpty(message))
             {
-                Size textSize = TextRenderer.MeasureText(message, new Font(fontname, fontsize / 2));
+                System.Drawing.Size textSize = TextRenderer.MeasureText(message, new Font(fontname, fontsize / 2));
                 if (textSize.Width <= MainForm.editArea.Frames[0].Width)
                 {
                     textBox1.MaxLength = MainForm.editArea.Frames[0].Width;
@@ -73,32 +79,34 @@ namespace EEditor
             var message = textBox1.Text;
             if (!string.IsNullOrWhiteSpace(message))
             {
-                Size textSize = TextRenderer.MeasureText(message, new Font(fontname, fontsize / 2));
+                System.Drawing.Size textSize = TextRenderer.MeasureText(message, new Font(fontname, fontsize / 2));
                 //Console.WriteLine("C " + textSize.Width + " - " + MainForm.editArea.Frames[0].Width);
                 if (textSize.Width <= MainForm.editArea.Frames[0].Width)
                 {
                     Bitmap bitmap = new Bitmap(textSize.Width, textSize.Height);
-                    int width = bitmap.Width;
-                    int height = bitmap.Height;
+                    int width = bmp.Width;
+                    int height = bmp.Height;
                     Graphics g = Graphics.FromImage(bitmap);
                     g.FillRectangle(new SolidBrush(Color.Black), 0, 0, bitmap.Width, bitmap.Height);
                     g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
                     g.DrawString(message, new Font(fontname, fontsize / 2), new SolidBrush(Color.White),0, 0);
                     SizeF size = g.MeasureString(message, new Font(fontname, fontsize / 2));
-                    Area = new string[height, Size.Round(size).Width];
-                    Back = new string[height, Size.Round(size).Width];
-                    Coins = new string[height, Size.Round(size).Width];
-                    Id = new string[height, Size.Round(size).Width];
-                    Target = new string[height, Size.Round(size).Width];
-                    Text1 = new string[height, Size.Round(size).Width];
-                    Text2 = new string[height, Size.Round(size).Width];
-                    Text3 = new string[height, Size.Round(size).Width];
-                    Text4 = new string[height, Size.Round(size).Width];
-                    for (int x = 0; x < bitmap.Width; x++)
+                    Area = new string[height, System.Drawing.Size.Round(size).Width];
+                    Back = new string[height, System.Drawing.Size.Round(size).Width];
+                    Coins = new string[height, System.Drawing.Size.Round(size).Width];
+                    Id = new string[height, System.Drawing.Size.Round(size).Width];
+                    Target = new string[height, System.Drawing.Size.Round(size).Width];
+                    Text1 = new string[height, System.Drawing.Size.Round(size).Width];
+                    Text2 = new string[height, System.Drawing.Size.Round(size).Width];
+                    //Text3 = new string[height, Size.Round(size).Width];
+                    Text3 = new string[height, System.Drawing.Size.Round(size).Width];
+                    Text4 = new string[height, System.Drawing.Size.Round(size).Width];
+                    Cbcolor = new string[height, System.Drawing.Size.Round(size).Width];
+                    for (int x = 0; x < bmp.Width; x++)
                     {
-                        for (int y = 0; y < bitmap.Height; y++)
+                        for (int y = 0; y < bmp.Height; y++)
                         {
-                            Color clr = bitmap.GetPixel(x, y);
+                            Color clr = bmp.GetPixel(x, y);
                             if (clr.ToArgb() != -16777216)
                             {
                                 if (MainForm.selectedBrick.ID < 500 || MainForm.selectedBrick.ID >= 1001)
@@ -106,7 +114,7 @@ namespace EEditor
                                     int value = MainForm.selectedBrick.ID == 0 ? 9 : MainForm.selectedBrick.ID;
                                     Area[y, x] = value.ToString();
                                 }
-                                else if (MainForm.selectedBrick.ID >= 500 || MainForm.selectedBrick.ID <= 999)
+                                else if (MainForm.selectedBrick.ID >= 500 && MainForm.selectedBrick.ID <= 999)
                                 {
                                     Back[y, x] = Convert.ToString(MainForm.selectedBrick.ID);
                                 }
@@ -120,12 +128,12 @@ namespace EEditor
                     {
                         if (clipboard)
                         {
-                            Clipboard.SetData("EEData", new string[][,] { Area, Back, Coins, Id, Target, Text1,Text2,Text3,Text4 });
+                            Clipboard.SetData("EEData", new string[][,] { Area, Back, Coins, Id, Target, Text1,Text2,Text3,Text4,Cbcolor });
                             Close();
                         }
                         else
                         {
-                            Clipboard.SetData("EEData", new string[][,] { Area, Back, Coins, Id, Target, Text1,Text2,Text3,Text4 });
+                            Clipboard.SetData("EEData", new string[][,] { Area, Back, Coins, Id, Target, Text1,Text2,Text3,Text4,Cbcolor });
                             MainForm.editArea.Focus();
                             SendKeys.Send("^{v}");
                             Close();
