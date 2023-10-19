@@ -972,6 +972,11 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     Tool.CleanUp(false);
                     SetMarkBlock(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]);
                 }
+                else if (data?.Length == 9)
+                {
+                    Tool.CleanUp(false);
+                    SetMarkBlock(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], null);
+                }
             }
             if ((int)Keys.D0 <= (int)e.KeyCode && (int)e.KeyCode <= (int)Keys.D9)
                 MainForm.SetActiveBrick((int)e.KeyCode - (int)Keys.D0);
