@@ -34,6 +34,7 @@
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.cbWrap = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,11 +90,22 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // cbWrap
+            // 
+            this.cbWrap.AutoSize = true;
+            this.cbWrap.Location = new System.Drawing.Point(6, 368);
+            this.cbWrap.Name = "cbWrap";
+            this.cbWrap.Size = new System.Drawing.Size(52, 17);
+            this.cbWrap.TabIndex = 5;
+            this.cbWrap.Text = "Wrap";
+            this.cbWrap.UseVisualStyleBackColor = true;
+            // 
             // fontadding
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(398, 371);
+            this.ClientSize = new System.Drawing.Size(398, 397);
+            this.Controls.Add(this.cbWrap);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -119,5 +131,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.FontDialog fontDialog1;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.CheckBox cbWrap;
     }
 }
