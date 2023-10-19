@@ -795,7 +795,7 @@ namespace EEditor
                                 conn.Send("access", levelPassword);
                                 passTimer = new System.Threading.Timer(x => OnStatusChanged("Wrong level code. Please enter the right one and retry.", DateTime.MinValue, true, 0, 0), null, 5000, Timeout.Infinite);
                             }
-                            else if (e.GetBoolean(14))
+                            else if (e.GetBoolean(21))
                             {
                                 AnimateForm.editRights = true;
                                 locker.Release();
