@@ -152,6 +152,7 @@ namespace EELVL
                 case NumberBlock b: writer.WriteInt(b.Number); break;
                 case RotatableBlock b: writer.WriteInt(b.Rotation); break;
                 case MorphableBlock b: writer.WriteInt(b.Morph); break;
+                case ColoredBlock b: writer.WriteUInt(b.Colour); break;
                 case Block b: break;
             }
         }
