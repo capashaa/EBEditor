@@ -1,3 +1,23 @@
+### EBEditor - Beta 0.1.4
+Fixed: Font is now working again.  
+Fixed: Missing morphs.  
+Fixed: Xmas blocks.  
+Fixed: Copy selections from EEOditor to EBEditor.  
+Fixed: Colored blocks.  
+Fixed: Colored names was not updated.  
+Fixed: Open worlds can be used again.  
+Fixed: Backgrounds behind blocks eraser, should work.  
+Fixed: Saving to eelvl.  
+Fixed: Loading eelvl.   
+Fixed: Opening or saving to eelvl/ebelvl would empty the workarea.  
+Added: Fairytale mushroom.  
+Added: Coin resetters.  
+Added: Color changer on all colored backgrounds.  
+Added: Jumbo world.  
+Added: hex blocks for some of the tools.  
+
+
+
 ### EBEditor - Beta 0.1.3  
 Fixed: rotations, morphs and such.  
 Fixed: Downloading worlds.  
