@@ -617,13 +617,13 @@
     <None Include="Resources\add.png" />
     <None Include="Resources\bullets.png" />
     <None Include="Resources\BLOCKS_back.png" />
-    <None Include="Resources\BLOCKS_deco.png" />
     <None Include="Resources\BLOCKS_front.png" />
     <None Include="Resources\blueprint.png" />
     <None Include="Resources\bgs_overlays.png" />
+    <None Include="Resources\BLOCKS_deco.png" />
     <Content Include="Resources\copy.png" />
-    <None Include="Resources\eeditor_bgIgnore.png" />
     <None Include="Resources\eeditor_bgIgnore.ico" />
+    <None Include="Resources\eeditor_bgIgnore.png" />
     <Content Include="Resources\eeditor_unknown.png" />
     <None Include="Resources\eye.png" />
     <None Include="Resources\find_next.png" />
