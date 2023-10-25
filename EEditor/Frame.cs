@@ -227,7 +227,7 @@ namespace EEditor
                     ys[y] = bytes[i++];
                 }
                 if (bdata.goalNew.Contains((int)type) || bdata.rotationNew.Contains((int)type))
-                    
+
                 {
                     datta = BitConverter.ToUInt32(bytes, i, true);
                     i += 4;
@@ -251,7 +251,7 @@ namespace EEditor
                     datta = BitConverter.ToUInt32(bytes, i, true);
                     i += 4;
                 }
-                if (bdata.coloredBlocks.Contains((int)type) || type == 1200)
+                if (bdata.coloredBlocks.Contains((int)type))
                 {
                     colour = BitConverter.ToUInt32(bytes, i, true);
                     i += 4;
@@ -547,7 +547,7 @@ namespace EEditor
                     if (layerNum == 1)
                     {
                         frame.Background[ny, nx] = (int)type;
-                        if (EELVL.Blocks.IsType((int)type,Blocks.BlockType.BlockColor))
+                        if (EELVL.Blocks.IsType((int)type, Blocks.BlockType.BlockColor))
                         {
                             frame.BlockData7[ny, nx] = colour;
                         }
@@ -559,7 +559,7 @@ namespace EEditor
                         {
                             frame.BlockData7[ny, nx] = colour;
                         }
-                        if (EELVL.Blocks.IsType((int)type,Blocks.BlockType.Morphable) || EELVL.Blocks.IsType((int)type,Blocks.BlockType.Rotatable) || EELVL.Blocks.IsType((int)type,Blocks.BlockType.Number) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Enumerable))
+                        if (EELVL.Blocks.IsType((int)type, Blocks.BlockType.Morphable) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Rotatable) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Number) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Enumerable))
                         {
                             frame.BlockData[ny, nx] = (int)datta;
                         }
@@ -1183,9 +1183,73 @@ namespace EEditor
 
             return res;
         }
+        public void SaveEBELVL(FileStream file)
+        {
+            EELVL.Level.Ebe = true;
+            EELVL.Level savelvl = new Level(Width, Height);
+            for (int y = 0; y < Height; ++y)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    int fid = Foreground[y, x];
+                    int bid = Background[y, x];
+                    if (Blocks.IsType(fid, Blocks.BlockType.Normal))
+                    {
+                        savelvl[0, x, y] = new Blocks.Block(fid);
+                    }
+                    if (Blocks.IsType(fid, Blocks.BlockType.Number))
+                    {
+                        savelvl[0, x, y] = new Blocks.NumberBlock(fid, BlockData[y, x]);
+                    }
+                    if (Blocks.IsType(fid, Blocks.BlockType.NPC))
+                    {
+                        savelvl[0, x, y] = new Blocks.NPCBlock(fid, BlockData3[y, x], BlockData4[y, x], BlockData5[y, x], BlockData6[y, x]);
+                    }
+                    if (Blocks.IsType(fid, Blocks.BlockType.Morphable))
+                    {
+                        savelvl[0, x, y] = new Blocks.MorphableBlock(fid, BlockData[y, x]);
+                    }
+                    if (Blocks.IsType(fid, Blocks.BlockType.Enumerable))
+                    {
+                        savelvl[0, x, y] = new Blocks.EnumerableBlock(fid, BlockData[y, x]);
+                    }
+                    if (Blocks.IsType(fid, Blocks.BlockType.Sign))
+                    {
+                        savelvl[0, x, y] = new Blocks.SignBlock(fid, BlockData3[y, x], BlockData[y, x]);
+                    }
+                    if (Blocks.IsType(fid, Blocks.BlockType.Rotatable))
+                    {
+                        int bdata = BlockData[y, x];
+                        savelvl[0, x, y] = new Blocks.RotatableBlock(fid, bdata);
+                    }
+                    if (Blocks.IsType(fid, Blocks.BlockType.Portal))
+                    {
+                        savelvl[0, x, y] = new Blocks.PortalBlock(fid, BlockData[y, x], BlockData1[y, x], BlockData2[y, x]);
+                    }
+                    if (Blocks.IsType(fid, Blocks.BlockType.WorldPortal))
+                    {
+                        savelvl[0, x, y] = new Blocks.WorldPortalBlock(fid, BlockData3[y, x], BlockData[y, x]);
+                    }
+                    if (Blocks.IsType(fid, Blocks.BlockType.Music))
+                    {
+                        savelvl[0, x, y] = new Blocks.MusicBlock(fid, BlockData[y, x]);
+                    }
+                    if (Blocks.IsType(bid, Blocks.BlockType.Normal))
+                    {
+                        savelvl[1, x, y] = new Blocks.Block(bid);
+                    }
+                    if (Blocks.IsType(bid, Blocks.BlockType.BlockColor))
+                    {
+                        savelvl[1, x, y] = new Blocks.ColoredBlock(bid, BlockData7[y, x]);
+                    }
+                }
+            }
+            savelvl.Save(file);
+            Level.Ebe = false;
+        }
         public void SaveLVL(FileStream file)
         {
-            Level savelvl = Level.Open(file);
+            EELVL.Level savelvl = new Level(Width, Height);
             for (int y = 0; y < Height; ++y)
             {
                 for (int x = 0; x < Width; ++x)
@@ -1587,13 +1651,14 @@ namespace EEditor
             using (FileStream fs = new FileStream(file, FileMode.Open))
             {
                 Level.Ebe = true;
+                //BitConverter.IsLittleEndian = true;
                 Level lvl = Level.Open(fs);
                 Console.WriteLine(lvl.Version);
                 if (lvl.Version == 1)
                 {
                     Frame f = new Frame(lvl.Width, lvl.Height);
-                    f.levelname = lvl.WorldName;
-                    f.nickname = lvl.OwnerName;
+                    f.levelname = lvl.WorldName == null ? "Untitled World": lvl.WorldName;
+                    f.nickname = lvl.OwnerName == null ? "Uknown" : lvl.OwnerName;
 
                     if (lvl.BackgroundColor != 0)
                     {
@@ -1739,7 +1804,7 @@ namespace EEditor
                                 f.BlockData[y, x] = ((Blocks.RotatableBlock)lvl[0, x, y]).Rotation;
                             }
 
-                            if (Blocks.IsType(lvl[0,x,y].BlockID,Blocks.BlockType.RotatableButNotReally))
+                            if (Blocks.IsType(lvl[0, x, y].BlockID, Blocks.BlockType.RotatableButNotReally))
                             {
                                 f.Foreground[y, x] = lvl[0, x, y].BlockID;
                                 f.BlockData[y, x] = 0;
