@@ -1118,8 +1118,10 @@ namespace EEditor
                     {
                         if (MainForm.userdata.IgnoreBlocks != null)
                         {
+                            
                             if (!MainForm.userdata.IgnoreBlocks.Contains(fid) && MainForm.decosBMI[fid] == 0 && MainForm.miscBMI[fid] == 0)
                             {
+                                Console.WriteLine(MainForm.miscBMI[fid]);
                                 MainForm.editArea.Frames[0].Background[y, x] = 0;
                                 MainForm.editArea.Draw(x, y, Graphics.FromImage(MainForm.editArea.Back), MainForm.userdata.thisColor);
                                 MainForm.editArea.Invalidate();
@@ -1155,7 +1157,7 @@ namespace EEditor
             {
                 label4.Invoke((MethodInvoker)delegate
                 {
-                    label4.Text = "Replaced " + totalReplaced + " blocks you don't own.";
+                    label4.Text = "Replaced " + totalReplaced + "backgrounds behind blocks.";
                 });
             }
             else
