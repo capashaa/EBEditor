@@ -178,7 +178,7 @@ namespace EEditor
                                 }
                             }
                             editArea.CurFrame.Background[y, x] = PenID;
-                            if (editArea.Tool.coloredBlock != 1) { editArea.CurFrame.BlockData7[y, x] = editArea.Tool.coloredBlock; }
+                            if (bdata.backgroundColor != 1) { editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor; }
                             else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
                         }
                     }
@@ -222,7 +222,7 @@ namespace EEditor
                         else
                         {
                             editArea.CurFrame.Background[y, x] = PenID;
-                            if (editArea.Tool.coloredBlock != 1) { editArea.CurFrame.BlockData7[y, x] = editArea.Tool.coloredBlock; }
+                            if (bdata.backgroundColor != 1) { editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor; }
                             else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
                         }
                     }

@@ -18,7 +18,7 @@ namespace EEditor
         private int dx;
         private int dy;
         public Rectangle Rect { get; set; }
-        private Bitmap img1 = new Bitmap(3000, 3000);
+        private Bitmap img1 = new Bitmap(16, 16);
         public ToolRectFill(EditArea editArea)
             : base(editArea)
         {
@@ -29,10 +29,37 @@ namespace EEditor
 
         private void Rect2(Point start, Point end)
         {
-            Graphics g = Graphics.FromImage(editArea.Back1);
+            Graphics g = Graphics.FromImage(editArea.Back);
             if (PenID >= 500 && PenID <= 999)
             {
-                img1 = MainForm.backgroundBMD.Clone(new Rectangle(MainForm.backgroundBMI[PenID] * 16, 0, 16, 16), MainForm.backgroundBMD.PixelFormat);
+                if (PenID == 631)
+                {
+                    using (Graphics gr = Graphics.FromImage(img1))
+                    {
+                        gr.FillRectangle(new SolidBrush(bdata.UIntToColor(bdata.backgroundColor)), new Rectangle(0, 0, 16, 16));
+                    }
+                }
+                else if (PenID == 632)
+                {
+                    using (Graphics gr = Graphics.FromImage(img1))
+                    {
+                        gr.FillRectangle(new SolidBrush(bdata.UIntToColor(bdata.backgroundColor)), new Rectangle(0, 0, 16, 16));
+                        gr.DrawImage(Properties.Resources.bgs_overlays, new Rectangle(0, 0, 16, 16), new Rectangle(16, 0, 16, 16), GraphicsUnit.Pixel);
+                    }
+
+                }
+                else if (PenID == 633)
+                {
+                    using (Graphics gr = Graphics.FromImage(img1))
+                    {
+                        gr.FillRectangle(new SolidBrush(bdata.UIntToColor(bdata.backgroundColor)), new Rectangle(0, 0, 16, 16));
+                        gr.DrawImage(Properties.Resources.bgs_overlays, new Rectangle(0, 0, 16, 16), new Rectangle(32, 0, 16, 16), GraphicsUnit.Pixel);
+                    }
+                }
+                else
+                {
+                    img1 = MainForm.backgroundBMD.Clone(new Rectangle(MainForm.backgroundBMI[PenID] * 16, 0, 16, 16), MainForm.backgroundBMD.PixelFormat);
+                }
             }
             else if (PenID < 500 || PenID >= 1001)
             {
@@ -216,6 +243,10 @@ namespace EEditor
                         {
                             incfg += PenID + ":" + editArea.CurFrame.Background[y, x] + ":" + x + ":" + y + ":";
                             editArea.CurFrame.Background[y, x] = PenID;
+                            if (PenID == 631 || PenID == 632 || PenID == 633)
+                            {
+                                editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor;
+                            }
                         }
                         else if (PenID < 500 || PenID >= 1001)
                         {

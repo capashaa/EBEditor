@@ -13,9 +13,6 @@ namespace EEditor
 
         public override void MouseUp(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-            }
         }
 
         public override void MouseDown(MouseEventArgs e)
@@ -31,9 +28,6 @@ namespace EEditor
                     Recte(p1);
                 }
 
-            }
-            if (e.Button == MouseButtons.Right)
-            {
             }
         }
 
@@ -119,6 +113,10 @@ namespace EEditor
                             if (PenID != editArea.CurFrame.Background[(int)yy, (int)xx])
                             {
                                 incfg += PenID + ":" + editArea.CurFrame.Background[(int)yy, (int)xx] + ":" + (int)xx + ":" + (int)yy + ":";
+                            }
+                            if (PenID == 631 || PenID == 632 || PenID == 633)
+                            {
+                                editArea.CurFrame.BlockData7[(int)yy, (int)xx] = bdata.backgroundColor;
                             }
                             if (editArea.CurFrame.Background[(int)yy, (int)xx] != 0)
                             {

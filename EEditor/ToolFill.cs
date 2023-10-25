@@ -124,6 +124,10 @@ namespace EEditor
                             if (dataf[y, x] == oldID1  && datafg[y,x] == oldID0) {
                             incfg += pen + ":" + dataf[y, x] + ":" + x + ":" + y + ":";
                                 dataf[y, x] = pen;
+                                if (pen == 631 || pen == 632 || pen == 633)
+                                {
+                                    editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor;
+                                }
                                 if (editArea.InvokeRequired) {
                                     editArea.Invoke((MethodInvoker)delegate {
                                         editArea.Draw(x, y, g, MainForm.userdata.thisColor);

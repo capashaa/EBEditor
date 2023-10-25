@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace EEditor
@@ -17,7 +19,8 @@ namespace EEditor
         private bool selected = false;
         private int dx;
         private int dy;
-        private Bitmap img1 = new Bitmap(3000, 3000);
+        private Bitmap img1 = new Bitmap(16, 16);
+        private Bitmap img3 = new Bitmap(16, 16);
         public Rectangle Rect { get; set; }
 
         public ToolRect(EditArea editArea)
@@ -26,20 +29,48 @@ namespace EEditor
             borderPen = new Pen(Color.LightGreen);
             borderPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
             editArea.Back1 = editArea.Back;
+
         }
 
         private void rect2(Point start, Point end)
         {
-            Graphics g = Graphics.FromImage(editArea.Back1);
+            Graphics g = Graphics.FromImage(editArea.Back);
             if (PenID >= 500 && PenID <= 999)
             {
+                if (PenID == 631)
+                {
+                    using (Graphics gr = Graphics.FromImage(img1))
+                    {
+                        gr.FillRectangle(new SolidBrush(bdata.UIntToColor(bdata.backgroundColor)), new Rectangle(0, 0, 16, 16));
+                    }
+                }
+                else if (PenID == 632)
+                {
+                    using (Graphics gr = Graphics.FromImage(img1))
+                    {
+                        gr.FillRectangle(new SolidBrush(bdata.UIntToColor(bdata.backgroundColor)), new Rectangle(0, 0, 16, 16));
+                        gr.DrawImage(Properties.Resources.bgs_overlays, new Rectangle(0, 0, 16, 16), new Rectangle(16, 0, 16, 16), GraphicsUnit.Pixel);
+                    }
+
+                }
+                else if (PenID == 633)
+                {
+                    using (Graphics gr = Graphics.FromImage(img1))
+                    {
+                        gr.FillRectangle(new SolidBrush(bdata.UIntToColor(bdata.backgroundColor)), new Rectangle(0, 0, 16, 16));
+                        gr.DrawImage(Properties.Resources.bgs_overlays, new Rectangle(0, 0, 16, 16), new Rectangle(32, 0, 16, 16), GraphicsUnit.Pixel);
+                    }
+                }
+                else
+                {
                     img1 = MainForm.backgroundBMD.Clone(new Rectangle(MainForm.backgroundBMI[PenID] * 16, 0, 16, 16), MainForm.backgroundBMD.PixelFormat);
+                }
             }
             else if (PenID < 500 || PenID >= 1001)
             {
                 if (MainForm.miscBMI[PenID] != 0)
                 {
-                        img1 = MainForm.miscBMD.Clone(new Rectangle(MainForm.miscBMI[PenID] * 16, 0, 16, 16), MainForm.miscBMD.PixelFormat);
+                    img1 = MainForm.miscBMD.Clone(new Rectangle(MainForm.miscBMI[PenID] * 16, 0, 16, 16), MainForm.miscBMD.PixelFormat);
                 }
                 else if (MainForm.decosBMI[PenID] != 0)
                 {
@@ -50,7 +81,7 @@ namespace EEditor
                     img1 = MainForm.foregroundBMD.Clone(new Rectangle(MainForm.foregroundBMI[PenID] * 16, 0, 16, 16), MainForm.foregroundBMD.PixelFormat);
                 }
             }
-            
+
             Image img2 = bdata.SetImageOpacity(img1, 0.5f);
             if (end.X == start.X && end.Y > start.Y)
             {
@@ -220,6 +251,11 @@ namespace EEditor
                             {
                                 incfg += PenID + ":" + editArea.CurFrame.Background[y, x] + ":" + x + ":" + y + ":";
                                 editArea.CurFrame.Background[y, x] = PenID;
+                                if (PenID == 631 || PenID == 632 || PenID == 633)
+                                {
+                                    editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor;
+                                }
+                                
                             }
                             else if (PenID < 500 || PenID >= 1001)
                             {

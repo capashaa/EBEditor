@@ -57,6 +57,10 @@ namespace EEditor
                 if (PenID >= 500 && PenID <= 999)
                 {
                     editArea.CurFrame.Background[y, x] = PenID;
+                    if (PenID == 631 || PenID == 632 || PenID == 633)
+                    {
+                        editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor;
+                    }
                 }
                 else
                 {
