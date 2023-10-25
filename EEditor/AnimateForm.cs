@@ -107,31 +107,15 @@ namespace EEditor
                             if (MainForm.userdata.level.StartsWith("OW"))
                             {
                                 int version = bdata.forceversion ? bdata.version : Convert.ToInt32(client.BigDB.Load("config", "config")["version"]);
-                                client.Multiplayer.ListRooms($"Everybuildexists{version}", null, 0, 0,
-                                (RoomInfo[] rinfo) =>
-                                {
-                                    foreach (var val in rinfo)
-                                    {
-                                        if (val.Id.StartsWith("OW"))
-                                        {
-                                            if (val.Id.Length == MainForm.userdata.level.Length)
-                                            {
-                                                MainForm.userdata.level = val.Id;
-                                                levelTextBox.Text = val.Id;
-                                                conn = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, MainForm.userdata.level.StartsWith("BW") ? "Beta" : "Everybuildexists" + bdata.version, true, null, null);
-                                                Animator anim = new Animator(frames, conn, levelPassTextBox.Text, shuffleCheckBox.Checked, checkBoxReverse.Checked, checkBoxRandom.Checked);
-                                                conn.OnDisconnect += Conn_OnDisconnect;
-                                                Animator.pb = uploadProgressBar; //Make Animator.cs work with this form's progressbar
-                                                Animator.afHandle = this.Handle; //Make TaskbarProgress.cs work with this form's upload progress
-                                                anim.StatusChanged += UpdateStatus;
-                                                thread = new Thread(new ThreadStart(anim.Run));
-                                                thread.Start();
-                                                break;
-                                            }
-                                        }
-                                    }
-                                },
-                                (PlayerIOError error) => Console.WriteLine(error.Message));
+                                conn = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, MainForm.userdata.level.StartsWith("BW") ? "Beta" : "Everybuildexists" + bdata.version, true, null, null);
+                                Animator anim = new Animator(frames, conn, levelPassTextBox.Text, shuffleCheckBox.Checked, checkBoxReverse.Checked, checkBoxRandom.Checked);
+                                conn.OnDisconnect += Conn_OnDisconnect;
+                                Animator.pb = uploadProgressBar; //Make Animator.cs work with this form's progressbar
+                                Animator.afHandle = this.Handle; //Make TaskbarProgress.cs work with this form's upload progress
+                                anim.StatusChanged += UpdateStatus;
+                                thread = new Thread(new ThreadStart(anim.Run));
+                                thread.Start();
+                            
                             }
                             else
                             {
