@@ -29,8 +29,6 @@ namespace EELVL
         public static bool Ebe { get; set; }
         public int Version { get; set; }
 
-        public bool fucker { get; set; }
-
         private readonly Block?[,,] blocks;
 
         public Block this[int l, int x, int y]
@@ -162,19 +160,39 @@ namespace EELVL
         {
             AS3BinaryWriter writer = new AS3BinaryWriter(stream);
 
-            writer.WriteString(OwnerName);
-            writer.WriteString(WorldName);
-            writer.WriteInt(Width);
-            writer.WriteInt(Height);
-            writer.WriteFloat(Gravity);
-            writer.WriteUInt(BackgroundColor);
-            writer.WriteString(Description);
-            writer.WriteBool(Campaign);
-            writer.WriteString(CrewID);
-            writer.WriteString(CrewName);
-            writer.WriteInt(CrewStatus);
-            writer.WriteBool(Minimap);
-            writer.WriteString(OwnerID);
+            if (Ebe)
+            {
+                writer.WriteInt(1);
+                writer.WriteString(OwnerName);
+                writer.WriteString(WorldName);
+                writer.WriteInt(Width);
+                writer.WriteInt(Height);
+                writer.WriteFloat(Gravity);
+                writer.WriteUInt(BackgroundColor);
+                writer.WriteString(Description);
+                writer.WriteBool(Campaign);
+                writer.WriteString(CrewID);
+                writer.WriteString(CrewName);
+                writer.WriteInt(CrewStatus);
+                writer.WriteBool(Minimap);
+                writer.WriteString(OwnerID);
+            }
+            else
+            {
+                writer.WriteString(OwnerName);
+                writer.WriteString(WorldName);
+                writer.WriteInt(Width);
+                writer.WriteInt(Height);
+                writer.WriteFloat(Gravity);
+                writer.WriteUInt(BackgroundColor);
+                writer.WriteString(Description);
+                writer.WriteBool(Campaign);
+                writer.WriteString(CrewID);
+                writer.WriteString(CrewName);
+                writer.WriteInt(CrewStatus);
+                writer.WriteBool(Minimap);
+                writer.WriteString(OwnerID);
+            }
         }
 
         public void WriteContent(Stream stream)
