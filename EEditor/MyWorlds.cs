@@ -335,6 +335,10 @@ namespace EEditor
                                 w = 150;
                                 h = 150;
                                 break;
+                            case "world14":
+                                w = 250;
+                                h = 250;
+                                break;
                         };
                     }
                     else
