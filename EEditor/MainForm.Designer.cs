@@ -51,6 +51,7 @@
             this.newWorldButton = new System.Windows.Forms.ToolStripButton();
             this.openWorldDropButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.eEditor38ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eBELevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eELVLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.eEditor37ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -146,7 +147,7 @@
             this.lastUsedBlockButton2 = new System.Windows.Forms.ToolStripButton();
             this.lastUsedBlockButton3 = new System.Windows.Forms.ToolStripButton();
             this.lastUsedBlockButton4 = new System.Windows.Forms.ToolStripButton();
-            this.eBELevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eBELevelToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.morphToolStrip.SuspendLayout();
             this.viewToolStrip.SuspendLayout();
             this.settingsToolStrip.SuspendLayout();
@@ -341,7 +342,7 @@
             this.accountsComboBox,
             this.settingsButton,
             this.aboutButton});
-            this.settingsToolStrip.Location = new System.Drawing.Point(643, 0);
+            this.settingsToolStrip.Location = new System.Drawing.Point(612, 0);
             this.settingsToolStrip.Name = "settingsToolStrip";
             this.settingsToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.settingsToolStrip.Size = new System.Drawing.Size(156, 27);
@@ -390,7 +391,7 @@
             this.fileToolStrip.Location = new System.Drawing.Point(0, 0);
             this.fileToolStrip.Name = "fileToolStrip";
             this.fileToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.fileToolStrip.Size = new System.Drawing.Size(127, 27);
+            this.fileToolStrip.Size = new System.Drawing.Size(96, 27);
             this.fileToolStrip.TabIndex = 7;
             // 
             // newWorldButton
@@ -436,6 +437,13 @@
             this.eEditor38ToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.eEditor38ToolStripMenuItem.Text = "EEditor 3.8+";
             this.eEditor38ToolStripMenuItem.Click += new System.EventHandler(this.eEditor38ToolStripMenuItem_Click);
+            // 
+            // eBELevelToolStripMenuItem
+            // 
+            this.eBELevelToolStripMenuItem.Name = "eBELevelToolStripMenuItem";
+            this.eBELevelToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.eBELevelToolStripMenuItem.Text = "EBE Offline Level";
+            this.eBELevelToolStripMenuItem.Click += new System.EventHandler(this.eBELevelToolStripMenuItem_Click);
             // 
             // eELVLToolStripMenuItem
             // 
@@ -527,6 +535,7 @@
             this.saveDropButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.saveDropButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveWorldToolStripMenuItem,
+            this.eBELevelToolStripMenuItem1,
             this.eelvlToolStripMenuItem1,
             this.toolStripSeparator4,
             this.worldAsImageToolStripMenuItem,
@@ -548,7 +557,7 @@
             // eelvlToolStripMenuItem1
             // 
             this.eelvlToolStripMenuItem1.Name = "eelvlToolStripMenuItem1";
-            this.eelvlToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
+            this.eelvlToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.eelvlToolStripMenuItem1.Text = "EE Offline Level";
             this.eelvlToolStripMenuItem1.Click += new System.EventHandler(this.EelvlToolStripMenuItem1_Click);
             // 
@@ -585,7 +594,7 @@
             this.insertDropButton,
             this.toolStripSeparator8,
             this.replaceButton});
-            this.toolToolStrip.Location = new System.Drawing.Point(127, 0);
+            this.toolToolStrip.Location = new System.Drawing.Point(96, 0);
             this.toolToolStrip.Name = "toolToolStrip";
             this.toolToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.toolToolStrip.Size = new System.Drawing.Size(204, 27);
@@ -666,7 +675,7 @@
             this.rectangleButton.Image = global::EEditor.Properties.Resources.rectangle;
             this.rectangleButton.Name = "rectangleButton";
             this.rectangleButton.ShortcutKeyDisplayString = ",";
-            this.rectangleButton.Size = new System.Drawing.Size(205, 22);
+            this.rectangleButton.Size = new System.Drawing.Size(209, 26);
             this.rectangleButton.Text = "Rectangle";
             this.rectangleButton.Click += new System.EventHandler(this.rectangleButton_Click);
             // 
@@ -675,7 +684,7 @@
             this.filledRectangleButton.Image = global::EEditor.Properties.Resources.rectanglefill;
             this.filledRectangleButton.Name = "filledRectangleButton";
             this.filledRectangleButton.ShortcutKeyDisplayString = "CTRL + ,";
-            this.filledRectangleButton.Size = new System.Drawing.Size(205, 22);
+            this.filledRectangleButton.Size = new System.Drawing.Size(209, 26);
             this.filledRectangleButton.Text = "Filled rectangle";
             this.filledRectangleButton.Click += new System.EventHandler(this.filledRectangleButton_Click);
             // 
@@ -684,7 +693,7 @@
             this.circleButton.Image = global::EEditor.Properties.Resources.circle;
             this.circleButton.Name = "circleButton";
             this.circleButton.ShortcutKeyDisplayString = ".";
-            this.circleButton.Size = new System.Drawing.Size(205, 22);
+            this.circleButton.Size = new System.Drawing.Size(209, 26);
             this.circleButton.Text = "Circle";
             this.circleButton.Click += new System.EventHandler(this.circleButton_Click);
             // 
@@ -693,7 +702,7 @@
             this.filledCircleButton.Image = global::EEditor.Properties.Resources.circlefill;
             this.filledCircleButton.Name = "filledCircleButton";
             this.filledCircleButton.ShortcutKeyDisplayString = "CTRL + .";
-            this.filledCircleButton.Size = new System.Drawing.Size(205, 22);
+            this.filledCircleButton.Size = new System.Drawing.Size(209, 26);
             this.filledCircleButton.Text = "Filled circle";
             this.filledCircleButton.Click += new System.EventHandler(this.filledCircleButton_Click);
             // 
@@ -702,7 +711,7 @@
             this.lineButton.Image = global::EEditor.Properties.Resources.line;
             this.lineButton.Name = "lineButton";
             this.lineButton.ShortcutKeyDisplayString = "-";
-            this.lineButton.Size = new System.Drawing.Size(205, 22);
+            this.lineButton.Size = new System.Drawing.Size(209, 26);
             this.lineButton.Text = "Line";
             this.lineButton.Click += new System.EventHandler(this.lineButton_Click);
             // 
@@ -710,7 +719,7 @@
             // 
             this.mazeGeneratorToolStripMenuItem.Image = global::EEditor.Properties.Resources.maze;
             this.mazeGeneratorToolStripMenuItem.Name = "mazeGeneratorToolStripMenuItem";
-            this.mazeGeneratorToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.mazeGeneratorToolStripMenuItem.Size = new System.Drawing.Size(209, 26);
             this.mazeGeneratorToolStripMenuItem.Text = "Maze Generator";
             this.mazeGeneratorToolStripMenuItem.Visible = false;
             // 
@@ -833,7 +842,7 @@
             this.refreshButton,
             this.codeTextbox,
             this.uploadButton});
-            this.uploadToolStrip.Location = new System.Drawing.Point(433, 0);
+            this.uploadToolStrip.Location = new System.Drawing.Point(402, 0);
             this.uploadToolStrip.Name = "uploadToolStrip";
             this.uploadToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.uploadToolStrip.Size = new System.Drawing.Size(210, 27);
@@ -906,7 +915,7 @@
             this.redoButton,
             this.historyButton,
             this.StatisticButton});
-            this.historyToolStrip.Location = new System.Drawing.Point(331, 0);
+            this.historyToolStrip.Location = new System.Drawing.Point(300, 0);
             this.historyToolStrip.Name = "historyToolStrip";
             this.historyToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.historyToolStrip.Size = new System.Drawing.Size(102, 27);
@@ -1352,12 +1361,12 @@
             this.lastUsedBlockButton4.Size = new System.Drawing.Size(23, 22);
             this.lastUsedBlockButton4.Click += new System.EventHandler(this.lastUsedBlockButton);
             // 
-            // eBELevelToolStripMenuItem
+            // eBELevelToolStripMenuItem1
             // 
-            this.eBELevelToolStripMenuItem.Name = "eBELevelToolStripMenuItem";
-            this.eBELevelToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.eBELevelToolStripMenuItem.Text = "EBE Offline Level";
-            this.eBELevelToolStripMenuItem.Click += new System.EventHandler(this.eBELevelToolStripMenuItem_Click);
+            this.eBELevelToolStripMenuItem1.Name = "eBELevelToolStripMenuItem1";
+            this.eBELevelToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.eBELevelToolStripMenuItem1.Text = "EBE Offline Level";
+            this.eBELevelToolStripMenuItem1.Click += new System.EventHandler(this.eBELevelToolStripMenuItem1_Click);
             // 
             // MainForm
             // 
@@ -1532,6 +1541,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripButton BlockPicker10;
         private System.Windows.Forms.ToolStripMenuItem eBELevelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem eBELevelToolStripMenuItem1;
     }
 }
 
