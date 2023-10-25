@@ -18,7 +18,7 @@ namespace EEditor
         ///     Indicates the byte order ("endianess") in which data is stored in this computer
         ///     architecture.
         ///</summary>
-        //public static bool IsLittleEndian { get; set; } = false; // should default to false, which is what we want for Empire
+        public static bool IsLittleEndian { get; set; } = false; // should default to false, which is what we want for Empire
 
         /// <summary>
         ///     Converts the specified double-precision floating point number to a 64-bit
