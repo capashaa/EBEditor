@@ -23,6 +23,7 @@ namespace EEditor
         static ToolStripProgressBar toolsprog;
         static ToolStrip tools;
         static ListBox listb;
+        public static int staff = 0;
         public Accounts()
         {
             InitializeComponent();
@@ -33,7 +34,6 @@ namespace EEditor
             toolsprog = toolStripProgressBar1;
             tools = statusStrip1;
             listb = accountListBox;
-            bool admin = false;
             foreach (KeyValuePair<string, accounts> acco in MainForm.accs)
             {
                 accountListBox.Items.Add(acco.Key);
@@ -149,7 +149,7 @@ namespace EEditor
                                 try
                                 {
                                     Dictionary<string, int> values = JsonConvert.DeserializeObject<Dictionary<string, int>>(property.Value["payvault"].ToString());
-                                    MainForm.accs.Add(property.Key, new accounts() { login = property.Value["login"].ToString(), password = property.Value["password"].ToString(),admin = (bool)property.Value["admin"], moderator = (bool)property.Value["moderator"], payvault = values });
+                                    MainForm.accs.Add(property.Key, new accounts() { login = property.Value["login"].ToString(), password = property.Value["password"].ToString(),admin = (bool)property.Value["admin"], moderator = (bool)property.Value["moderator"],staff = (int)property.Value["staff"], payvault = values });
                                     mf.cb.Items.Add(property.Key);
                                 }
                                 catch (Exception)
@@ -265,6 +265,7 @@ namespace EEditor
                         con.Send("getMySimplePlayerObject");
                         break;
                     case "getMySimplePlayerObject":
+                        
                         Dictionary<string, int> pv = new Dictionary<string, int>();
                         int total = bdata.extractPlayerObjectsMessage(m) + 1;
                         string nickname = m[(uint)total].ToString();
@@ -276,6 +277,26 @@ namespace EEditor
                         admin_ = m.GetBoolean((uint)isadmin);
                         moderator_ = m.GetBoolean((uint)ismod);
                         if (m.GetBoolean((uint)goldmember)) pv.Add("goldmember", 0);
+                        client.BigDB.Load("config", "staff", da =>
+                        {
+                            foreach (var item in da)
+                            {
+                                if (item.Key == nickname)
+                                {
+                                    switch (item.Value)
+                                    {
+                                        case "Admin":
+                                        case "Designer":
+                                            staff = 1;
+                                            break;
+                                    }
+                                    break;
+                                }
+                            }
+                        }, error =>
+                        {
+                            Console.WriteLine(error);
+                        });
                         client.PayVault.Refresh(() =>
                         {
                             int totalpv = client.PayVault.Items.Length;
@@ -313,7 +334,7 @@ namespace EEditor
                                 MainForm.userdata.username = nickname;
                                 if (!MainForm.accs.ContainsKey(nickname))
                                 {
-                                    MainForm.accs.Add(nickname, new accounts() { login = login, password = pass, loginMethod = loginmethod, admin = admin_, moderator = moderator_, payvault = pv });
+                                    MainForm.accs.Add(nickname, new accounts() { login = login, password = pass, loginMethod = loginmethod, admin = admin_, moderator = moderator_,staff = staff, payvault = pv });
                                     if (Accounts.listb.InvokeRequired)
                                     {
                                         Accounts.listb.Invoke((MethodInvoker)delegate
@@ -326,7 +347,7 @@ namespace EEditor
                                 }
                                 else if (MainForm.accs.ContainsKey(nickname))
                                 {
-                                    MainForm.accs[nickname] = new accounts() { login = login, password = pass, loginMethod = loginmethod, admin = admin_, moderator = moderator_,payvault = pv };
+                                    MainForm.accs[nickname] = new accounts() { login = login, password = pass, loginMethod = loginmethod, admin = admin_, moderator = moderator_, staff = staff,payvault = pv };
                                     File.WriteAllText(Directory.GetCurrentDirectory() + accss, JsonConvert.SerializeObject(MainForm.accs, Formatting.Indented));
                                 }
                                 if (Accounts.listb.InvokeRequired)
@@ -345,7 +366,7 @@ namespace EEditor
                                 if (!MainForm.accs.ContainsKey(nickname))
                                 {
                                     MainForm.userdata.username = nickname;
-                                    MainForm.accs.Add(nickname, new accounts() { login = login, password = pass, loginMethod = loginmethod, admin = admin_, moderator = moderator_, payvault = pv });
+                                    MainForm.accs.Add(nickname, new accounts() { login = login, password = pass, loginMethod = loginmethod, admin = admin_, moderator = moderator_, staff = staff, payvault = pv });
                                     if (Accounts.listb.InvokeRequired)
                                     {
                                         Accounts.listb.Invoke((MethodInvoker)delegate
@@ -382,18 +403,21 @@ namespace EEditor
         public static void successLogin2(Client client, string login, string password, int loginmethod) //login for save
         {
             client_ = client;
+
             tryLobbyConnect($"{client.ConnectUserId}_{RandomString(5)}", client, login, password, loginmethod);
 
         }
         private void successLogin(Client client, string login, string password, int loginmethod) //login for save
         {
             Console.WriteLine(client.ConnectUserId);
+            
             client_ = client;
             tryLobbyConnect($"{client.ConnectUserId}_{RandomString(5)}", client, login, password, loginmethod);
         }
 
         private void successLogin1(Client client, string login, string password, int loginmethod) //login for reload
         {
+
             client_ = client;
             tryLobbyConnect($"{client.ConnectUserId}_{RandomString(5)}", client, login, password, loginmethod);
         }
