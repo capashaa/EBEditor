@@ -19,6 +19,12 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         public static int version = 225;
         public static bool forceversion = false;
 
+        public static uint backgroundColor = 1;
+
+        public static int[] openworlds =
+        {
+
+        };
         public static string lobby = "Lobby";
         public static string normal_room = "Everybuildexists";
 
