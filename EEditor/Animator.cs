@@ -746,7 +746,7 @@ namespace EEditor
                 {
                     if (MainForm.userdata.level.StartsWith("OW") && levelPassword.Length == 0)
                     {
-                        if (e.GetBoolean(14))
+                        if (e.GetBoolean(21))
                         {
                             MainForm.OpenWorld = true;
                             MainForm.OpenWorldCode = false;
@@ -762,7 +762,7 @@ namespace EEditor
                     }
                     else if (MainForm.userdata.level.StartsWith("OW") && levelPassword.Length > 0)
                     {
-                        if (!e.GetBoolean(14))
+                        if (!e.GetBoolean(21))
                         {
                             MainForm.OpenWorld = true;
                             MainForm.OpenWorldCode = true;
