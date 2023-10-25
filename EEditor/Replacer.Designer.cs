@@ -35,6 +35,7 @@
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button6 = new System.Windows.Forms.Button();
             this.ReplaceUnknownCheckBox = new System.Windows.Forms.CheckBox();
             this.ClearBgsBlacklistButton = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
@@ -93,7 +94,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.WorldPortalRadioButton = new System.Windows.Forms.RadioButton();
             this.SignRadioButton = new System.Windows.Forms.RadioButton();
-            this.button6 = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rotateIcon2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rotateIcon1)).BeginInit();
@@ -119,6 +120,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PortalReplaceFrom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PortalRotRepl)).BeginInit();
             this.tabPage3.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // BottomToolStripPanel
@@ -160,22 +162,35 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Controls.Add(this.button6);
             this.groupBox1.Controls.Add(this.ReplaceUnknownCheckBox);
-            this.groupBox1.Controls.Add(this.ClearBgsBlacklistButton);
             this.groupBox1.Controls.Add(this.button9);
             this.groupBox1.Controls.Add(this.button5);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.ClearBgsButton);
             this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.button8);
             this.groupBox1.Location = new System.Drawing.Point(270, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(278, 424);
+            this.groupBox1.Size = new System.Drawing.Size(278, 433);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Find && replace";
+            // 
+            // button6
+            // 
+            this.button6.Image = global::EEditor.Properties.Resources.remove;
+            this.button6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button6.Location = new System.Drawing.Point(21, 280);
+            this.button6.Margin = new System.Windows.Forms.Padding(2);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(102, 33);
+            this.button6.TabIndex = 20;
+            this.button6.Text = "Remove All";
+            this.button6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // ReplaceUnknownCheckBox
             // 
@@ -190,11 +205,11 @@
             // 
             // ClearBgsBlacklistButton
             // 
-            this.ClearBgsBlacklistButton.Location = new System.Drawing.Point(139, 389);
+            this.ClearBgsBlacklistButton.Location = new System.Drawing.Point(6, 50);
             this.ClearBgsBlacklistButton.Name = "ClearBgsBlacklistButton";
-            this.ClearBgsBlacklistButton.Size = new System.Drawing.Size(121, 21);
+            this.ClearBgsBlacklistButton.Size = new System.Drawing.Size(129, 21);
             this.ClearBgsBlacklistButton.TabIndex = 18;
-            this.ClearBgsBlacklistButton.Text = "Exceptions";
+            this.ClearBgsBlacklistButton.Text = "Ignore List";
             this.ClearBgsBlacklistButton.UseVisualStyleBackColor = true;
             this.ClearBgsBlacklistButton.Click += new System.EventHandler(this.ClearBgsBlacklistButton_Click);
             // 
@@ -253,11 +268,11 @@
             // 
             this.ClearBgsButton.Image = global::EEditor.Properties.Resources.eeditor_bgIgnore;
             this.ClearBgsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ClearBgsButton.Location = new System.Drawing.Point(139, 342);
+            this.ClearBgsButton.Location = new System.Drawing.Point(6, 19);
             this.ClearBgsButton.Name = "ClearBgsButton";
-            this.ClearBgsButton.Size = new System.Drawing.Size(121, 36);
+            this.ClearBgsButton.Size = new System.Drawing.Size(129, 25);
             this.ClearBgsButton.TabIndex = 0;
-            this.ClearBgsButton.Text = "Clear block background";
+            this.ClearBgsButton.Text = "Clear Backgrounds";
             this.ClearBgsButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ClearBgsButton.UseVisualStyleBackColor = true;
             this.ClearBgsButton.Click += new System.EventHandler(this.ClearBgsButton_Click);
@@ -277,9 +292,9 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(17, 366);
+            this.button8.Location = new System.Drawing.Point(21, 318);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(106, 33);
+            this.button8.Size = new System.Drawing.Size(102, 26);
             this.button8.TabIndex = 16;
             this.button8.Text = "Reset search";
             this.button8.UseVisualStyleBackColor = true;
@@ -415,7 +430,7 @@
             this.groupBox2.Controls.Add(this.toolStripContainer1);
             this.groupBox2.Location = new System.Drawing.Point(12, 5);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(252, 424);
+            this.groupBox2.Size = new System.Drawing.Size(252, 433);
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Get block ID by pack";
@@ -472,7 +487,7 @@
             // 
             this.groupBox5.Controls.Add(this.progressBar1);
             this.groupBox5.Controls.Add(this.label4);
-            this.groupBox5.Location = new System.Drawing.Point(12, 435);
+            this.groupBox5.Location = new System.Drawing.Point(12, 444);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(536, 42);
             this.groupBox5.TabIndex = 16;
@@ -857,25 +872,22 @@
             this.SignRadioButton.UseVisualStyleBackColor = true;
             this.SignRadioButton.Click += new System.EventHandler(this.SignRadioButton_Click);
             // 
-            // button6
+            // groupBox3
             // 
-            this.button6.Image = global::EEditor.Properties.Resources.remove;
-            this.button6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button6.Location = new System.Drawing.Point(21, 280);
-            this.button6.Margin = new System.Windows.Forms.Padding(2);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(102, 33);
-            this.button6.TabIndex = 20;
-            this.button6.Text = "Remove All";
-            this.button6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.groupBox3.Controls.Add(this.ClearBgsButton);
+            this.groupBox3.Controls.Add(this.ClearBgsBlacklistButton);
+            this.groupBox3.Location = new System.Drawing.Point(131, 338);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(141, 86);
+            this.groupBox3.TabIndex = 21;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Bg behind blocks";
             // 
             // Replacer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(563, 489);
+            this.ClientSize = new System.Drawing.Size(563, 497);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox2);
@@ -920,6 +932,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PortalRotRepl)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -991,5 +1004,6 @@
         private System.Windows.Forms.Button ClearBgsBlacklistButton;
         private System.Windows.Forms.CheckBox ReplaceUnknownCheckBox;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }
