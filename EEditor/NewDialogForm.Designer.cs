@@ -81,6 +81,7 @@
             "150x150 Big",
             "110x110 Low Gravity",
             "200x200 Massive",
+            "250x250 Jumbo World",
             "200x400 Vertical Great",
             "300x300 Huge",
             "400x50 Wide",
