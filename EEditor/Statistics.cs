@@ -8,11 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Collections;
+
 namespace EEditor
 {
     public partial class Statistics : Form
     {
-        private Dictionary<int, int> bdata = new Dictionary<int, int>();
+        private Dictionary<int, int> bcount = new Dictionary<int, int>();
         private Semaphore wait = new Semaphore(0, 1);
         public Statistics()
         {
@@ -39,37 +41,36 @@ namespace EEditor
         private void sortby(int id)
         {
             panel1.Controls.Clear();
-            bdata.Clear();
+            bcount.Clear();
+            int incr = 0;
             for (int x = 0; x < MainForm.editArea.CurFrame.Width; x++)
             {
                 for (int y = 0; y < MainForm.editArea.CurFrame.Height; y++)
                 {
-                    if (bdata.ContainsKey(MainForm.editArea.CurFrame.Foreground[y, x]) && id >= 0 && id <= 3)
+                    if (bcount.ContainsKey(MainForm.editArea.CurFrame.Foreground[y, x]) && id >= 0 && id <= 3)
                     {
 
 
-                        bdata[MainForm.editArea.CurFrame.Foreground[y, x]] += 1;
+                        bcount[MainForm.editArea.CurFrame.Foreground[y, x]] += 1;
                     }
-                    if (!bdata.ContainsKey(MainForm.editArea.CurFrame.Foreground[y, x]) && id >= 0 && id <= 3)
+                    if (!bcount.ContainsKey(MainForm.editArea.CurFrame.Foreground[y, x]) && id >= 0 && id <= 3)
                     {
 
-                        bdata.Add(MainForm.editArea.CurFrame.Foreground[y, x], 1);
+                        bcount.Add(MainForm.editArea.CurFrame.Foreground[y, x], 1);
                     }
-                    if (bdata.ContainsKey(MainForm.editArea.CurFrame.Background[y, x]) && MainForm.editArea.CurFrame.Background[y, x]  != 0 && (id == 0 || id == 4))
+                    if (bcount.ContainsKey(MainForm.editArea.CurFrame.Background[y, x]) && MainForm.editArea.CurFrame.Background[y, x] != 0 && (id == 0 || id == 4))
                     {
+                        bcount[MainForm.editArea.CurFrame.Background[y, x]] += 1;
 
-
-                        bdata[MainForm.editArea.CurFrame.Background[y, x]] += 1;
                     }
-                    if (!bdata.ContainsKey(MainForm.editArea.CurFrame.Background[y, x]) && MainForm.editArea.CurFrame.Background[y, x] != 0 && (id == 0 || id == 4))
+                    if (!bcount.ContainsKey(MainForm.editArea.CurFrame.Background[y, x]) && MainForm.editArea.CurFrame.Background[y, x] != 0 && (id == 0 || id == 4))
                     {
-
-                        bdata.Add(MainForm.editArea.CurFrame.Background[y, x], 1);
+                        bcount.Add(MainForm.editArea.CurFrame.Background[y, x], 1);
                     }
                 }
             }
-                int position = 0, wposition = 4;
-            foreach (var val in bdata)
+            int position = 0, wposition = 4;
+            foreach (var val in bcount)
             {
                 PictureBox table = new PictureBox();
                 ToolTip tp = new ToolTip();
@@ -101,10 +102,10 @@ namespace EEditor
                         }
                         panel1.Controls.Add(table);
                     }
-                    
+
                     if (MainForm.ActionBlocks.ContainsKey(val.Key) && (id == 0 || id == 2))
                     {
-                        
+
                         block = MainForm.ActionBlocks[val.Key];
                         using (Graphics gr = Graphics.FromImage(bmp))
                         {
@@ -149,24 +150,26 @@ namespace EEditor
                 {
                     if (MainForm.BackgroundBlocks.ContainsKey(val.Key) && val.Key != 0 && (id == 0 || id == 4))
                     {
-                        block = MainForm.BackgroundBlocks[val.Key];
-                        using (Graphics gr = Graphics.FromImage(bmp))
-                        {
-                            gr.FillRectangle(new SolidBrush(Color.Gray), new Rectangle(5, 5, 100, 50));
-                            gr.DrawRectangle(new Pen(Color.White), new Rectangle(5, 5, 54, 24));
-                            gr.DrawImage(block, new Point(8, 8));
-                            //gr.DrawString($"{val.Value}", new Font("Arial", 8, FontStyle.Regular), new SolidBrush(Color.Black), new Point(25, 9));
-                            gr.DrawString($"{val.Value}", new Font("Arial", 8, FontStyle.Regular), new SolidBrush(Color.White), new Point(24, 8));
+                            block = MainForm.BackgroundBlocks[val.Key];
+                            using (Graphics gr = Graphics.FromImage(bmp))
+                            {
+                                gr.FillRectangle(new SolidBrush(Color.Gray), new Rectangle(5, 5, 100, 50));
+                                gr.DrawRectangle(new Pen(Color.White), new Rectangle(5, 5, 54, 24));
+                                gr.DrawImage(block, new Point(8, 8));
+                                //gr.DrawString($"{val.Value}", new Font("Arial", 8, FontStyle.Regular), new SolidBrush(Color.Black), new Point(25, 9));
+                                gr.DrawString($"{val.Value}", new Font("Arial", 8, FontStyle.Regular), new SolidBrush(Color.White), new Point(24, 8));
+                            }
+                            table.Image = bmp;
+                            wposition += 60;
+                            if (wposition == 244) //244
+                            {
+                                wposition = 4;
+                                position += 30;
+                            }
+                            panel1.Controls.Add(table);
                         }
-                        table.Image = bmp;
-                        wposition += 60;
-                        if (wposition == 244) //244
-                        {
-                            wposition = 4;
-                            position += 30;
-                        }
-                        panel1.Controls.Add(table);
-                    }
+
+                    
                 }
 
 
