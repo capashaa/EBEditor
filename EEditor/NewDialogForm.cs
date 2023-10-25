@@ -142,30 +142,35 @@ namespace EEditor
             }
             else if (listBox1.SelectedIndex == 9)
             {
+                SizeWidth = 250;
+                SizeHeight = 250;
+            }
+            else if (listBox1.SelectedIndex == 10)
+            {
                 SizeWidth = 200;
                 SizeHeight = 400;
             }
-            else if (listBox1.SelectedIndex == 10)
+            else if (listBox1.SelectedIndex == 11)
             {
                 SizeWidth = 300;
                 SizeHeight = 300;
             }
-            else if (listBox1.SelectedIndex == 11)
+            else if (listBox1.SelectedIndex == 12)
             {
                 SizeWidth = 400;
                 SizeHeight = 50;
             }
-            else if (listBox1.SelectedIndex == 12)
+            else if (listBox1.SelectedIndex == 13)
             {
                 SizeWidth = 400;
                 SizeHeight = 200;
             }
-            else if (listBox1.SelectedIndex == 13)
+            else if (listBox1.SelectedIndex == 14)
             {
                 SizeWidth = 636;
                 SizeHeight = 50;
             }
-            else if (listBox1.SelectedIndex == 14)
+            else if (listBox1.SelectedIndex == 15)
             {
                 SizeWidth = 200;
                 SizeHeight = 200;
@@ -234,7 +239,7 @@ namespace EEditor
             {
                 MainForm.userdata.useColor = true;
                 MainForm.userdata.thisColor = dg.Color;
-                
+
                 using (Graphics gr = Graphics.FromImage(bmp))
                 {
                     gr.Clear(dg.Color);
@@ -249,16 +254,16 @@ namespace EEditor
                 using (Graphics gr = Graphics.FromImage(bmp))
                 {
                     gr.Clear(Color.Transparent);
-                    gr.DrawRectangle(new Pen(GetContrastColor(MainForm.themecolors.accent)),new Rectangle(0,0,bmp.Width -1,bmp.Height -1));   
+                    gr.DrawRectangle(new Pen(GetContrastColor(MainForm.themecolors.accent)), new Rectangle(0, 0, bmp.Width - 1, bmp.Height - 1));
                 }
                 usebg = false;
             }
-            pbColor.Image= bmp;
+            pbColor.Image = bmp;
             //Properties.Settings.Default.usecolor = false;
             //Properties.Settings.Default.Save();
 
         }
-        private void updateData(string title,string owner, int width, int height)
+        private void updateData(string title, string owner, int width, int height)
         {
             MainForm.Text = $"({title}) [{owner}] ({width}x{height}) - EBEditor {this.ProductVersion}";
         }
@@ -276,49 +281,21 @@ namespace EEditor
 
                 if (datas == 0)
                 {
-                    if (MainForm.userdata.level.StartsWith("OW"))
+                    if (client != null)
                     {
                         int version = bdata.forceversion ? bdata.version : Convert.ToInt32(client.BigDB.Load("config", "config")["version"]);
-                        client.Multiplayer.ListRooms($"Everybuildexists{version}", null, 0, 0,
-                        (RoomInfo[] rinfo) =>
-                        {
-                            foreach (var val in rinfo)
-                            {
-                                if (val.Id.StartsWith("OW"))
-                                {
-                                    if (val.Id == MainForm.userdata.level)
-                                    {
-                                        MainForm.userdata.level = val.Id;
-                                        Connection = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, $"Everybuildexists{bdata.version}", true, null, null);
-                                        Connection.OnMessage += OnMessage;
-                                        Connection.Send("init");
-                                        NeedsInit = false;
-                                        break;
-                                    }
-                                }
-                            }
-                        },
-                        (PlayerIOError error) => Console.WriteLine(error.Message));
+                        Connection = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, $"Everybuildexists{version}", true, null, null);
+                        Connection.OnMessage += OnMessage;
+                        Connection.Send("init");
+                        NeedsInit = false;
                         s.WaitOne();
                         Connection.Disconnect();
                     }
                     else
                     {
-                        if (client != null)
-                        {
-                            int version = bdata.forceversion ? bdata.version : Convert.ToInt32(client.BigDB.Load("config", "config")["version"]);
-                            Connection = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, $"Everybuildexists{version}", true, null, null);
-                            Connection.OnMessage += OnMessage;
-                            Connection.Send("init");
-                            NeedsInit = false;
-                            s.WaitOne();
-                            Connection.Disconnect();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Client is null");
-                        }
+                        MessageBox.Show("Client is null");
                     }
+
                 }
                 else if (datas == 1)
                 {
@@ -396,13 +373,13 @@ namespace EEditor
                                 {
                                     MapFrame = new Frame(w, h);
                                     //uid2name(owner, name, w, h);
-                                    updateData(name, owner, w,h);
+                                    updateData(name, owner, w, h);
                                 }
                             }
                             else
                             {
                                 //uid2name(owner, name, 200, 200);
-                                updateData(name, owner, 200,200);
+                                updateData(name, owner, 200, 200);
                                 MapFrame = new Frame(200, 200);
                             }
                         }
@@ -552,7 +529,7 @@ namespace EEditor
                     MainForm.Text = $"({e[1]}) [{owner}] ({e[25]}x{e[26]}) - EBEditor {this.ProductVersion}";
                     SizeWidth = MapFrame.Width;
                     SizeHeight = MapFrame.Height;
-                    
+
                     Connection.OnMessage -= OnMessage;
                     s.Release();
                     DialogResult = System.Windows.Forms.DialogResult.OK;
