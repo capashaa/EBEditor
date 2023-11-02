@@ -877,7 +877,7 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
                     MainForm.id.Visible = true;
                     MainForm.target.Visible = true;
                 }
-                else if (EELVL.Blocks.IsType(CurFrame.Background[p.Y, p.X],EELVL.Blocks.BlockType.BlockColor))
+                else if (CurFrame.Background[p.Y, p.X] == 631 || CurFrame.Background[p.Y, p.X] == 632 || CurFrame.Background[p.Y, p.X] == 633)
                 {
                     MainForm.txt.Text = CurFrame.BlockData7[p.Y, p.X].ToString();
                     MainForm.txt.Visible = true;
