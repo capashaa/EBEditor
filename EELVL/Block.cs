@@ -86,9 +86,6 @@ namespace EELVL
                 1569, 1570, 1571, 1572, 1573, 1574, 1575, 1576, 1577, 1578,
                 1579
             },
-            { BlockType.BlockColor,
-                631,632,633
-                }
         };
 
 
@@ -124,7 +121,6 @@ namespace EELVL
                 BlockType.WorldPortal => new WorldPortalBlock(bid, reader.ReadString(), reader.ReadInt()),
                 BlockType.Label => new LabelBlock(bid, reader.ReadString(), reader.ReadString(), reader.ReadInt()),
                 BlockType.NPC => new NPCBlock(bid, reader.ReadString(), reader.ReadString(), reader.ReadString(), reader.ReadString()),
-                BlockType.BlockColor => new ColoredBlock(bid, reader.ReadUInt()),
                 _ => throw new Exception("This shouldn't happen")
             };
 
@@ -152,7 +148,6 @@ namespace EELVL
                 case NumberBlock b: writer.WriteInt(b.Number); break;
                 case RotatableBlock b: writer.WriteInt(b.Rotation); break;
                 case MorphableBlock b: writer.WriteInt(b.Morph); break;
-                case ColoredBlock b: writer.WriteUInt(b.Colour); break;
                 case Block b: break;
             }
         }
@@ -200,26 +195,6 @@ namespace EELVL
 
             public override int GetHashCode()
                 => base.GetHashCode() * 1619 + Morph;
-        }
-
-        public class ColoredBlock : Block
-        {
-            public uint Colour { get; }
-
-            internal ColoredBlock(BlockType type, int bid, uint colour) : base(type, bid)
-            {
-                Colour = colour;
-            }
-
-            public ColoredBlock(int bid, uint colour)
-                : this(BlockType.BlockColor, bid, colour) { }
-
-            public override bool Equals(object obj)
-                => obj is ColoredBlock b && base.Equals(b)
-                && b.Colour == Colour;
-
-            public override int GetHashCode()
-                => (int)(((uint)base.GetHashCode() * 1619) + Colour);
         }
 
         public class RotatableBlock : Block
