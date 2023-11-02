@@ -288,6 +288,7 @@ namespace EEditor
                         Connection.OnMessage += OnMessage;
                         Connection.Send("init");
                         NeedsInit = false;
+                        MainForm.connections.Add(Connection);
                         s.WaitOne();
                         Connection.Disconnect();
                     }

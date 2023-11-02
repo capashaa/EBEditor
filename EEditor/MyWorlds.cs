@@ -211,7 +211,7 @@ namespace EEditor
 
         private void lobbyConnected(Connection con)
         {
-            
+            MainForm.connections.Add(con);
             con.OnMessage += (s, m) =>
             {
 

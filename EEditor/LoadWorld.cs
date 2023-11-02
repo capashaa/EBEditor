@@ -101,6 +101,7 @@ namespace EEditor
                     int version = bdata.forceversion ? bdata.version : Convert.ToInt32(sel.BigDB.Load("config", "config")["version"]);
                     sel.Multiplayer.CreateJoinRoom(roomid, $"{bdata.normal_room}{version}", false, null, null, (Connection con) =>
                     {
+                        MainForm.connections.Add(con);
                         conn = con;
                         con.Send("init");
                         con.OnMessage += (object sender, PlayerIOClient.Message m) =>

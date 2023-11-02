@@ -51,6 +51,7 @@ namespace EEditor
             this.reversed = reversed;
             this.vertical = vertical;
             conn.OnMessage += OnMessage;
+            MainForm.connections.Add(conn);
             Control.CheckForIllegalCrossThreadCalls = false;
         }
 

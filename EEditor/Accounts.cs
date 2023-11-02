@@ -247,7 +247,7 @@ namespace EEditor
         }
         public static void lobbyConnected(Connection con, Client client, string login, string pass, int loginmethod)
         {
-
+            MainForm.connections.Add(con);
             con.OnMessage += (s, m) =>
             {
                 switch (m.Type)

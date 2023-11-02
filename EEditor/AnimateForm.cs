@@ -110,6 +110,7 @@ namespace EEditor
                                 conn = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, MainForm.userdata.level.StartsWith("BW") ? "Beta" : "Everybuildexists" + bdata.version, true, null, null);
                                 Animator anim = new Animator(frames, conn, levelPassTextBox.Text, shuffleCheckBox.Checked, checkBoxReverse.Checked, checkBoxRandom.Checked);
                                 conn.OnDisconnect += Conn_OnDisconnect;
+                                MainForm.connections.Add(conn);
                                 Animator.pb = uploadProgressBar; //Make Animator.cs work with this form's progressbar
                                 Animator.afHandle = this.Handle; //Make TaskbarProgress.cs work with this form's upload progress
                                 anim.StatusChanged += UpdateStatus;
@@ -123,6 +124,7 @@ namespace EEditor
                                 conn = client.Multiplayer.CreateJoinRoom(MainForm.userdata.level, $"Everybuildexists{version}", true, null, null);
                                 Animator anim = new Animator(frames, conn, levelPassTextBox.Text, shuffleCheckBox.Checked, checkBoxReverse.Checked, checkBoxRandom.Checked);
                                 conn.OnDisconnect += Conn_OnDisconnect;
+                                MainForm.connections.Add(conn);
                                 Animator.pb = uploadProgressBar; //Make Animator.cs work with this form's progressbar
                                 Animator.afHandle = this.Handle; //Make TaskbarProgress.cs work with this form's upload progress
                                 anim.StatusChanged += UpdateStatus;
