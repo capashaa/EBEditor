@@ -64,7 +64,7 @@ namespace EELVL
 
 			public void CopyTo(byte[] buffer) => Array.Copy(inner, start, buffer, 0, count);
 			public void Reverse() => Array.Reverse(inner, start, count);
-
+			
 			public static Int32 ToInt32(Span<byte> data) => BitConverter.ToInt32(data.inner, data.start);
 			public static UInt32 ToUInt32(Span<byte> data) => BitConverter.ToUInt32(data.inner, data.start);
 
@@ -89,7 +89,7 @@ namespace EELVL
 			return arr;
 		}
 
-		public static Span<byte> FromUShortArray(ushort[] data)
+        public static Span<byte> FromUShortArray(ushort[] data)
 		{
 			int count = data.Length;
 
