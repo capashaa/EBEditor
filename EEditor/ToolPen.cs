@@ -206,14 +206,14 @@ namespace EEditor
                                 {
                                     editArea.CurFrame.Background[y, x] = PenID;
                                     editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(cd.Color);
-                                    if (!color.ContainsKey(PenID)) color.Add(PenID, bdata.ColorToUint(cd.Color));
-                                    
+                                    bdata.backgroundColor = bdata.ColorToUint(cd.Color);
+                                    //if (!color.ContainsKey(PenID)) color.Add(PenID, bdata.ColorToUint(cd.Color));
 
                                 }
                                 else
                                 {
                                     editArea.CurFrame.Background[y, x] = PenID;
-                                    if (editArea.Tool.coloredBlock != 1) { editArea.CurFrame.BlockData7[y, x] = editArea.Tool.coloredBlock; }
+                                    if (editArea.Tool.coloredBlock != 1) { editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor; }
                                     else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
                                 }
                                 editArea.mouseDown = false;
@@ -221,6 +221,7 @@ namespace EEditor
                         }
                         else
                         {
+                            Console.WriteLine(bdata.backgroundColor);
                             editArea.CurFrame.Background[y, x] = PenID;
                             if (bdata.backgroundColor != 1) { editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor; }
                             else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
