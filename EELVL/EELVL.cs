@@ -26,8 +26,6 @@ namespace EELVL
         public float Gravity { get; set; }
         public bool Minimap { get; set; }
         public bool Campaign { get; set; }
-        public static bool Ebe { get; set; }
-        public int Version { get; set; }
 
         private readonly Block?[,,] blocks;
 
@@ -37,7 +35,6 @@ namespace EELVL
             set => blocks[l, x, y] = value.BlockID == 0 ? null : value;
         }
         public Level(
-            int version,
             string ownerName,
             string worldName,
             int width,
@@ -53,7 +50,6 @@ namespace EELVL
             string ownerID
         )
         {
-            Version = version;
             OwnerName = ownerName;
             WorldName = worldName;
             Width = width;
@@ -71,7 +67,7 @@ namespace EELVL
             blocks = new Block[2, Width, Height];
         }
 
-        public Level(int width, int height, int borderID = 9) : this(0, "", "Untitled World", width, height, 1, 0, "", false, "", "", 1, true, "")
+        public Level(int width, int height, int borderID = 9) : this("", "Untitled World", width, height, 1, 0, "", false, "", "", 1, true, "")
         {
             Block border = new Block(borderID);
             for (int x = 0; x < Width; x++)
@@ -89,11 +85,7 @@ namespace EELVL
         public static Level ReadMeta(Stream stream)
         {
             AS3BinaryReader reader = new AS3BinaryReader(stream);
-
-            if (Ebe)
-            {
                 return new Level(
-                    reader.ReadInt(),
                     reader.ReadString(),
                     reader.ReadString(),
                     reader.ReadInt(),
@@ -108,26 +100,7 @@ namespace EELVL
                     reader.ReadBool(),
                     reader.ReadString()
                 );
-            }
-            else
-            {
-                return new Level(
-                    0,
-                    reader.ReadString(),
-                    reader.ReadString(),
-                    reader.ReadInt(),
-                    reader.ReadInt(),
-                    reader.ReadFloat(),
-                    reader.ReadUInt(),
-                    reader.ReadString(),
-                    reader.ReadBool(),
-                    reader.ReadString(),
-                    reader.ReadString(),
-                    reader.ReadInt(),
-                    reader.ReadBool(),
-                    reader.ReadString()
-                );
-            }
+            
         }
 
         public void ReadContent(Stream stream)
@@ -160,9 +133,6 @@ namespace EELVL
         {
             AS3BinaryWriter writer = new AS3BinaryWriter(stream);
 
-            if (Ebe)
-            {
-                writer.WriteInt(1);
                 writer.WriteString(OwnerName);
                 writer.WriteString(WorldName);
                 writer.WriteInt(Width);
@@ -176,23 +146,7 @@ namespace EELVL
                 writer.WriteInt(CrewStatus);
                 writer.WriteBool(Minimap);
                 writer.WriteString(OwnerID);
-            }
-            else
-            {
-                writer.WriteString(OwnerName);
-                writer.WriteString(WorldName);
-                writer.WriteInt(Width);
-                writer.WriteInt(Height);
-                writer.WriteFloat(Gravity);
-                writer.WriteUInt(BackgroundColor);
-                writer.WriteString(Description);
-                writer.WriteBool(Campaign);
-                writer.WriteString(CrewID);
-                writer.WriteString(CrewName);
-                writer.WriteInt(CrewStatus);
-                writer.WriteBool(Minimap);
-                writer.WriteString(OwnerID);
-            }
+            
         }
 
         public void WriteContent(Stream stream)
