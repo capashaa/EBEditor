@@ -15,6 +15,7 @@ using System.Reflection.Emit;
 using Microsoft.VisualBasic.ApplicationServices;
 using System.Windows.Markup;
 using static System.Windows.Forms.MonthCalendar;
+using PlayerIOClient;
 
 namespace EEditor
 {
@@ -27,6 +28,7 @@ namespace EEditor
         public static bool OpenWorldCode = false;
         public static theme themecolors = new theme();
         public static userData userdata = new userData();
+        public static List<Connection> connections = new List<Connection> ();
         public static Dictionary<int, Bitmap> ActionBlocks = new Dictionary<int, Bitmap>();
         public static Dictionary<int, Bitmap> ForegroundBlocks = new Dictionary<int, Bitmap>();
         public static Dictionary<int, Bitmap> DecorationBlocks = new Dictionary<int, Bitmap>();
@@ -4682,6 +4684,14 @@ namespace EEditor
             ToolPen.id.Clear();
             ToolPen.target.Clear();
             ToolPen.color.Clear();
+            foreach (var con in connections)
+            {
+                if (con != null && con.Connected)
+                {
+                    Console.WriteLine("Disconnected");
+                    con.Disconnect();
+                }
+            }
         }
 
         #endregion Form loading and closing
