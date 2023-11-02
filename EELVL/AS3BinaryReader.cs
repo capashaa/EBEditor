@@ -36,7 +36,7 @@ namespace EELVL
 			return buffer.AsSpan(0, count);
 		}
 
-		private Span<byte> FromBigEndian(int count)
+        private Span<byte> FromBigEndian(int count)
 		{
 			Span<byte> data = Bytes(count);
 			if (BitConverter.IsLittleEndian) data.Reverse();
@@ -52,12 +52,12 @@ namespace EELVL
 		public string ReadString()
 		{
 			ushort length = ReadUShort();
-			return Span<byte>.GetString(Bytes(length));
-		}
+            return Span<byte>.GetString(Bytes(length));
+        }
 		public ushort[] ReadUShortArray()
 		{
-			uint length = ReadUInt();
+            uint length = ReadUInt();
 			return ToUShortArray(Bytes((int)length));
-		}
-	}
+        }
+    }
 }
