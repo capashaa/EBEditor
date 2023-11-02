@@ -329,6 +329,8 @@
     <Compile Include="Drums.Designer.cs">
       <DependentUpon>Drums.cs</DependentUpon>
     </Compile>
+    <Compile Include="EBELVL.cs" />
+    <Compile Include="EBELVLParser.cs" />
     <Compile Include="EditAreaTransforms.cs">
       <SubType>UserControl</SubType>
     </Compile>
