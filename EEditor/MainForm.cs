@@ -2673,13 +2673,12 @@ namespace EEditor
                                 }
                                 if (cur.ID == 631 || cur.ID == 632 || cur.ID == 633)
                                 {
-                                    using (ColorDialog cd = new ColorDialog())
+                                    using (ColorSelection cd = new ColorSelection())
                                     {
                                         if (cd.ShowDialog() == DialogResult.OK)
                                         {
-                                            Console.WriteLine(cur.ID);
                                             editArea.Tool.PenID = cur.ID;
-                                            bdata.backgroundColor = bdata.ColorToUint(cd.Color);
+                                            bdata.backgroundColor = bdata.ColorToUint(cd.color);
                                             cur.Checked = false;
                                         }
                                     }
