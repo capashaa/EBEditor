@@ -199,14 +199,14 @@ namespace EEditor
                     {
                         if (!mouseMove)
                         {
-                            if (button)
+                            /*if (button)
                             {
-                                ColorDialog cd = new ColorDialog();
+                                ColorSelection cd = new ColorSelection();
                                 if (cd.ShowDialog() == DialogResult.OK)
                                 {
                                     editArea.CurFrame.Background[y, x] = PenID;
-                                    editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(cd.Color);
-                                    bdata.backgroundColor = bdata.ColorToUint(cd.Color);
+                                    editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(cd.color);
+                                    bdata.backgroundColor = bdata.ColorToUint(cd.color);
                                     //if (!color.ContainsKey(PenID)) color.Add(PenID, bdata.ColorToUint(cd.Color));
 
                                 }
@@ -217,11 +217,13 @@ namespace EEditor
                                     else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
                                 }
                                 editArea.mouseDown = false;
-                            }
+                            }*/
+                            editArea.CurFrame.Background[y, x] = PenID;
+                            if (editArea.Tool.coloredBlock != 1) { editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor; }
+                            else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
                         }
                         else
                         {
-                            Console.WriteLine(bdata.backgroundColor);
                             editArea.CurFrame.Background[y, x] = PenID;
                             if (bdata.backgroundColor != 1) { editArea.CurFrame.BlockData7[y, x] = bdata.backgroundColor; }
                             else { editArea.CurFrame.BlockData7[y, x] = bdata.ColorToUint(Color.White); }
