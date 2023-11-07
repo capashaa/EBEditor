@@ -322,6 +322,12 @@
     <Compile Include="CoinsOptions.Designer.cs">
       <DependentUpon>CoinsOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="ColorSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ColorSelection.Designer.cs">
+      <DependentUpon>ColorSelection.cs</DependentUpon>
+    </Compile>
     <Compile Include="Decompress.cs" />
     <Compile Include="Drums.cs">
       <SubType>Form</SubType>
@@ -514,6 +520,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CoinsOptions.resx">
       <DependentUpon>CoinsOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ColorSelection.resx">
+      <DependentUpon>ColorSelection.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Drums.resx">
       <DependentUpon>Drums.cs</DependentUpon>
