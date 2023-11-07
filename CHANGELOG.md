@@ -1,8 +1,8 @@
 ### EBEditor - Beta 0.1.5
-Added ebelvl loading.
-Added hex and pick color options for hex blocks.
-Added hex colors for statistics.
-Added hex colors for image tool.
+Added ebelvl loading.  
+Added hex and pick color options for hex blocks.  
+Added hex colors for statistics.  
+Added hex colors for image tool.  
 
 ### EBEditor - Beta 0.1.4
 Fixed: Font is now working again.  
