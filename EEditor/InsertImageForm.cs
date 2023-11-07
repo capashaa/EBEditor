@@ -20,6 +20,7 @@ namespace EEditor
         private string[,] Text2;
         private string[,] Text3;
         private string[,] Text4;
+        private string[,] cbblock;
         private bool exit = false;
         int n;
 
@@ -77,18 +78,25 @@ namespace EEditor
             double d = Distance(c, Color.FromArgb((int)Minimap.Colors[0]));
             if (checkBoxBackground.Checked)
             {
-                foreach (int i in Background)
+                if (rbNormal.Checked)
                 {
-                    if (Minimap.ImageColor[i])
+                    foreach (int i in Background)
                     {
-                        double dist = Distance(c, Color.FromArgb((int)Minimap.Colors[i]));
-                        if (dist < d)
+                        if (Minimap.ImageColor[i])
                         {
-                            d = dist;
-                            j = i;
+                            double dist = Distance(c, Color.FromArgb((int)Minimap.Colors[i]));
+                            if (dist < d)
+                            {
+                                d = dist;
+                                j = i;
+                            }
                         }
+                        if (exit) break;
                     }
-                    if (exit) break;
+                }
+                else
+                {
+                    j = 631;
                 }
             }
             if (checkBoxBlocks.Checked)
@@ -146,7 +154,7 @@ namespace EEditor
 
         private void Transform(Bitmap image)
         {
-            
+
             int width = image.Width;
             int height = image.Height;
             int incr = 0;
@@ -159,7 +167,8 @@ namespace EEditor
             Text2 = new string[height, width];
             Text3 = new string[height, width];
             Text4 = new string[height, width];
-            
+            cbblock = new string[height, width];
+
             if (width > MainForm.editArea.BlockWidth || height > MainForm.editArea.BlockHeight)
             {
                 DialogResult rs = MessageBox.Show("The image is bigger than the world you have. Do you want to continue?", "Image bigger than world", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -185,6 +194,7 @@ namespace EEditor
                                 Area[yy, xx] = Convert.ToString(c);
                             else
                                 Back[yy, xx] = Convert.ToString(c);
+                                if (rbHex.Checked) cbblock[yy, xx] = bdata.ColorToUint(col).ToString();
                             if (exit) break;
                         }
                         if (exit) break;
@@ -226,6 +236,7 @@ namespace EEditor
                             Area[yy, xx] = Convert.ToString(c);
                         else
                             Back[yy, xx] = Convert.ToString(c);
+                            if (rbHex.Checked) cbblock[yy, xx] = bdata.ColorToUint(col).ToString();
                         if (exit) break;
                     }
                     if (exit) break;
@@ -245,7 +256,7 @@ namespace EEditor
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    Clipboard.SetData("EEData", new string[][,] { Area, Back, Coins, Id, Target, Text1, Text2, Text3, Text4 });
+                    Clipboard.SetData("EEData", new string[][,] { Area, Back, Coins, Id, Target, Text1, Text2, Text3, Text4, cbblock });
                     MainForm.editArea.MainForm.SetMarkTool();
                     MainForm.editArea.Focus();
                     SendKeys.Send("^{v}");
