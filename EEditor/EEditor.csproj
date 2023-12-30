@@ -336,7 +336,8 @@
       <DependentUpon>Drums.cs</DependentUpon>
     </Compile>
     <Compile Include="EBELVL.cs" />
-    <Compile Include="EBELVLParser.cs" />
+    <Compile Include="EBELVLReader.cs" />
+    <Compile Include="EBELVLWriter.cs" />
     <Compile Include="EditAreaTransforms.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -632,6 +633,7 @@
     <None Include="Resources\blueprint.png" />
     <None Include="Resources\bgs_overlays.png" />
     <None Include="Resources\BLOCKS_deco.png" />
+    <None Include="Resources\blocks_shape.png" />
     <Content Include="Resources\copy.png" />
     <None Include="Resources\eeditor_bgIgnore.ico" />
     <None Include="Resources\eeditor_bgIgnore.png" />
