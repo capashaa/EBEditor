@@ -262,6 +262,12 @@ namespace EEditor
                     colour = BitConverter.ToUInt32(bytes, i, true);
                     i += 4;
                 }
+                if ((int)type == 1645)
+                {
+                    colour = BitConverter.ToUInt32(bytes, i, true);
+                    rotation = BitConverter.ToUInt32(bytes, i + 4, true);
+                    i += 8;
+                }
                 if (type == 1000)
                 {
                     var textLength = BitConverter.ToInt32(bytes, i, true);
@@ -557,12 +563,18 @@ namespace EEditor
                         {
                             frame.BlockData7[ny, nx] = colour;
                         }
+
                     }
                     else
                     {
                         frame.Foreground[ny, nx] = (int)type;
-                        if (type == 1200)
+                        if (bdata.coloredBlocks.Contains((int)type))
                         {
+                            frame.BlockData7[ny, nx] = colour;
+                        }
+                        if (1645 == (int)type)
+                        {
+                            frame.BlockData[ny, nx] = (int)rotation;
                             frame.BlockData7[ny, nx] = colour;
                         }
                         if (EELVL.Blocks.IsType((int)type, Blocks.BlockType.Morphable) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Rotatable) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Number) || EELVL.Blocks.IsType((int)type, Blocks.BlockType.Enumerable))
