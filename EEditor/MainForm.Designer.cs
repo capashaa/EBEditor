@@ -551,7 +551,7 @@
             // 
             this.saveWorldToolStripMenuItem.Enabled = false;
             this.saveWorldToolStripMenuItem.Name = "saveWorldToolStripMenuItem";
-            this.saveWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveWorldToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.saveWorldToolStripMenuItem.Text = "EEditor World";
             this.saveWorldToolStripMenuItem.Click += new System.EventHandler(this.saveWorldToolStripMenuItem_Click);
             // 
@@ -559,7 +559,7 @@
             // 
             this.eBELevelToolStripMenuItem1.Enabled = false;
             this.eBELevelToolStripMenuItem1.Name = "eBELevelToolStripMenuItem1";
-            this.eBELevelToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.eBELevelToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
             this.eBELevelToolStripMenuItem1.Text = "EBE Offline Level";
             this.eBELevelToolStripMenuItem1.Click += new System.EventHandler(this.eBELevelToolStripMenuItem1_Click);
             // 
@@ -567,26 +567,26 @@
             // 
             this.eelvlToolStripMenuItem1.Enabled = false;
             this.eelvlToolStripMenuItem1.Name = "eelvlToolStripMenuItem1";
-            this.eelvlToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.eelvlToolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
             this.eelvlToolStripMenuItem1.Text = "EE Offline Level";
             this.eelvlToolStripMenuItem1.Click += new System.EventHandler(this.EelvlToolStripMenuItem1_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(169, 6);
             // 
             // worldAsImageToolStripMenuItem
             // 
             this.worldAsImageToolStripMenuItem.Name = "worldAsImageToolStripMenuItem";
-            this.worldAsImageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.worldAsImageToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.worldAsImageToolStripMenuItem.Text = "World as image";
             this.worldAsImageToolStripMenuItem.Click += new System.EventHandler(this.worldAsImageToolStripMenuItem_Click);
             // 
             // minimapAsImageToolStripMenuItem
             // 
             this.minimapAsImageToolStripMenuItem.Name = "minimapAsImageToolStripMenuItem";
-            this.minimapAsImageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.minimapAsImageToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.minimapAsImageToolStripMenuItem.Text = "Minimap as image";
             this.minimapAsImageToolStripMenuItem.Click += new System.EventHandler(this.minimapAsImageToolStripMenuItem_Click);
             // 
