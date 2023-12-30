@@ -7,7 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection.Emit;
 using System.Xml.Linq;
-
+using static System.Resources.ResXFileRef;
+using EELVL;
 namespace EEditor
 {
     public class EBELVL
@@ -100,16 +101,27 @@ namespace EEditor
                         }
 
                         byte[] bytes = memoryStream.ToArray();
-                        EBELVL level = MetaData(bytes);
+                        EBELVL level = ReadMetaData(bytes);
                         level.MetaBlocks(bytes, Position);
                         return level;
                     }
                 }
             }
         }
+        public static void Write(string file)
+        {
+            using (FileStream compressedFile = File.OpenWrite(file))
+            {
+                using (System.IO.Compression.DeflateStream deflateStream = new System.IO.Compression.DeflateStream(compressedFile, CompressionMode.Compress))
+                {
+
+                }
+            }
+            //EELVL.Level
+        }
         public void MetaBlocks(byte[] bytes,int position)
         {
-            EBEDataChunk[] chunks = EBELVLParser.Parse(bytes, position);
+            EBEDataChunk[] chunks = EBELVLReader.Parse(bytes, position);
             foreach (var c in chunks)
             {
                 foreach (var pos in c.Locations)
@@ -117,7 +129,41 @@ namespace EEditor
             }
 
         }
-        public static EBELVL MetaData(byte[] meta)
+
+        public static void WriteMetaData(byte[] datta)
+        {
+                        int i = 0;
+
+            var length = (short)0;
+            var version = BitConverter.GetBytes(1); i += 4;
+            var data0 = Encoding.UTF8.GetBytes("capasha");
+            datta = BitConverter.GetBytes((ushort)data0.Length); 
+                i += 2;
+            i += length;
+            var data1 = Encoding.UTF8.GetBytes("My own world");
+            BitConverter.GetBytes((ushort)data1.Length); i += 2;
+            var width = BitConverter.GetBytes(25); i += 4;
+            var height = BitConverter.GetBytes(25); i += 4;
+            //var gravity = BitConverter.ToDouble(bytes, i, bigEndian); i += 8;
+            i += 4;
+            var bg = BitConverter.GetBytes(0); i += 4;
+            var data2 = Encoding.UTF8.GetBytes("My own world");
+            BitConverter.GetBytes((ushort)data2.Length); i += 2;
+            //var camp = BitConverter.ToBoolean(bytes, i, bigEndian); i += 2;
+            i++;
+            var data3 = Encoding.UTF8.GetBytes("My own world");
+            BitConverter.GetBytes((ushort)data3.Length); i += 2;
+            var data4 = Encoding.UTF8.GetBytes("My own world");
+            BitConverter.GetBytes((ushort)data4.Length); i += 2;
+            var crewStatus = BitConverter.GetBytes(0); i += 4;
+            //var minimap = BitConverter.ToBoolean(bytes, i, bigEndian); i += 2;
+            i++;
+            var data5 = Encoding.UTF8.GetBytes("My own world");
+            BitConverter.GetBytes((ushort)data5.Length); i += 2;
+            i += 4;
+            Position = i;
+        }
+        public static EBELVL ReadMetaData(byte[] meta)
         {
             int i = 0;
 
