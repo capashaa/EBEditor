@@ -152,7 +152,15 @@ IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
 
         public static int[] coloredBlocks =
         {
-            631, 632, 633
+        1200,
+        1201,
+        631,
+        632,
+        633,
+        634,
+        635,
+        636,
+        1646,
         };
         //public static int[] effects = { 417, 418, 419, 420, 421, 422, 453 };
         //spikes
